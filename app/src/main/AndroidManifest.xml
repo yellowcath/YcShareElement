@@ -17,7 +17,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".SecondActivity" />
-        <activity android:name=".simple.SimpleActivity" />
+        <activity android:name=".simple.SimpleFragmentActivity" />
+        <activity android:name=".simple.SimpleFromActivity" />
+        <activity android:name=".simple.SimpleToActivity" />
 
     </application>
 

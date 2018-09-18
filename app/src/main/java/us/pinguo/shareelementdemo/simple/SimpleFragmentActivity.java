@@ -9,7 +9,7 @@ import us.pinguo.shareelementdemo.TransitionHelper;
 /**
  * Created by huangwei on 2018/9/18 0018.
  */
-public class SimpleActivity extends AppCompatActivity {
+public class SimpleFragmentActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         TransitionHelper.enableTransition(this);

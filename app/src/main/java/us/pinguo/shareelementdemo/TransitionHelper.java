@@ -29,7 +29,7 @@ public class TransitionHelper {
         }
         View statusBar = activity.findViewById(android.R.id.statusBarBackground);
         View navigationBar = activity.findViewById(android.R.id.navigationBarBackground);
-
+//
         List<Pair<View, String>> pairs = new ArrayList<>();
         if (statusBar != null) {
             pairs.add(Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
@@ -41,7 +41,8 @@ public class TransitionHelper {
             View view = shareViews[i];
             pairs.add(Pair.create(view, view.getTransitionName()));
         }
-        Pair<View, String>[] pairsArray = (Pair<View, String>[]) pairs.toArray();
+        Pair<View, String>[] pairsArray = new Pair[pairs.size()];
+        pairs.toArray(pairsArray);
         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, pairsArray);
         return options.toBundle();
     }

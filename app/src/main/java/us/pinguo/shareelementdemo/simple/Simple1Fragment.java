@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.transition.ChangeBounds;
 import android.transition.ChangeImageTransform;
-import android.transition.ChangeTransform;
 import android.transition.TransitionSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,17 +30,13 @@ public class Simple1Fragment extends Fragment {
         imgView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TransitionSet simple2EnterTransition = new TransitionSet();
-                simple2EnterTransition.addTransition(new ChangeImageTransform());
-                simple2EnterTransition.addTransition(new ChangeBounds());
-                simple2EnterTransition.addTransition(new ChangeTransform());
-
-//                setExitTransition(new Fade());
+                TransitionSet simple2Transition = new TransitionSet();
+                simple2Transition.addTransition(new ChangeImageTransform());
+                simple2Transition.addTransition(new ChangeBounds());
 
                 Simple2Fragment simple2Fragment = new Simple2Fragment();
-//                simple2Fragment.setEnterTransition(new Fade());
-                simple2Fragment.setSharedElementEnterTransition(simple2EnterTransition);
-                simple2Fragment.setSharedElementReturnTransition(simple2EnterTransition);
+                simple2Fragment.setSharedElementEnterTransition(simple2Transition);
+                simple2Fragment.setSharedElementReturnTransition(simple2Transition);
                 FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.addSharedElement(imgView, imgView.getTransitionName());
                 fragmentTransaction.replace(R.id.simple_container, simple2Fragment, "simple2");

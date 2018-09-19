@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import us.pinguo.shareelementdemo.advanced.AdvancedListActivity;
 import us.pinguo.shareelementdemo.simple.SimpleFragmentActivity;
 import us.pinguo.shareelementdemo.simple.SimpleFromActivity;
 
@@ -16,8 +17,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         findViewById(R.id.simple_fragment_btn).setOnClickListener(this);
         findViewById(R.id.simple_activity_btn).setOnClickListener(this);
-
+        findViewById(R.id.recyclerview_btn).setOnClickListener(this);
     }
+
 
     @Override
     public void onClick(View v) {
@@ -27,6 +29,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.simple_activity_btn:
                 startActivity(new Intent(this, SimpleFromActivity.class));
+                break;
+            case R.id.recyclerview_btn:
+                startActivity(new Intent(this, AdvancedListActivity.class));
                 break;
         }
     }

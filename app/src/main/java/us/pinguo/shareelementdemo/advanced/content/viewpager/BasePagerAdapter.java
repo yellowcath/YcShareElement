@@ -1,4 +1,4 @@
-package us.pinguo.shareelementdemo.advanced.viewpager;
+package us.pinguo.shareelementdemo.advanced.content.viewpager;
 
 import android.support.v4.view.PagerAdapter;
 import android.util.SparseArray;

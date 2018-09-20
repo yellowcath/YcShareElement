@@ -20,8 +20,7 @@ import us.pinguo.shareelementdemo.advanced.Video;
 /**
  * Created by huangwei on 2018/9/19 0019.
  */
-public class VideoListCell extends BaseRecyclerCell<Video, BaseViewHolder> {
-    private String mShowingUrl;
+public class VideoListCell extends BaseListCell<Video, RecyclerView.ViewHolder> {
 
     public VideoListCell(Video video) {
         super(video);
@@ -35,16 +34,19 @@ public class VideoListCell extends BaseRecyclerCell<Video, BaseViewHolder> {
 
     @Override
     protected void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        super.onBindViewHolder(holder,position);
         SimpleDraweeView simpleDraweeView = holder.itemView.findViewById(R.id.list_item_video);
         setSize(simpleDraweeView);
         showWebp(simpleDraweeView,mData.webpUrl,true);
     }
 
+    @Override
+    public View getShareElement() {
+        SimpleDraweeView simpleDraweeView = mViewHolder.itemView.findViewById(R.id.list_item_video);
+        return simpleDraweeView;
+    }
+
     public void showWebp(final SimpleDraweeView simpleDraweeView, final String url, boolean autoplay) {
-//        if (mShowingUrl!=null &&mShowingUrl.equals(url) && simpleDraweeView.getController() != null && simpleDraweeView.getController().getAnimatable() != null) {
-//            startAnimatable(autoplay);
-//            return;
-//        }
         simpleDraweeView.getHierarchy().setBackgroundImage(new ColorDrawable(Color.GRAY));
         simpleDraweeView.getHierarchy().setActualImageScaleType(ScalingUtils.ScaleType.CENTER_CROP);
         DraweeController controller = Fresco.newDraweeControllerBuilder()
@@ -54,7 +56,6 @@ public class VideoListCell extends BaseRecyclerCell<Video, BaseViewHolder> {
                     public void onFinalImageSet(String s, @Nullable ImageInfo imageInfo, @Nullable Animatable animatable) {
                         super.onFinalImageSet(s, imageInfo, animatable);
                         simpleDraweeView.getHierarchy().setBackgroundImage(null);
-                        mShowingUrl = url;
                     }
                 })
                 .setAutoPlayAnimations(autoplay)

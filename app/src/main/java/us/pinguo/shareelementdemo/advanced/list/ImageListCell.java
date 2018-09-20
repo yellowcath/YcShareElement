@@ -17,7 +17,7 @@ import us.pinguo.shareelementdemo.advanced.Image;
 /**
  * Created by huangwei on 2018/9/19 0019.
  */
-public class ImageListCell extends BaseRecyclerCell<Image, RecyclerView.ViewHolder> {
+public class ImageListCell extends BaseListCell<Image,RecyclerView.ViewHolder> {
 
     public ImageListCell(Image image) {
         super(image);
@@ -25,7 +25,9 @@ public class ImageListCell extends BaseRecyclerCell<Image, RecyclerView.ViewHold
 
     @Override
     protected void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        super.onBindViewHolder(holder,position);
         ImageView imageView = holder.itemView.findViewById(R.id.list_item_img);
+        imageView.setTransitionName(mData.url);
         setSize(imageView);
 
         Glide.with(imageView)
@@ -55,5 +57,10 @@ public class ImageListCell extends BaseRecyclerCell<Image, RecyclerView.ViewHold
     @Override
     protected int getType() {
         return 0;
+    }
+
+    @Override
+    public View getShareElement() {
+        return mViewHolder.itemView.findViewById(R.id.list_item_img);
     }
 }

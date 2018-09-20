@@ -1,0 +1,39 @@
+package us.pinguo.shareelementdemo.advanced.list;
+
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+
+/**
+ * Created by huangwei on 2018/9/20.
+ */
+public abstract class BaseListCell<DATA,VH extends RecyclerView.ViewHolder> extends BaseRecyclerCell<DATA,VH> {
+
+    protected OnCellClickListener mOnCellClickListener;
+
+    public BaseListCell(DATA data) {
+        super(data);
+    }
+
+    @Override
+    protected void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mOnCellClickListener!=null){
+                    mOnCellClickListener.onCellClick(BaseListCell.this);
+                }
+            }
+        });
+    }
+
+    public void setOnCellClickListener(OnCellClickListener onCellClickListener) {
+        this.mOnCellClickListener = onCellClickListener;
+    }
+
+    public interface OnCellClickListener{
+        void onCellClick(BaseListCell cell);
+    }
+
+    public abstract View getShareElement();
+}

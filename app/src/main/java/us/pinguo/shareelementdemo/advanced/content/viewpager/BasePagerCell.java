@@ -1,4 +1,4 @@
-package us.pinguo.shareelementdemo.advanced.viewpager;
+package us.pinguo.shareelementdemo.advanced.content.viewpager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,18 +10,18 @@ import android.view.ViewGroup;
 public abstract class BasePagerCell<DATA, VH extends BasePagerViewHolder> implements BasePagerAdapter.OnViewRecycleListener {
 
     protected DATA mData;
-    VH mViewHolder;
+    protected VH mViewHolder;
 
     public BasePagerCell(DATA data) {
         mData = data;
     }
 
 
-    abstract VH createViewHolder(ViewGroup parent);
+    protected abstract VH createViewHolder(ViewGroup parent);
 
     protected abstract void onBindViewHolder(VH viewHolder);
 
-    abstract int getType();
+    protected abstract int getType();
 
     @Override
     public void onViewRecycled() {

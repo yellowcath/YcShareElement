@@ -1,4 +1,4 @@
-package us.pinguo.shareelementdemo.advanced.viewpager;
+package us.pinguo.shareelementdemo.advanced.content.viewpager;
 
 import android.graphics.Bitmap;
 import android.util.SparseArray;

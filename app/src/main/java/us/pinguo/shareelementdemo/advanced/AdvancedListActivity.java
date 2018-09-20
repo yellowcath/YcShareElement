@@ -1,5 +1,6 @@
 package us.pinguo.shareelementdemo.advanced;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -16,5 +17,10 @@ public class AdvancedListActivity extends AppCompatActivity {
         Fresco.initialize(getApplicationContext());
         setContentView(R.layout.activity_simple);
         getSupportFragmentManager().beginTransaction().add(R.id.simple_container, new AdvancedListFragment()).commit();
+    }
+
+    @Override
+    public void onActivityReenter(int resultCode, Intent data) {
+        super.onActivityReenter(resultCode, data);
     }
 }

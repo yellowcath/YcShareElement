@@ -1,15 +1,18 @@
 package us.pinguo.shareelementdemo.advanced;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.transition.ChangeBounds;
+import android.transition.ChangeImageTransform;
+import android.transition.TransitionSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import us.pinguo.shareelementdemo.advanced.content.BaseContentCell;
 import us.pinguo.shareelementdemo.advanced.content.ImageContentCell;
@@ -37,11 +40,26 @@ public class AdvancedContentFragment extends Fragment implements ViewPager.OnPag
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        getActivity().postponeEnterTransition();
         mViewPager = (ViewPager) view;
         mViewPager.setBackgroundColor(0xFF323232);
         mAdapter = new BasePagerAdapter();
         mViewPager.addOnPageChangeListener(this);
         initCells();
+        TransitionSet transitionSet = new TransitionSet();
+        transitionSet.addTransition(new ChangeImageTransform());
+        transitionSet.addTransition(new ChangeBounds());
+
+        getActivity().getWindow().setSharedElementEnterTransition(transitionSet);
+        getActivity().getWindow().setSharedElementExitTransition(transitionSet);
+        mViewPager.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                mViewPager.getViewTreeObserver().removeOnPreDrawListener(this);
+                getActivity().startPostponedEnterTransition();
+                return false;
+            }
+        });
     }
 
     private void initCells() {

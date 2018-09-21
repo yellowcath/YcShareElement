@@ -1,23 +1,10 @@
 package us.pinguo.shareelementdemo.advanced.content;
 
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
-import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
-import com.shuyu.gsyvideoplayer.listener.LockClickListener;
-import com.shuyu.gsyvideoplayer.player.PlayerFactory;
-import com.shuyu.gsyvideoplayer.player.SystemPlayerManager;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import us.pinguo.shareelementdemo.R;
-import us.pinguo.shareelementdemo.advanced.Image;
 import us.pinguo.shareelementdemo.advanced.Video;
-import us.pinguo.shareelementdemo.advanced.content.viewpager.BasePagerCell;
 import us.pinguo.shareelementdemo.advanced.content.viewpager.BasePagerViewHolder;
 
 /**
@@ -38,6 +25,7 @@ public class VideoContentCell extends BaseContentCell<Video> {
     @Override
     protected void onBindViewHolder(BasePagerViewHolder viewHolder) {
         StandardGSYVideoPlayer videoView = viewHolder.getView(R.id.content_item_video);
+        videoView.setTransitionName(mData.videoUrl);
         GSYVideoOptionBuilder gsyVideoOption = new GSYVideoOptionBuilder();
         gsyVideoOption
 //                .setThumbImageView(imageView)

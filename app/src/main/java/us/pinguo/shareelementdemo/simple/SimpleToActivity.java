@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import us.pinguo.shareelementdemo.R;
 import us.pinguo.shareelementdemo.TransitionHelper;
+import us.pinguo.shareelementdemo.transform.ChangeImageViewTransform;
 
 /**
  * Created by huangwei on 2018/9/18 0018.
@@ -20,6 +21,8 @@ public class SimpleToActivity extends AppCompatActivity {
 
         // Postpone the transition until the window's decor view has
         // finished its layout.
+        getWindow().setSharedElementEnterTransition(new ChangeImageViewTransform());
+        getWindow().setSharedElementExitTransition(new ChangeImageViewTransform());
         postponeEnterTransition();
 
         final View decor = getWindow().getDecorView();

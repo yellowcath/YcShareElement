@@ -5,11 +5,11 @@
     android:layout_height="match_parent"
     android:background="@android:color/holo_blue_bright">
     <ImageView
-        android:id="@+id/s1_img"
+        android:id="@+id/s2_img"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="16dp"
-        android:transitionName="simple_img"
-        android:src="@drawable/simple" />
+        android:src="@drawable/test"
+        android:transitionName="simple_img" />
 
 </FrameLayout>

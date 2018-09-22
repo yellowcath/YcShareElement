@@ -9,7 +9,8 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_margin="16dp"
+        android:scaleType="centerCrop"
         android:transitionName="simple_img"
-        android:src="@drawable/simple" />
+        android:src="@drawable/test" />
 
 </FrameLayout>

@@ -25,7 +25,7 @@ public class VideoContentCell extends BaseContentCell<Video> {
     @Override
     protected void onBindViewHolder(BasePagerViewHolder viewHolder) {
         StandardGSYVideoPlayer videoView = viewHolder.getView(R.id.content_item_video);
-        videoView.setTransitionName(mData.videoUrl);
+        videoView.setTransitionName(mData.url);
         GSYVideoOptionBuilder gsyVideoOption = new GSYVideoOptionBuilder();
         gsyVideoOption
 //                .setThumbImageView(imageView)
@@ -36,7 +36,7 @@ public class VideoContentCell extends BaseContentCell<Video> {
                 .setAutoFullWithSize(true)
                 .setShowFullAnimation(false)
                 .setNeedLockFull(true)
-                .setUrl(mData.videoUrl)
+                .setUrl(mData.url)
                 .setCacheWithPlay(true)
                 .setLooping(true)
         .build(videoView);

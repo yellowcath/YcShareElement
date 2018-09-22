@@ -36,7 +36,7 @@ public class VideoListCell extends BaseListCell<Video, RecyclerView.ViewHolder> 
     protected void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         super.onBindViewHolder(holder,position);
         SimpleDraweeView simpleDraweeView = holder.itemView.findViewById(R.id.list_item_video);
-        simpleDraweeView.setTransitionName(mData.videoUrl);
+        simpleDraweeView.setTransitionName(mData.url);
         setSize(simpleDraweeView);
         showWebp(simpleDraweeView,mData.webpUrl,true);
     }

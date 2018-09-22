@@ -3,11 +3,8 @@ package us.pinguo.shareelementdemo.simple;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.view.ViewTreeObserver;
 import us.pinguo.shareelementdemo.R;
-import us.pinguo.shareelementdemo.TransitionHelper;
-import us.pinguo.shareelementdemo.transform.ChangeImageViewTransform;
+import us.pinguo.shareelementdemo.transform.YcShareElement;
 
 /**
  * Created by huangwei on 2018/9/18 0018.
@@ -15,24 +12,9 @@ import us.pinguo.shareelementdemo.transform.ChangeImageViewTransform;
 public class SimpleToActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        TransitionHelper.enableTransition(this);
+        YcShareElement.beforeOnCreate(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_to);
-
-        // Postpone the transition until the window's decor view has
-        // finished its layout.
-        getWindow().setSharedElementEnterTransition(new ChangeImageViewTransform());
-        getWindow().setSharedElementExitTransition(new ChangeImageViewTransform());
-        postponeEnterTransition();
-
-        final View decor = getWindow().getDecorView();
-        decor.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-            @Override
-            public boolean onPreDraw() {
-                decor.getViewTreeObserver().removeOnPreDrawListener(this);
-                startPostponedEnterTransition();
-                return true;
-            }
-        });
+        YcShareElement.callReadyAfterPreDraw(this);
     }
 }

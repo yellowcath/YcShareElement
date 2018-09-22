@@ -48,7 +48,7 @@ public class ImageListCell extends BaseListCell<Image,RecyclerView.ViewHolder> {
     private void setSize(ImageView imageView) {
         int width = (imageView.getResources().getDisplayMetrics().widthPixels -
                 imageView.getResources().getDimensionPixelSize(R.dimen.divider) * 3) / 2;
-        int height = (int) (mData.height / (float) mData.width * width);
+        int height = width;//(int) (mData.height / (float) mData.width * width);
         ViewGroup.LayoutParams layoutParams = imageView.getLayoutParams();
         layoutParams.height = height;
         imageView.setLayoutParams(layoutParams);

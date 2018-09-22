@@ -6,18 +6,17 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.transition.ChangeBounds;
-import android.transition.ChangeImageTransform;
-import android.transition.TransitionSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import com.bumptech.glide.Glide;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import us.pinguo.shareelementdemo.advanced.content.BaseContentCell;
 import us.pinguo.shareelementdemo.advanced.content.ImageContentCell;
 import us.pinguo.shareelementdemo.advanced.content.VideoContentCell;
 import us.pinguo.shareelementdemo.advanced.content.viewpager.BasePagerAdapter;
+import us.pinguo.shareelementdemo.transform.YcShareElement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,23 +39,16 @@ public class AdvancedContentFragment extends Fragment implements ViewPager.OnPag
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().postponeEnterTransition();
         mViewPager = (ViewPager) view;
         mViewPager.setBackgroundColor(0xFF323232);
         mAdapter = new BasePagerAdapter();
         mViewPager.addOnPageChangeListener(this);
         initCells();
-        TransitionSet transitionSet = new TransitionSet();
-        transitionSet.addTransition(new ChangeImageTransform());
-        transitionSet.addTransition(new ChangeBounds());
-
-        getActivity().getWindow().setSharedElementEnterTransition(transitionSet);
-        getActivity().getWindow().setSharedElementExitTransition(transitionSet);
         mViewPager.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
             public boolean onPreDraw() {
                 mViewPager.getViewTreeObserver().removeOnPreDrawListener(this);
-                getActivity().startPostponedEnterTransition();
+                YcShareElement.onShareElementReady(getActivity());
                 return false;
             }
         });
@@ -91,8 +83,8 @@ public class AdvancedContentFragment extends Fragment implements ViewPager.OnPag
         if (mAdapter.getItem(position) instanceof VideoContentCell) {
             mPlayingCell = ((VideoContentCell) mAdapter.getItem(position));
             mPlayingCell.startPlay();
-        }else{
-            mPlayingCell=null;
+        } else {
+            mPlayingCell = null;
         }
     }
 
@@ -103,7 +95,7 @@ public class AdvancedContentFragment extends Fragment implements ViewPager.OnPag
 
     @Override
     public void onPause() {
-        if(mPlayingCell!=null){
+        if (mPlayingCell != null) {
             GSYVideoManager.instance().pause();
         }
         super.onPause();
@@ -111,7 +103,7 @@ public class AdvancedContentFragment extends Fragment implements ViewPager.OnPag
 
     @Override
     public void onResume() {
-        if(mPlayingCell!=null){
+        if (mPlayingCell != null) {
             GSYVideoManager.instance().start();
         }
         super.onResume();

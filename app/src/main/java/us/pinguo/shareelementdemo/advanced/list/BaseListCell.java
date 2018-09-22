@@ -3,11 +3,12 @@ package us.pinguo.shareelementdemo.advanced.list;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import us.pinguo.shareelementdemo.advanced.BaseData;
 
 /**
  * Created by huangwei on 2018/9/20.
  */
-public abstract class BaseListCell<DATA,VH extends RecyclerView.ViewHolder> extends BaseRecyclerCell<DATA,VH> {
+public abstract class BaseListCell<DATA extends BaseData,VH extends RecyclerView.ViewHolder> extends BaseRecyclerCell<DATA,VH> {
 
     protected OnCellClickListener mOnCellClickListener;
 
@@ -33,6 +34,11 @@ public abstract class BaseListCell<DATA,VH extends RecyclerView.ViewHolder> exte
 
     public interface OnCellClickListener{
         void onCellClick(BaseListCell cell);
+    }
+
+    @Override
+    public DATA getData() {
+        return super.getData();
     }
 
     public abstract View getShareElement();

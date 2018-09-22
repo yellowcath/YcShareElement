@@ -9,7 +9,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import us.pinguo.shareelementdemo.R;
 import us.pinguo.shareelementdemo.advanced.Image;
-import us.pinguo.shareelementdemo.advanced.content.viewpager.BasePagerCell;
 import us.pinguo.shareelementdemo.advanced.content.viewpager.BasePagerViewHolder;
 
 /**

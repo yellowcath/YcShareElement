@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import us.pinguo.shareelementdemo.R;
 import us.pinguo.shareelementdemo.TransitionHelper;
+import us.pinguo.shareelementdemo.transform.YcShareElement;
 
 /**
  * Created by huangwei on 2018/9/18 0018.
@@ -14,7 +15,7 @@ import us.pinguo.shareelementdemo.TransitionHelper;
 public class AdvancedContentActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        TransitionHelper.enableTransition(this);
+        YcShareElement.beforeOnCreate(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple);
         AdvancedContentFragment advancedContentFragment = new AdvancedContentFragment();

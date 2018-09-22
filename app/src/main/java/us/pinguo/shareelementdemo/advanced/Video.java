@@ -6,18 +6,14 @@ import android.os.Parcelable;
 /**
  * Created by huangwei on 2018/9/19 0019.
  */
-public class Video implements Parcelable {
-    public String videoUrl;
+public class Video extends BaseData {
     public String webpUrl;
-    public int width;
-    public int height;
 
-    public Video(String videoUrl, String webpUrl, int width, int height) {
-        this.videoUrl = videoUrl;
+    public Video(String url,String webpUrl, int width, int height) {
+        super(url, width, height);
         this.webpUrl = webpUrl;
-        this.width = width;
-        this.height = height;
     }
+
 
     @Override
     public int describeContents() {
@@ -26,20 +22,16 @@ public class Video implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.videoUrl);
+        super.writeToParcel(dest, flags);
         dest.writeString(this.webpUrl);
-        dest.writeInt(this.width);
-        dest.writeInt(this.height);
     }
 
     protected Video(Parcel in) {
-        this.videoUrl = in.readString();
+        super(in);
         this.webpUrl = in.readString();
-        this.width = in.readInt();
-        this.height = in.readInt();
     }
 
-    public static final Parcelable.Creator<Video> CREATOR = new Parcelable.Creator<Video>() {
+    public static final Creator<Video> CREATOR = new Creator<Video>() {
         @Override
         public Video createFromParcel(Parcel source) {
             return new Video(source);

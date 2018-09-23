@@ -143,22 +143,6 @@ public class ChangeOnlineImageTransform extends Transition {
         if (startBounds.equals(endBounds) && matricesEqual) {
             return null;
         }
-//        imageView.setBackgroundColor(0xFFFF0000);
-//        imageView.setImageDrawable(new ColorDrawable(0));
-        //Three animtor is needed：translation,scale and matrix
-        //translation
-        float translationX = startBounds.left - endBounds.left;
-        float translationY = startBounds.top - endBounds.top;
-//        imageView.setTranslationX(translationX);
-//        imageView.setTranslationY(translationY);
-
-        ObjectAnimator transXAnimator = ObjectAnimator.ofFloat(imageView, "translationX", translationX, 0);
-        ObjectAnimator transYAnimator = ObjectAnimator.ofFloat(imageView, "translationY", translationY, 0);
-
-        //Rect
-        ObjectAnimator boundsAnimator = ObjectAnimator.ofObject(imageView,
-                new RectProperty(Rect.class, "boundsAnimator"),
-                new RectEvaluator(), startBounds, endBounds);
 
         //matrix
         final Drawable drawable = imageView.getDrawable();
@@ -181,45 +165,31 @@ public class ChangeOnlineImageTransform extends Transition {
         }
 
         AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.play(boundsAnimator).with(matrixAnimator);//.with(transXAnimator).with(transYAnimator);//
-        if (imageView.getParent() instanceof ViewGroup) {
-            suppressLayout((ViewGroup) imageView.getParent(), true);
-            animatorSet.addListener(new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationStart(Animator animation) {
+        animatorSet.play(matrixAnimator);
+        final ImageView.ScaleType scaleType = imageView.getScaleType();
+        imageView.setScaleType(ImageView.ScaleType.MATRIX);
+        animatorSet.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
 
-                }
+            }
 
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    suppressLayout((ViewGroup) imageView.getParent(), false);
-                }
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                imageView.setScaleType(scaleType);
+            }
 
-                @Override
-                public void onAnimationCancel(Animator animation) {
+            @Override
+            public void onAnimationCancel(Animator animation) {
 
-                }
+            }
 
-                @Override
-                public void onAnimationRepeat(Animator animation) {
+            @Override
+            public void onAnimationRepeat(Animator animation) {
 
-                }
-            });
-        }
+            }
+        });
         return animatorSet;
-    }
-
-    private static void suppressLayout(ViewGroup viewGroup, boolean bool) {
-        try {
-            Method method = ViewGroup.class.getDeclaredMethod("suppressLayout", boolean.class);
-            method.invoke(viewGroup, bool);
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
     }
 
     private ObjectAnimator createNullAnimator(ImageView imageView) {
@@ -237,33 +207,14 @@ public class ChangeOnlineImageTransform extends Transition {
             = new Property<ImageView, Matrix>(Matrix.class, "animatedTransform") {
         @Override
         public void set(ImageView object, Matrix value) {
-            animateTransform(object, value);
-            Log.e("hwLog", object.getWidth() + "  " + object.getDrawable().getBounds());
+            object.setImageMatrix(value);
         }
 
         @Override
         public Matrix get(ImageView object) {
-            return null;
+            return object.getImageMatrix();
         }
     };
-
-    private class RectProperty extends Property<ImageView, Rect> {
-
-
-        public RectProperty(Class<Rect> type, String name) {
-            super(type, name);
-        }
-
-        @Override
-        public void set(ImageView object, Rect value) {
-            object.layout(value.left, value.top, value.right, value.bottom);
-        }
-
-        @Override
-        public Rect get(ImageView object) {
-            return null;
-        }
-    }
 
     private static TypeEvaluator<Matrix> NULL_MATRIX_EVALUATOR = new TypeEvaluator<Matrix>() {
         @Override
@@ -290,19 +241,6 @@ public class ChangeOnlineImageTransform extends Transition {
             }
             mTempMatrix.setValues(mTempEndValues);
             return mTempMatrix;
-        }
-    }
-
-    private static void animateTransform(ImageView imageView, Matrix matrix) {
-        try {
-            Method animateTransform = imageView.getClass().getMethod("animateTransform", Matrix.class);
-            animateTransform.invoke(imageView, matrix);
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
         }
     }
 

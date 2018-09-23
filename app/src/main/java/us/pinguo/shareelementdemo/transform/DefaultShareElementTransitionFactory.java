@@ -37,7 +37,7 @@ public class DefaultShareElementTransitionFactory implements IShareElementTransi
         if (shareImageViewInfoExisted) {
             transitionSet.addTransition(new ChangeOnlineImageTransform());
 //            transitionSet.addTransition(new ChangeImageTransform());
-//            transitionSet.addTransition(new ChangeBounds());
+            transitionSet.addTransition(new ChangeBounds());
 //            transitionSet.addTransition(new ChangeTransform());
         } else if (imageViewExisted) {
             transitionSet.addTransition(new ChangeImageTransform());

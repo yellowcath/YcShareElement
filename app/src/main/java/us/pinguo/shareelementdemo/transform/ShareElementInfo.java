@@ -1,5 +1,6 @@
 package us.pinguo.shareelementdemo.transform;
 
+import android.graphics.Rect;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.view.View;
@@ -10,9 +11,14 @@ import us.pinguo.shareelementdemo.R;
  */
 public class ShareElementInfo implements Parcelable{
 
-    public transient View view;
+    public View view;
 
     public Parcelable originData;
+
+    /**
+     * 实际做动画的View的大小,由{@link YcShareElement#recordShareElementsBaseBounds}负责填充
+     */
+    public Rect tansfromViewBounds = new Rect();
 
     public ShareElementInfo(View view) {
         this.view = view;

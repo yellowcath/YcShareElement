@@ -8,10 +8,10 @@ import android.animation.TypeEvaluator;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.transition.Transition;
 import android.transition.TransitionValues;
+import android.util.Log;
 import android.util.Pair;
 import android.util.Property;
 import android.view.View;
@@ -26,7 +26,7 @@ import java.util.Map;
 /**
  * Created by huangwei on 2018/9/21 0021.
  */
-public class ChangeOnlineImageTransform extends Transition {
+public class ChangeOnlineImageTransform2 extends Transition {
     private static final String TAG = "YcShareElement";
 
     private static final String PROPNAME_SCALE_TYPE = "hw:changeImageTransform:scaletype";
@@ -85,39 +85,58 @@ public class ChangeOnlineImageTransform extends Transition {
             endMatrix.set(((ImageView) endValues.view).getImageMatrix());
             return;
         }
-        Rect startBounds = (Rect) startValues.values.get(PROPNAME_BOUNDS);
-        Rect endBounds = (Rect) endValues.values.get(PROPNAME_BOUNDS);
+        ImageView.ScaleType startScaleType = (ImageView.ScaleType) startValues.values.get(PROPNAME_SCALE_TYPE);
         ShareImageViewInfo shareElementInfo = (ShareImageViewInfo) startValues.values.get(PROPNAME_INFO);
 
-        Rect transfromViewRect = new Rect();
-        boolean isEnter = shareElementInfo.tansfromViewBounds.width() == 0;
-        if (isEnter) {
-            transfromViewRect.set(endBounds);
-        } else {
-            transfromViewRect.set(shareElementInfo.tansfromViewBounds);
-        }
-
-        ImageView.ScaleType startScaleType = (ImageView.ScaleType) startValues.values.get(PROPNAME_SCALE_TYPE);
-        ImageView.ScaleType endScaleType = (ImageView.ScaleType) endValues.values.get(PROPNAME_SCALE_TYPE);
-        BitmapInfo transfromBitmapInfo = sBitmapSizeCalculator.calculateImageSize(
-                transfromViewRect,
-                isEnter ? endScaleType : shareElementInfo.tranfromViewScaleType,
+        Rect startBounds = (Rect) startValues.values.get(PROPNAME_BOUNDS);
+        BitmapInfo startBitmapInfo = sBitmapSizeCalculator.calculateImageSize(
+                startBounds,
+                startScaleType,
                 shareElementInfo.photoOriginWidth,
                 shareElementInfo.photoOriginHeight);
-
         if (startScaleType == ImageView.ScaleType.MATRIX) {
             startMatrix.set((Matrix) startValues.values.get(PROPNAME_MATRIX));
         } else {
-            //注意：这里要计算的是如何给出的ImageView模拟出初始状态的ImageView
-            //这里不管是进入还是退出，都用的是第二个Activity的控件，因此Bitmap都是第二个Activity的，需要据此Bitmap的大小计算动画
-            startMatrix.set(getImageViewMatrix(startBounds, startScaleType, transfromBitmapInfo.width, transfromBitmapInfo.height));
+            startMatrix.set(getImageViewMatrix(startBounds, startScaleType, startBitmapInfo.width, startBitmapInfo.height));
         }
 
+
+        ImageView.ScaleType endScaleType = (ImageView.ScaleType) endValues.values.get(PROPNAME_SCALE_TYPE);
+        Rect endBounds = (Rect) endValues.values.get(PROPNAME_BOUNDS);
+        BitmapInfo endBitmapInfo = sBitmapSizeCalculator.calculateImageSize(
+                endBounds,
+                endScaleType,
+                shareElementInfo.photoOriginWidth,
+                shareElementInfo.photoOriginHeight);
         if (endScaleType == ImageView.ScaleType.MATRIX) {
             endMatrix.set((Matrix) endValues.values.get(PROPNAME_MATRIX));
         } else {
-            //这里要计算的是如何给出的ImageView模拟出结束状态的ImageView
-            endMatrix.set(getImageViewMatrix(endBounds, endScaleType, transfromBitmapInfo.width, transfromBitmapInfo.height));
+            endMatrix.set(getImageViewMatrix(endBounds, endScaleType, endBitmapInfo.width, endBitmapInfo.height));
+        }
+
+
+//        if (startBitmapInfo.scale > endBitmapInfo.scale) {
+//            //end处需要考虑缩放
+//
+//        } else {
+//            //start处需要考虑缩放
+//            //TODO 如果ScaleType本来就是Matrix?
+//            float scale = startBitmapInfo.scale / endBitmapInfo.scale;
+//            Pair<Integer, Integer> pivot = getPivot(startBounds, startScaleType);
+//            startMatrix.postScale(scale, scale, pivot.first, pivot.second);
+//        }
+
+    }
+
+    private Pair<Integer, Integer> getPivot(Rect bounds, ImageView.ScaleType scaleType) {
+        switch (scaleType) {
+            case CENTER:
+            case FIT_CENTER:
+            case CENTER_CROP:
+            case CENTER_INSIDE:
+                return new Pair<>(bounds.centerX(), bounds.centerY());
+            default:
+                return new Pair<>(bounds.left, bounds.top);
         }
     }
 
@@ -142,24 +161,7 @@ public class ChangeOnlineImageTransform extends Transition {
         if (startBounds.equals(endBounds) && matricesEqual) {
             return null;
         }
-        imageView.setBackgroundColor(0xFFFF0000);
-//        imageView.setImageDrawable(new ColorDrawable(0));
-        //Three animtor is needed：translation,scale and matrix
-        //translation
-        float translationX = startBounds.left - endBounds.left;
-        float translationY = startBounds.top - endBounds.top;
-//        imageView.setTranslationX(translationX);
-//        imageView.setTranslationY(translationY);
 
-        ObjectAnimator transXAnimator = ObjectAnimator.ofFloat(imageView, "translationX", translationX, 0);
-        ObjectAnimator transYAnimator = ObjectAnimator.ofFloat(imageView, "translationY", translationY, 0);
-
-        //Rect
-        ObjectAnimator boundsAnimator = ObjectAnimator.ofObject(imageView,
-                new RectProperty(Rect.class, "boundsAnimator"),
-                new RectEvaluator(), startBounds, endBounds);
-
-        //matrix
         final Drawable drawable = imageView.getDrawable();
         int drawableWidth = drawable.getIntrinsicWidth();
         int drawableHeight = drawable.getIntrinsicHeight();
@@ -177,10 +179,15 @@ public class ChangeOnlineImageTransform extends Transition {
             }
             ANIMATED_TRANSFORM_PROPERTY.set(imageView, startMatrix);
             matrixAnimator = createMatrixAnimator(imageView, startMatrix, endMatrix);
+            Log.e("hwLog", startMatrix.toShortString() + " /n " + endMatrix.toShortString());
         }
 
+        // Move and Scale Animator
+        ObjectAnimator rectAnimator = ObjectAnimator.ofObject(imageView, new RectProperty(Rect.class, "RectTransform", startBounds, endBounds),
+                new RectEvaluator(), startBounds, endBounds);
+
         AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.play(boundsAnimator).with(matrixAnimator);//.with(transXAnimator).with(transYAnimator);//
+        animatorSet.play(matrixAnimator).with(rectAnimator);
         return animatorSet;
     }
 
@@ -210,14 +217,25 @@ public class ChangeOnlineImageTransform extends Transition {
 
     private class RectProperty extends Property<ImageView, Rect> {
 
+        private Rect startBounds, endBounds;
+        private float startScale,endScale;
+        private Rect tempRect = new Rect();
 
-        public RectProperty(Class<Rect> type, String name) {
+        public RectProperty(Class<Rect> type, String name, Rect startBounds, Rect endBounds) {
             super(type, name);
+            this.startBounds = startBounds;
+            this.endBounds = endBounds;
+            startScale = startBounds.width()/(float)endBounds.width();
+            endScale = 1;
         }
 
         @Override
         public void set(ImageView object, Rect value) {
-            object.layout(value.left, value.top, value.right, value.bottom);
+//            float progress = (value.width() - startBounds.width())/(float)(endBounds.width()-startBounds.width());
+//            float scale = startScale+(endScale -startScale)*progress;
+//            object.setScaleX(scale);
+//            object.setScaleY(scale);
+            object.layout(value.left,value.top,value.right,value.bottom);
         }
 
         @Override

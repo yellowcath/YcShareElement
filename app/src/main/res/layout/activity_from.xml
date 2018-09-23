@@ -10,7 +10,6 @@
         android:layout_height="100dp"
         android:layout_margin="16dp"
         android:scaleType="centerCrop"
-        android:transitionName="simple_img"
-        android:src="@drawable/test" />
+        android:transitionName="simple_img" />
 
 </FrameLayout>

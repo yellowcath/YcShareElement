@@ -9,7 +9,7 @@ import android.widget.ImageView;
 public class DefaultBitmapSizeCalculator implements IBitmapSizeCalculator {
 
     @Override
-    public BitmapSize calculateImageSize(Rect bounds, ImageView.ScaleType scaleType, int originImageWidth, int originImageHeight) {
-        return new BitmapSize(originImageWidth, originImageHeight);
+    public BitmapInfo calculateImageSize(Rect bounds, ImageView.ScaleType scaleType, int originImageWidth, int originImageHeight) {
+        return new BitmapInfo(originImageWidth, originImageHeight,1f);
     }
 }

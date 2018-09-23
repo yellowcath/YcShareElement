@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.SharedElementCallback;
 import android.content.Context;
 import android.graphics.Matrix;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -11,10 +12,13 @@ import android.transition.Transition;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.ImageView;
 import us.pinguo.shareelementdemo.R;
 import us.pinguo.shareelementdemo.TransitionHelper;
 import us.pinguo.shareelementdemo.simple.SimpleToActivity;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -97,6 +101,7 @@ public class YcShareElement {
             public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
                 super.onMapSharedElements(names, sharedElements);
                 Log.e("hwLog", "onMapSharedElements");
+                recordShareElementsBaseBounds(sharedElements);
             }
 
             @Override
@@ -156,7 +161,24 @@ public class YcShareElement {
         });
     }
 
-    public static void callReadyAfterPreDraw(final Activity activity){
+    private static void recordShareElementsBaseBounds(Map<String, View> sharedElements) {
+        if (sharedElements == null) {
+            return;
+        }
+        Iterator<View> values = sharedElements.values().iterator();
+        while (values.hasNext()) {
+            View view = values.next();
+            Object tag = view.getTag(R.id.share_element_info);
+            if (tag instanceof ShareElementInfo) {
+                ((ShareElementInfo) tag).tansfromViewBounds.set(view.getLeft(), view.getTop(), view.getRight(), view.getBottom());
+            }
+            if (tag instanceof ShareImageViewInfo && view instanceof ImageView) {
+                ((ShareImageViewInfo) tag).tranfromViewScaleType = ((ImageView) view).getScaleType();
+            }
+        }
+    }
+
+    public static void callReadyAfterPreDraw(final Activity activity) {
         final View decor = activity.getWindow().getDecorView();
         decor.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
@@ -167,6 +189,7 @@ public class YcShareElement {
             }
         });
     }
+
     public static void onShareElementReady(Activity activity) {
         activity.startPostponedEnterTransition();
     }

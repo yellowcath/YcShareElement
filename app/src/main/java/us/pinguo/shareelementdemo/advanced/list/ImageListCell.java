@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.FitCenter;
 import com.bumptech.glide.request.RequestOptions;
 import us.pinguo.shareelementdemo.R;
 import us.pinguo.shareelementdemo.advanced.Image;
@@ -34,6 +35,7 @@ public class ImageListCell extends BaseListCell<Image,RecyclerView.ViewHolder> {
                 .load(mData.url)
                 .apply(new RequestOptions()
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .transform(new FitCenter())
                         .skipMemoryCache(true)
                         .placeholder(new ColorDrawable(Color.GRAY)))
                 .into(imageView);

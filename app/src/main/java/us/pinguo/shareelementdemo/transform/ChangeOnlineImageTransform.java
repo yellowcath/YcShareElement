@@ -12,6 +12,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.transition.Transition;
 import android.transition.TransitionValues;
+import android.util.Log;
 import android.util.Pair;
 import android.util.Property;
 import android.view.View;
@@ -142,7 +143,7 @@ public class ChangeOnlineImageTransform extends Transition {
         if (startBounds.equals(endBounds) && matricesEqual) {
             return null;
         }
-        imageView.setBackgroundColor(0xFFFF0000);
+//        imageView.setBackgroundColor(0xFFFF0000);
 //        imageView.setImageDrawable(new ColorDrawable(0));
         //Three animtor is needed：translation,scale and matrix
         //translation
@@ -181,7 +182,44 @@ public class ChangeOnlineImageTransform extends Transition {
 
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.play(boundsAnimator).with(matrixAnimator);//.with(transXAnimator).with(transYAnimator);//
+        if (imageView.getParent() instanceof ViewGroup) {
+            suppressLayout((ViewGroup) imageView.getParent(), true);
+            animatorSet.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    suppressLayout((ViewGroup) imageView.getParent(), false);
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            });
+        }
         return animatorSet;
+    }
+
+    private static void suppressLayout(ViewGroup viewGroup, boolean bool) {
+        try {
+            Method method = ViewGroup.class.getDeclaredMethod("suppressLayout", boolean.class);
+            method.invoke(viewGroup, bool);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
     }
 
     private ObjectAnimator createNullAnimator(ImageView imageView) {
@@ -200,6 +238,7 @@ public class ChangeOnlineImageTransform extends Transition {
         @Override
         public void set(ImageView object, Matrix value) {
             animateTransform(object, value);
+            Log.e("hwLog", object.getWidth() + "  " + object.getDrawable().getBounds());
         }
 
         @Override

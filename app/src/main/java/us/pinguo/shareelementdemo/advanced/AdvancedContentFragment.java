@@ -112,7 +112,6 @@ public class AdvancedContentFragment extends Fragment implements ViewPager.OnPag
     @Override
     public void onDestroy() {
         super.onDestroy();
-        GSYVideoManager.instance().releaseMediaPlayer();
     }
 
 }

@@ -14,6 +14,7 @@ import com.bumptech.glide.load.resource.bitmap.FitCenter;
 import com.bumptech.glide.request.RequestOptions;
 import us.pinguo.shareelementdemo.R;
 import us.pinguo.shareelementdemo.TransitionHelper;
+import us.pinguo.shareelementdemo.advanced.BaseData;
 import us.pinguo.shareelementdemo.transform.ChangeOnlineImageTransform;
 import us.pinguo.shareelementdemo.transform.GetShareElement;
 import us.pinguo.shareelementdemo.transform.GlideBitmapSizeCalculator;
@@ -27,7 +28,6 @@ import us.pinguo.shareelementdemo.transform.YcShareElement;
 public class SimpleFromActivity extends AppCompatActivity implements GetShareElement {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        TransitionHelper.enableTransition(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_from);
 
@@ -59,6 +59,6 @@ public class SimpleFromActivity extends AppCompatActivity implements GetShareEle
     @Override
     public ShareElementInfo[] getShareElements() {
         final ImageView imgView = findViewById(R.id.s1_img);
-        return new ShareElementInfo[]{new ShareImageViewInfo(imgView, 1024, 768)};
+        return new ShareElementInfo[]{new ShareImageViewInfo(imgView, new BaseData(null,1024, 768))};
     }
 }

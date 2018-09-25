@@ -17,7 +17,7 @@ public class AdvancedContentActivity extends AppCompatActivity implements GetSha
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        YcShareElement.beforeOnCreate(this, this);
+        YcShareElement.postponeEnterTransition(this, this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple);
         mFragment = new AdvancedContentFragment();

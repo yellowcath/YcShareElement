@@ -3,6 +3,8 @@ package us.pinguo.shareelementdemo.advanced;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Objects;
+
 /**
  * Created by huangwei on 2018/9/22.
  */
@@ -35,4 +37,23 @@ public class BaseData implements Parcelable {
         this.height = in.readInt();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        BaseData baseData = (BaseData) o;
+        return width == baseData.width &&
+                height == baseData.height &&
+                Objects.equals(url, baseData.url);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(url, width, height);
+    }
 }

@@ -10,6 +10,7 @@ import android.view.Window;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by huangwei on 2018/9/18 0018.
@@ -27,16 +28,8 @@ public class TransitionHelper {
         if (!ENABLE || shareViews == null) {
             return null;
         }
-        View statusBar = activity.findViewById(android.R.id.statusBarBackground);
-        View navigationBar = activity.findViewById(android.R.id.navigationBarBackground);
-//
         List<Pair<View, String>> pairs = new ArrayList<>();
-        if (statusBar != null) {
-            pairs.add(Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
-        }
-        if (navigationBar != null) {
-            pairs.add(Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME));
-        }
+        //添加ShareElements
         for (int i = 0; i < shareViews.length; i++) {
             View view = shareViews[i];
             pairs.add(Pair.create(view, view.getTransitionName()));
@@ -46,5 +39,4 @@ public class TransitionHelper {
         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, pairsArray);
         return options.toBundle();
     }
-
 }

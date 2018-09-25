@@ -19,7 +19,7 @@ public class VideoContentCell extends BaseContentCell<Video> {
     }
 
     @Override
-    protected View getShareElement() {
+    public View getShareElement() {
         return mViewHolder==null?null:mViewHolder.getView(R.id.content_item_video);
     }
 

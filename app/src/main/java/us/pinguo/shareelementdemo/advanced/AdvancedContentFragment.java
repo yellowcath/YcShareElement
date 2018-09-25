@@ -16,6 +16,7 @@ import us.pinguo.shareelementdemo.advanced.content.ImageContentCell;
 import us.pinguo.shareelementdemo.advanced.content.VideoContentCell;
 import us.pinguo.shareelementdemo.advanced.content.viewpager.BasePagerAdapter;
 import us.pinguo.shareelementdemo.transform.ShareElementInfo;
+import us.pinguo.shareelementdemo.transform.ShareImageViewInfo;
 import us.pinguo.shareelementdemo.transform.YcShareElement;
 
 import java.util.ArrayList;
@@ -44,14 +45,7 @@ public class AdvancedContentFragment extends Fragment implements ViewPager.OnPag
         mAdapter = new BasePagerAdapter();
         mViewPager.addOnPageChangeListener(this);
         initCells();
-        mViewPager.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-            @Override
-            public boolean onPreDraw() {
-                mViewPager.getViewTreeObserver().removeOnPreDrawListener(this);
-                YcShareElement.onShareElementReady(getActivity());
-                return false;
-            }
-        });
+        YcShareElement.callReadyAfterPreDraw(getActivity());
     }
 
     private void initCells() {
@@ -117,7 +111,7 @@ public class AdvancedContentFragment extends Fragment implements ViewPager.OnPag
     public ShareElementInfo[] getShareElements() {
         BaseContentCell item = (BaseContentCell) mAdapter.getItem(mViewPager.getCurrentItem());
         if (item != null) {
-            return new ShareElementInfo[]{new ShareElementInfo(item.getShareElement(), (Parcelable) item.getData())};
+            return new ShareElementInfo[]{new ShareImageViewInfo(item.getShareElement(), (BaseData) item.getData())};
         }
         return new ShareElementInfo[0];
     }

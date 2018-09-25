@@ -7,11 +7,13 @@ import android.view.View;
 import us.pinguo.shareelementdemo.advanced.AdvancedListActivity;
 import us.pinguo.shareelementdemo.simple.SimpleFragmentActivity;
 import us.pinguo.shareelementdemo.simple.SimpleFromActivity;
+import us.pinguo.shareelementdemo.transform.YcShareElement;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        YcShareElement.init(getApplication());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 

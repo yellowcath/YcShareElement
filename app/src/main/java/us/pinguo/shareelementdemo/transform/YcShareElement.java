@@ -1,6 +1,7 @@
 package us.pinguo.shareelementdemo.transform;
 
 import android.app.Activity;
+import android.app.Application;
 import android.app.SharedElementCallback;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +17,7 @@ import android.transition.Transition;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.widget.ImageView;
 import us.pinguo.shareelementdemo.R;
 import us.pinguo.shareelementdemo.TransitionHelper;
@@ -25,6 +27,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -103,7 +106,7 @@ public class YcShareElement {
         return TransitionHelper.getTransitionBundle(activity, viewArray);
     }
 
-    public static void beforeOnCreate(@NonNull final Activity activity, @Nullable final GetShareElement getShareElement) {
+    public static void postponeEnterTransition(@NonNull final Activity activity, @Nullable final GetShareElement getShareElement) {
         activity.postponeEnterTransition();
         activity.setEnterSharedElementCallback(new SharedElementCallback() {
 
@@ -228,6 +231,17 @@ public class YcShareElement {
                 activity.getWindow().setExitTransition(exitTransition);
             }
         }
+        //防止状态栏闪烁
+        Transition enterTransition = activity.getWindow().getEnterTransition();
+        Transition exitTransition = activity.getWindow().getExitTransition();
+        if (enterTransition != null) {
+            enterTransition.excludeTarget(Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME, true);
+            enterTransition.excludeTarget(Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME, true);
+        }
+        if (exitTransition != null) {
+            exitTransition.excludeTarget(Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME, true);
+            exitTransition.excludeTarget(Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME, true);
+        }
     }
 
     public static void setShareElementTransitionFactory(IShareElementTransitionFactory transitionFactory) {
@@ -283,5 +297,48 @@ public class YcShareElement {
                 return false;
             }
         });
+    }
+
+    private static AtomicBoolean sInited = new AtomicBoolean(false);
+
+    public static void init(Application application) {
+        if (!sInited.getAndSet(true)) {
+            application.registerActivityLifecycleCallbacks(new Application.ActivityLifecycleCallbacks() {
+                @Override
+                public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+                    TransitionHelper.enableTransition(activity);
+                }
+
+                @Override
+                public void onActivityStarted(Activity activity) {
+
+                }
+
+                @Override
+                public void onActivityResumed(Activity activity) {
+
+                }
+
+                @Override
+                public void onActivityPaused(Activity activity) {
+
+                }
+
+                @Override
+                public void onActivityStopped(Activity activity) {
+
+                }
+
+                @Override
+                public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+
+                }
+
+                @Override
+                public void onActivityDestroyed(Activity activity) {
+
+                }
+            });
+        }
     }
 }

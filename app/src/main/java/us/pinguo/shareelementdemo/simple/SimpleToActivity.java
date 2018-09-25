@@ -11,8 +11,10 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.FitCenter;
 import com.bumptech.glide.request.RequestOptions;
 import us.pinguo.shareelementdemo.R;
+import us.pinguo.shareelementdemo.advanced.BaseData;
 import us.pinguo.shareelementdemo.transform.GetShareElement;
 import us.pinguo.shareelementdemo.transform.ShareElementInfo;
+import us.pinguo.shareelementdemo.transform.ShareImageViewInfo;
 import us.pinguo.shareelementdemo.transform.YcShareElement;
 
 /**
@@ -24,7 +26,7 @@ public class SimpleToActivity extends AppCompatActivity implements GetShareEleme
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        YcShareElement.beforeOnCreate(this, this);
+        YcShareElement.postponeEnterTransition(this, this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_to);
         mImageView = findViewById(R.id.s2_img);
@@ -46,6 +48,6 @@ public class SimpleToActivity extends AppCompatActivity implements GetShareEleme
 
     @Override
     public ShareElementInfo[] getShareElements() {
-        return new ShareElementInfo[]{new ShareElementInfo(mImageView,null)};
+        return new ShareElementInfo[]{new ShareImageViewInfo(mImageView, new BaseData(null, 1024, 768))};
     }
 }

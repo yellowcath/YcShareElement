@@ -55,4 +55,8 @@ public abstract class BasePagerCell<DATA, VH extends BasePagerViewHolder> implem
         }
         return super.hashCode();
     }
+
+    public VH getViewHolder() {
+        return mViewHolder;
+    }
 }

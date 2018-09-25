@@ -10,12 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import com.bumptech.glide.Glide;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import us.pinguo.shareelementdemo.advanced.content.BaseContentCell;
 import us.pinguo.shareelementdemo.advanced.content.ImageContentCell;
 import us.pinguo.shareelementdemo.advanced.content.VideoContentCell;
 import us.pinguo.shareelementdemo.advanced.content.viewpager.BasePagerAdapter;
+import us.pinguo.shareelementdemo.transform.ShareElementInfo;
 import us.pinguo.shareelementdemo.transform.YcShareElement;
 
 import java.util.ArrayList;
@@ -114,4 +114,11 @@ public class AdvancedContentFragment extends Fragment implements ViewPager.OnPag
         super.onDestroy();
     }
 
+    public ShareElementInfo[] getShareElements() {
+        BaseContentCell item = (BaseContentCell) mAdapter.getItem(mViewPager.getCurrentItem());
+        if (item != null) {
+            return new ShareElementInfo[]{new ShareElementInfo(item.getShareElement(), (Parcelable) item.getData())};
+        }
+        return new ShareElementInfo[0];
+    }
 }

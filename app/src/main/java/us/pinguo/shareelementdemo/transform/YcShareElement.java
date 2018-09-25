@@ -3,11 +3,15 @@ package us.pinguo.shareelementdemo.transform;
 import android.app.Activity;
 import android.app.SharedElementCallback;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.view.ViewCompat;
 import android.transition.Transition;
 import android.util.Log;
 import android.view.View;
@@ -15,24 +19,28 @@ import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import us.pinguo.shareelementdemo.R;
 import us.pinguo.shareelementdemo.TransitionHelper;
-import us.pinguo.shareelementdemo.simple.SimpleToActivity;
 
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by huangwei on 2018/9/22.
  */
 public class YcShareElement {
+    private static final String KEY_SHARE_ELEMENTS = "key_share_elements";
 
     private static IShareElementTransitionFactory sTransitionFactory = new DefaultShareElementTransitionFactory();
 
-    public static Bundle buildOptionsBundle(Activity activity, final ShareElementInfo... shareElementInfos) {
+    public static Bundle buildOptionsBundle(@NonNull final Activity activity, @Nullable final GetShareElement getShareElement) {
         activity.setExitSharedElementCallback(new SharedElementCallback() {
             @Override
             public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
+                mapSharedElements(activity, getShareElement, names, sharedElements);
                 super.onMapSharedElements(names, sharedElements);
                 Log.w("hwLog", "onMapSharedElements");
             }
@@ -44,7 +52,7 @@ public class YcShareElement {
 
                 if (tag instanceof ShareElementInfo) {
                     ShareElementInfo shareElementInfo = (ShareElementInfo) tag;
-                    shareElementInfo.originData = super.onCaptureSharedElementSnapshot(sharedElement, viewToGlobalMatrix, screenBounds);
+                    shareElementInfo.setSnapshot(super.onCaptureSharedElementSnapshot(sharedElement, viewToGlobalMatrix, screenBounds));
                     ;
                     return shareElementInfo;
                 }
@@ -86,19 +94,22 @@ public class YcShareElement {
 
 
         });
-        View[] viewArray = new View[shareElementInfos.length];
-        for (int i = 0; i < viewArray.length; i++) {
-            viewArray[i] = shareElementInfos[i].view;
+        ShareElementInfo[] infos = getShareElement == null ? null : getShareElement.getShareElements();
+        int len = infos == null ? 0 : infos.length;
+        View[] viewArray = new View[len];
+        for (int i = 0; i < len; i++) {
+            viewArray[i] = infos[i].getView();
         }
         return TransitionHelper.getTransitionBundle(activity, viewArray);
     }
 
-    public static void beforeOnCreate(final Activity activity) {
+    public static void beforeOnCreate(@NonNull final Activity activity, @Nullable final GetShareElement getShareElement) {
         activity.postponeEnterTransition();
         activity.setEnterSharedElementCallback(new SharedElementCallback() {
 
             @Override
             public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
+                mapSharedElements(activity, getShareElement, names, sharedElements);
                 super.onMapSharedElements(names, sharedElements);
                 Log.e("hwLog", "onMapSharedElements");
                 recordShareElementsBaseBounds(sharedElements);
@@ -120,7 +131,7 @@ public class YcShareElement {
             public View onCreateSnapshotView(Context context, Parcelable snapshot) {
                 Log.e("hwLog", "onCreateSnapshotView");
                 if (snapshot instanceof ShareElementInfo) {
-                    View view = super.onCreateSnapshotView(context, ((ShareElementInfo) snapshot).originData);
+                    View view = super.onCreateSnapshotView(context, ((ShareElementInfo) snapshot).getSnapshot());
                     view.setTag(R.id.share_element_info, snapshot);
                     return view;
                 } else {
@@ -170,10 +181,10 @@ public class YcShareElement {
             View view = values.next();
             Object tag = view.getTag(R.id.share_element_info);
             if (tag instanceof ShareElementInfo) {
-                ((ShareElementInfo) tag).tansfromViewBounds.set(view.getLeft(), view.getTop(), view.getRight(), view.getBottom());
+                ((ShareElementInfo) tag).getTansfromViewBounds().set(view.getLeft(), view.getTop(), view.getRight(), view.getBottom());
             }
             if (tag instanceof ShareImageViewInfo && view instanceof ImageView) {
-                ((ShareImageViewInfo) tag).tranfromViewScaleType = ((ImageView) view).getScaleType();
+                ((ShareImageViewInfo) tag).mTranfromViewScaleType = ((ImageView) view).getScaleType();
             }
         }
     }
@@ -221,5 +232,56 @@ public class YcShareElement {
 
     public static void setShareElementTransitionFactory(IShareElementTransitionFactory transitionFactory) {
         sTransitionFactory = transitionFactory;
+    }
+
+    private static void mapSharedElements(Activity activity, GetShareElement getShareElement, List<String> names, Map<String, View> sharedElements) {
+        ShareElementInfo[] infos = getShareElement == null ? null : getShareElement.getShareElements();
+
+        names.clear();
+        sharedElements.clear();
+        if (infos == null) {
+            return;
+        }
+        for (ShareElementInfo info : infos) {
+            View view = info.getView();
+            if (isViewInBounds(activity.getWindow().getDecorView(), view)) {
+                names.add(ViewCompat.getTransitionName(view));
+                sharedElements.put(ViewCompat.getTransitionName(view), view);
+            }
+        }
+    }
+
+    private static boolean isViewInBounds(View decorView, View view) {
+        Rect rect = new Rect();
+        decorView.getHitRect(rect);
+        return view.getLocalVisibleRect(rect);
+    }
+
+    public static void finishAfterTransition(Activity activity, GetShareElement getShareElement) {
+        ShareElementInfo[] shareElements = getShareElement == null ? null : getShareElement.getShareElements();
+        if (shareElements != null) {
+            ArrayList<ShareElementInfo> list = new ArrayList<>(Arrays.asList(shareElements));
+            Intent intent = new Intent();
+            intent.putParcelableArrayListExtra(KEY_SHARE_ELEMENTS, list);
+            activity.setResult(RESULT_OK, intent);
+        }
+    }
+
+    public static void onActivityReenter(final Activity activity, int resultCode, Intent data, IShareElementSelector selector) {
+        if (selector == null || resultCode != RESULT_OK || data == null || !data.hasExtra(KEY_SHARE_ELEMENTS)) {
+            return;
+        }
+        activity.postponeEnterTransition();
+        ArrayList<ShareElementInfo> shareElementsList = data.getParcelableArrayListExtra(KEY_SHARE_ELEMENTS);
+        selector.selectShareElements(shareElementsList);
+
+        activity.getWindow().getDecorView().getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                activity.getWindow().getDecorView().getViewTreeObserver().removeOnPreDrawListener(this);
+                activity.startPostponedEnterTransition();
+                return false;
+            }
+        });
     }
 }

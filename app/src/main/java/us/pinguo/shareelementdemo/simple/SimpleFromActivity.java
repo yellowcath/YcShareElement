@@ -15,15 +15,16 @@ import com.bumptech.glide.request.RequestOptions;
 import us.pinguo.shareelementdemo.R;
 import us.pinguo.shareelementdemo.TransitionHelper;
 import us.pinguo.shareelementdemo.transform.ChangeOnlineImageTransform;
+import us.pinguo.shareelementdemo.transform.GetShareElement;
 import us.pinguo.shareelementdemo.transform.GlideBitmapSizeCalculator;
-import us.pinguo.shareelementdemo.transform.NoClipTransformation;
+import us.pinguo.shareelementdemo.transform.ShareElementInfo;
 import us.pinguo.shareelementdemo.transform.ShareImageViewInfo;
 import us.pinguo.shareelementdemo.transform.YcShareElement;
 
 /**
  * Created by huangwei on 2018/9/18 0018.
  */
-public class SimpleFromActivity extends AppCompatActivity {
+public class SimpleFromActivity extends AppCompatActivity implements GetShareElement {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         TransitionHelper.enableTransition(this);
@@ -44,8 +45,7 @@ public class SimpleFromActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(SimpleFromActivity.this, SimpleToActivity.class);
                 ChangeOnlineImageTransform.setsBitmapSizeCalculator(new GlideBitmapSizeCalculator());
-                Bundle optionsBundle = YcShareElement.buildOptionsBundle(SimpleFromActivity.this,new ShareImageViewInfo(imgView,1024,768));
-//                Bundle optionsBundle = YcShareElement.buildOptionsBundle(SimpleFromActivity.this,new ShareElementInfo(imgView));
+                Bundle optionsBundle = YcShareElement.buildOptionsBundle(SimpleFromActivity.this,SimpleFromActivity.this);
                 startActivity(intent, optionsBundle);
             }
         });
@@ -54,5 +54,11 @@ public class SimpleFromActivity extends AppCompatActivity {
     @Override
     public void onActivityReenter(int resultCode, Intent data) {
         super.onActivityReenter(resultCode, data);
+    }
+
+    @Override
+    public ShareElementInfo[] getShareElements() {
+        final ImageView imgView = findViewById(R.id.s1_img);
+        return new ShareElementInfo[]{new ShareImageViewInfo(imgView, 1024, 768)};
     }
 }

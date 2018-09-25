@@ -1,5 +1,6 @@
 package us.pinguo.shareelementdemo.advanced.content;
 
+import android.view.View;
 import android.view.ViewGroup;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
@@ -15,6 +16,11 @@ public class VideoContentCell extends BaseContentCell<Video> {
 
     public VideoContentCell(Video video) {
         super(video);
+    }
+
+    @Override
+    protected View getShareElement() {
+        return mViewHolder==null?null:mViewHolder.getView(R.id.content_item_video);
     }
 
     @Override

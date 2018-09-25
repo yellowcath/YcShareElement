@@ -3,25 +3,19 @@ package us.pinguo.shareelementdemo.transform;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.animation.RectEvaluator;
 import android.animation.TypeEvaluator;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.transition.Transition;
 import android.transition.TransitionValues;
-import android.util.Log;
-import android.util.Pair;
 import android.util.Property;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import us.pinguo.shareelementdemo.R;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Map;
 
 /**
@@ -91,20 +85,20 @@ public class ChangeOnlineImageTransform extends Transition {
         ShareImageViewInfo shareElementInfo = (ShareImageViewInfo) startValues.values.get(PROPNAME_INFO);
 
         Rect transfromViewRect = new Rect();
-        boolean isEnter = shareElementInfo.tansfromViewBounds.width() == 0;
+        boolean isEnter = shareElementInfo.getTansfromViewBounds().width() == 0;
         if (isEnter) {
             transfromViewRect.set(endBounds);
         } else {
-            transfromViewRect.set(shareElementInfo.tansfromViewBounds);
+            transfromViewRect.set(shareElementInfo.getTansfromViewBounds());
         }
 
         ImageView.ScaleType startScaleType = (ImageView.ScaleType) startValues.values.get(PROPNAME_SCALE_TYPE);
         ImageView.ScaleType endScaleType = (ImageView.ScaleType) endValues.values.get(PROPNAME_SCALE_TYPE);
         BitmapInfo transfromBitmapInfo = sBitmapSizeCalculator.calculateImageSize(
                 transfromViewRect,
-                isEnter ? endScaleType : shareElementInfo.tranfromViewScaleType,
-                shareElementInfo.photoOriginWidth,
-                shareElementInfo.photoOriginHeight);
+                isEnter ? endScaleType : shareElementInfo.mTranfromViewScaleType,
+                shareElementInfo.getPhotoOriginWidth(),
+                shareElementInfo.getPhotoOriginHeight());
 
         if (startScaleType == ImageView.ScaleType.MATRIX) {
             startMatrix.set((Matrix) startValues.values.get(PROPNAME_MATRIX));

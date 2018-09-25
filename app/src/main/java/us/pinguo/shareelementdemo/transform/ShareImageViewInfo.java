@@ -1,33 +1,41 @@
 package us.pinguo.shareelementdemo.transform;
 
-import android.graphics.Rect;
 import android.os.Parcel;
 import android.view.View;
 import android.widget.ImageView;
+import us.pinguo.shareelementdemo.advanced.BaseData;
 
 import java.util.Map;
 
 /**
  * Created by huangwei on 2018/9/22.
  */
-public class ShareImageViewInfo extends ShareElementInfo {
-    /**
-     * 图片的原始尺寸
-     */
-    public int photoOriginWidth;
-    public int photoOriginHeight;
+public class ShareImageViewInfo extends ShareElementInfo<BaseData> {
 
     /**
      * 实际做动画的ImageView的ScaleType,由{@link YcShareElement#recordShareElementsBaseBounds(Map)}负责填充
      */
-    public ImageView.ScaleType tranfromViewScaleType = ImageView.ScaleType.FIT_CENTER;
+    public transient ImageView.ScaleType mTranfromViewScaleType = ImageView.ScaleType.FIT_CENTER;
 
-    public ShareImageViewInfo(View view, int photoOriginWidth, int photoOriginHeight) {
-        super(view);
-        this.photoOriginHeight = photoOriginHeight;
-        this.photoOriginWidth = photoOriginWidth;
+    public ShareImageViewInfo(View view, BaseData data) {
+        super(view, data);
     }
 
+    public int getPhotoOriginWidth() {
+        return mData.width;
+    }
+
+    public int getPhotoOriginHeight() {
+        return mData.height;
+    }
+
+    public ImageView.ScaleType getTranfromViewScaleType() {
+        return mTranfromViewScaleType;
+    }
+
+    public void setTranfromViewScaleType(ImageView.ScaleType tranfromViewScaleType) {
+        mTranfromViewScaleType = tranfromViewScaleType;
+    }
 
     @Override
     public int describeContents() {
@@ -37,14 +45,10 @@ public class ShareImageViewInfo extends ShareElementInfo {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
-        dest.writeInt(this.photoOriginWidth);
-        dest.writeInt(this.photoOriginHeight);
     }
 
     protected ShareImageViewInfo(Parcel in) {
         super(in);
-        this.photoOriginWidth = in.readInt();
-        this.photoOriginHeight = in.readInt();
     }
 
     public static final Creator<ShareImageViewInfo> CREATOR = new Creator<ShareImageViewInfo>() {

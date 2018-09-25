@@ -11,16 +11,15 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import us.pinguo.shareelementdemo.R;
-import us.pinguo.shareelementdemo.TransitionHelper;
 import us.pinguo.shareelementdemo.advanced.list.AdvancedListAdapter;
 import us.pinguo.shareelementdemo.advanced.list.BaseListCell;
-import us.pinguo.shareelementdemo.advanced.list.BaseRecyclerCell;
 import us.pinguo.shareelementdemo.advanced.list.ImageListCell;
 import us.pinguo.shareelementdemo.advanced.list.VideoListCell;
 import us.pinguo.shareelementdemo.transform.ChangeOnlineImageTransform;
+import us.pinguo.shareelementdemo.transform.GetShareElement;
 import us.pinguo.shareelementdemo.transform.GlideBitmapSizeCalculator;
+import us.pinguo.shareelementdemo.transform.ShareElementInfo;
 import us.pinguo.shareelementdemo.transform.ShareImageViewInfo;
 import us.pinguo.shareelementdemo.transform.YcShareElement;
 
@@ -31,12 +30,13 @@ import java.util.List;
 /**
  * Created by huangwei on 2018/9/18 0018.
  */
-public class AdvancedListFragment extends Fragment implements BaseListCell.OnCellClickListener {
+public class AdvancedListFragment extends Fragment implements BaseListCell.OnCellClickListener, GetShareElement {
     static final int REQUEST_CONTENT = 223;
 
     private RecyclerView mRecyclerView;
     private AdvancedListAdapter mAdapter;
     private ArrayList<Parcelable> mDataList = new ArrayList<>();
+    private BaseListCell mTransitionCell;
 
     @Nullable
     @Override
@@ -92,15 +92,12 @@ public class AdvancedListFragment extends Fragment implements BaseListCell.OnCel
 
     @Override
     public void onCellClick(BaseListCell cell) {
+        mTransitionCell = cell;
         Intent intent = new Intent(getActivity(), AdvancedContentActivity.class);
         intent.putParcelableArrayListExtra("data", mDataList);
         intent.putExtra("select", mDataList.indexOf(cell.getData()));
-        int w = cell.getData().width;
-        int h = cell.getData().height;
-        ImageView shareElement = (ImageView) cell.getShareElement();
-        ShareImageViewInfo info = new ShareImageViewInfo(cell.getShareElement(), w,h);
         ChangeOnlineImageTransform.setsBitmapSizeCalculator(new GlideBitmapSizeCalculator());
-        Bundle options = YcShareElement.buildOptionsBundle(getActivity(), info);
+        Bundle options = YcShareElement.buildOptionsBundle(getActivity(), this);
         startActivityForResult(intent, REQUEST_CONTENT, options);
     }
 
@@ -111,5 +108,27 @@ public class AdvancedListFragment extends Fragment implements BaseListCell.OnCel
             BaseListCell cell = (BaseListCell) mAdapter.getItem(i);
             cell.setOnCellClickListener(null);
         }
+    }
+
+    @Override
+    public ShareElementInfo[] getShareElements() {
+        if (mTransitionCell != null) {
+            ShareImageViewInfo info = new ShareImageViewInfo(mTransitionCell.getShareElement(), mTransitionCell.getData());
+            return new ShareElementInfo[]{info};
+        }
+        return new ShareElementInfo[0];
+    }
+
+    public void selectShareElement(ShareElementInfo shareElementInfo) {
+        BaseData data = (BaseData) shareElementInfo.getData();
+        for (int i = 0; i < mAdapter.getItemCount(); i++) {
+            BaseListCell cell = mAdapter.getItem(i);
+            if (cell.getData().equals(data)) {
+                StaggeredGridLayoutManager layoutManager = (StaggeredGridLayoutManager) mRecyclerView.getLayoutManager();
+                layoutManager.scrollToPosition(i);
+                return;
+            }
+        }
+
     }
 }

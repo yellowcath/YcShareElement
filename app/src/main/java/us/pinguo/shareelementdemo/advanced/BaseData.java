@@ -19,23 +19,6 @@ public class BaseData implements Parcelable {
         this.height = height;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.url);
-        dest.writeInt(this.width);
-        dest.writeInt(this.height);
-    }
-
-    protected BaseData(Parcel in) {
-        this.url = in.readString();
-        this.width = in.readInt();
-        this.height = in.readInt();
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -56,4 +39,34 @@ public class BaseData implements Parcelable {
 
         return Objects.hash(url, width, height);
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.url);
+        dest.writeInt(this.width);
+        dest.writeInt(this.height);
+    }
+
+    protected BaseData(Parcel in) {
+        this.url = in.readString();
+        this.width = in.readInt();
+        this.height = in.readInt();
+    }
+
+    public static final Creator<BaseData> CREATOR = new Creator<BaseData>() {
+        @Override
+        public BaseData createFromParcel(Parcel source) {
+            return new BaseData(source);
+        }
+
+        @Override
+        public BaseData[] newArray(int size) {
+            return new BaseData[size];
+        }
+    };
 }

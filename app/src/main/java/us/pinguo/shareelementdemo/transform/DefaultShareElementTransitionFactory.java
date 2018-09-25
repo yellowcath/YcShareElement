@@ -26,29 +26,25 @@ public class DefaultShareElementTransitionFactory implements IShareElementTransi
         transitionSet.addTransition(new ChangeClipBounds());
         boolean shareImageViewInfoExisted = false;
         boolean imageViewExisted = false;
+        boolean videoViewExisted = false;
         for (View view : shareViewList) {
             if (view instanceof ImageView) {
                 imageViewExisted = true;
                 if (view.getTag(R.id.share_element_info) instanceof ShareImageViewInfo) {
                     shareImageViewInfoExisted = true;
                 }
+            } else if(view.getTag(R.id.share_element_info) instanceof ShareVideoViewInfo){
+                videoViewExisted = true;
             }
         }
+        transitionSet.addTransition(new ChangeBounds());
+        transitionSet.addTransition(new ChangeTransform());
+        transitionSet.addTransition(new ChangeClipBounds());
+
         if (shareImageViewInfoExisted) {
             transitionSet.addTransition(new ChangeOnlineImageTransform());
-//            transitionSet.addTransition(new ChangeImageTransform());
-            transitionSet.addTransition(new ChangeBounds());
-//            transitionSet.addTransition(new ChangeTransform());
         } else if (imageViewExisted) {
             transitionSet.addTransition(new ChangeImageTransform());
-            transitionSet.addTransition(new ChangeBounds());
-            transitionSet.addTransition(new ChangeTransform());
-            transitionSet.addTransition(new ChangeClipBounds());
-        } else {
-            transitionSet.addTransition(new ChangeBounds());
-            transitionSet.addTransition(new ChangeTransform());
-            transitionSet.addTransition(new ChangeClipBounds());
-
         }
         return transitionSet;
     }

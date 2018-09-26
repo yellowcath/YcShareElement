@@ -5,6 +5,7 @@ import android.graphics.drawable.Animatable;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,7 +37,7 @@ public class VideoListCell extends BaseListCell<Video, RecyclerView.ViewHolder> 
     protected void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         super.onBindViewHolder(holder,position);
         SimpleDraweeView simpleDraweeView = holder.itemView.findViewById(R.id.list_item_video);
-        simpleDraweeView.setTransitionName(mData.url);
+        ViewCompat.setTransitionName(simpleDraweeView,mData.url);
         setSize(simpleDraweeView);
         showWebp(simpleDraweeView,mData.webpUrl,true);
     }

@@ -56,7 +56,6 @@ public class YcShareElement {
                 if (tag instanceof ShareElementInfo) {
                     ShareElementInfo shareElementInfo = (ShareElementInfo) tag;
                     shareElementInfo.setSnapshot(super.onCaptureSharedElementSnapshot(sharedElement, viewToGlobalMatrix, screenBounds));
-                    ;
                     return shareElementInfo;
                 }
                 return super.onCaptureSharedElementSnapshot(sharedElement, viewToGlobalMatrix, screenBounds);
@@ -66,7 +65,6 @@ public class YcShareElement {
             public void onSharedElementsArrived(List<String> sharedElementNames, List<View> sharedElements, OnSharedElementsReadyListener listener) {
                 super.onSharedElementsArrived(sharedElementNames, sharedElements, listener);
                 Log.w("hwLog", "onSharedElementsArrived");
-
             }
 
             //以下不回調
@@ -94,8 +92,6 @@ public class YcShareElement {
                 Log.w("hwLog", "onCreateSnapshotView");
                 return super.onCreateSnapshotView(context, snapshot);
             }
-
-
         });
         ShareElementInfo[] infos = getShareElement == null ? null : getShareElement.getShareElements();
         int len = infos == null ? 0 : infos.length;

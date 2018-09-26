@@ -2,6 +2,7 @@ package us.pinguo.shareelementdemo.advanced.content;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v4.view.ViewCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -35,7 +36,7 @@ public class ImageContentCell extends BaseContentCell<Image> {
     @Override
     protected void onBindViewHolder(BasePagerViewHolder viewHolder) {
         ImageView imageView = viewHolder.getView(R.id.content_item_img);
-        imageView.setTransitionName(mData.url);
+        ViewCompat.setTransitionName(imageView,mData.url);
         Glide.with(imageView)
                 .load(mData.url)
                 .apply(new RequestOptions()

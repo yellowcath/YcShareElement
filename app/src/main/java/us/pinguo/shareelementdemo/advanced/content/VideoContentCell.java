@@ -1,7 +1,15 @@
 package us.pinguo.shareelementdemo.advanced.content;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.support.v4.view.ViewCompat;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.FitCenter;
+import com.bumptech.glide.request.RequestOptions;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import us.pinguo.shareelementdemo.R;
@@ -19,19 +27,25 @@ public class VideoContentCell extends BaseContentCell<Video> {
     }
 
     @Override
-    public View getShareElement() {
-        return mViewHolder == null ? null : mViewHolder.getView(R.id.content_item_video);
-    }
-
-    @Override
     protected BasePagerViewHolder createViewHolder(ViewGroup parent) {
         return createHolderByLayout(R.layout.item_content_video, parent);
     }
 
     @Override
     protected void onBindViewHolder(BasePagerViewHolder viewHolder) {
+        //COVER
+        ImageView coverImg = viewHolder.getView(R.id.content_item_video_cover);
+        ViewCompat.setTransitionName(coverImg, mData.url);
+        Glide.with(coverImg)
+                .load(mData.webpUrl)
+                .apply(new RequestOptions()
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .transform(new FitCenter())
+                        .skipMemoryCache(true)
+                        .placeholder(new ColorDrawable(Color.GRAY)))
+                .into(coverImg);
+        //VIDEO
         StandardGSYVideoPlayer videoView = viewHolder.getView(R.id.content_item_video);
-        videoView.setTransitionName(mData.url);
         GSYVideoOptionBuilder gsyVideoOption = new GSYVideoOptionBuilder();
         gsyVideoOption
                 .setIsTouchWiget(true)
@@ -48,6 +62,11 @@ public class VideoContentCell extends BaseContentCell<Video> {
             mStartPlay = false;
             videoView.startPlayLogic();
         }
+    }
+
+    @Override
+    public View getShareElement() {
+        return mViewHolder == null ? null : mViewHolder.getView(R.id.content_item_video_cover);
     }
 
     public void startPlay() {

@@ -12,6 +12,7 @@ import us.pinguo.shareelementdemo.R;
  */
 public class ChangeVideoBounds extends ChangeBounds {
     private static final String PROPNAME_BOUNDS = "android:changeBounds:bounds";
+    private static final String PROPNAME_CLIP = "android:changeBounds:clip";
 
     @Override
     public void captureStartValues(TransitionValues transitionValues) {
@@ -31,7 +32,7 @@ public class ChangeVideoBounds extends ChangeBounds {
         Rect startBounds = (Rect) startValues.values.get(PROPNAME_BOUNDS);
         Rect endBounds = (Rect) endValues.values.get(PROPNAME_BOUNDS);
         ShareVideoViewInfo info = (ShareVideoViewInfo) startValues.view.getTag(R.id.share_element_info);
-
+        endValues.view.setBackgroundColor(0xFFFF0000);
         //返回动画
         float videoRatio = info.getVideoWidth() / (float) info.getVideoHeight();
         float startRatio = startBounds.width() / (float) startBounds.height();
@@ -40,7 +41,13 @@ public class ChangeVideoBounds extends ChangeBounds {
         if (videoRatio > startRatio) {
 
         } else {
-
+            if (videoRatio < endRatio) {
+                //Video竖屏满，endBounds需上下拉伸
+                int width = endBounds.width();
+                int height = (int) (width / videoRatio);
+                int cx = endBounds.centerX();
+                endBounds.set(cx - width / 2, endBounds.top, cx + width / 2, endBounds.top + height);
+            }
         }
 
         return super.createAnimator(sceneRoot, startValues, endValues);

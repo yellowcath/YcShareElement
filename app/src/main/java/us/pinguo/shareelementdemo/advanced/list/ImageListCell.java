@@ -3,6 +3,7 @@ package us.pinguo.shareelementdemo.advanced.list;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +29,7 @@ public class ImageListCell extends BaseListCell<Image,RecyclerView.ViewHolder> {
     protected void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         super.onBindViewHolder(holder,position);
         ImageView imageView = holder.itemView.findViewById(R.id.list_item_img);
-        imageView.setTransitionName(mData.url);
+        ViewCompat.setTransitionName(imageView,mData.url);
         setSize(imageView);
 
         Glide.with(imageView)

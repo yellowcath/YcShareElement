@@ -1,6 +1,5 @@
 package us.pinguo.shareelementdemo.transform;
 
-import android.graphics.Rect;
 import android.transition.ChangeBounds;
 import android.transition.ChangeClipBounds;
 import android.transition.ChangeImageTransform;
@@ -37,14 +36,17 @@ public class DefaultShareElementTransitionFactory implements IShareElementTransi
                 videoViewExisted = true;
             }
         }
-        transitionSet.addTransition(new ChangeBounds());
         transitionSet.addTransition(new ChangeTransform());
         transitionSet.addTransition(new ChangeClipBounds());
 
         if (shareImageViewInfoExisted) {
             transitionSet.addTransition(new ChangeOnlineImageTransform());
+            transitionSet.addTransition(new ChangeBounds());
         } else if (imageViewExisted) {
             transitionSet.addTransition(new ChangeImageTransform());
+            transitionSet.addTransition(new ChangeBounds());
+        }else if(videoViewExisted){
+            transitionSet.addTransition(new ChangeVideoBounds());
         }
         return transitionSet;
     }

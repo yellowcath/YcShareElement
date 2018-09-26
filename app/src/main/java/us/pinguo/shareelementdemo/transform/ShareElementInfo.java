@@ -73,15 +73,4 @@ public class ShareElementInfo<T extends Parcelable> implements Parcelable {
         this.mData = in.readParcelable(getClass().getClassLoader());
     }
 
-    public static final Creator<ShareElementInfo> CREATOR = new Creator<ShareElementInfo>() {
-        @Override
-        public ShareElementInfo createFromParcel(Parcel source) {
-            return new ShareElementInfo(source);
-        }
-
-        @Override
-        public ShareElementInfo[] newArray(int size) {
-            return new ShareElementInfo[size];
-        }
-    };
 }

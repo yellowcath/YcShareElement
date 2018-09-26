@@ -21,6 +21,7 @@ import us.pinguo.shareelementdemo.transform.GetShareElement;
 import us.pinguo.shareelementdemo.transform.GlideBitmapSizeCalculator;
 import us.pinguo.shareelementdemo.transform.ShareElementInfo;
 import us.pinguo.shareelementdemo.transform.ShareImageViewInfo;
+import us.pinguo.shareelementdemo.transform.ShareVideoViewInfo;
 import us.pinguo.shareelementdemo.transform.YcShareElement;
 
 import java.util.ArrayList;
@@ -113,7 +114,11 @@ public class AdvancedListFragment extends Fragment implements BaseListCell.OnCel
 
     @Override
     public ShareElementInfo[] getShareElements() {
-        if (mTransitionCell != null) {
+        if (mTransitionCell instanceof VideoListCell) {
+            ShareVideoViewInfo info = new ShareVideoViewInfo(mTransitionCell.getShareElement(), mTransitionCell.getData(),
+                    mTransitionCell.getData().width, mTransitionCell.getData().height);
+            return new ShareElementInfo[]{info};
+        } else if (mTransitionCell instanceof ImageListCell) {
             ShareImageViewInfo info = new ShareImageViewInfo(mTransitionCell.getShareElement(), mTransitionCell.getData());
             return new ShareElementInfo[]{info};
         }

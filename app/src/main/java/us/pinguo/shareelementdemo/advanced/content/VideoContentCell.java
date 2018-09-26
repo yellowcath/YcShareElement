@@ -20,12 +20,12 @@ public class VideoContentCell extends BaseContentCell<Video> {
 
     @Override
     public View getShareElement() {
-        return mViewHolder==null?null:mViewHolder.getView(R.id.content_item_video);
+        return mViewHolder == null ? null : mViewHolder.getView(R.id.content_item_video);
     }
 
     @Override
     protected BasePagerViewHolder createViewHolder(ViewGroup parent) {
-        return createHolderByLayout(R.layout.item_content_video,parent);
+        return createHolderByLayout(R.layout.item_content_video, parent);
     }
 
     @Override
@@ -34,8 +34,6 @@ public class VideoContentCell extends BaseContentCell<Video> {
         videoView.setTransitionName(mData.url);
         GSYVideoOptionBuilder gsyVideoOption = new GSYVideoOptionBuilder();
         gsyVideoOption
-//                .setThumbImageView(imageView)
-
                 .setIsTouchWiget(true)
                 .setRotateViewAuto(false)
                 .setLockLand(false)
@@ -45,15 +43,15 @@ public class VideoContentCell extends BaseContentCell<Video> {
                 .setUrl(mData.url)
                 .setCacheWithPlay(true)
                 .setLooping(true)
-        .build(videoView);
-        if(mStartPlay){
+                .build(videoView);
+        if (mStartPlay) {
             mStartPlay = false;
             videoView.startPlayLogic();
         }
     }
 
-    public void startPlay(){
-        if(mViewHolder==null || mViewHolder.itemView==null){
+    public void startPlay() {
+        if (mViewHolder == null || mViewHolder.itemView == null) {
             mStartPlay = true;
             return;
         }

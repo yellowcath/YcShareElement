@@ -25,15 +25,12 @@ public class DefaultShareElementTransitionFactory implements IShareElementTransi
         transitionSet.addTransition(new ChangeClipBounds());
         boolean shareImageViewInfoExisted = false;
         boolean imageViewExisted = false;
-        boolean videoViewExisted = false;
         for (View view : shareViewList) {
             if (view instanceof ImageView) {
                 imageViewExisted = true;
                 if (view.getTag(R.id.share_element_info) instanceof ShareImageViewInfo) {
                     shareImageViewInfoExisted = true;
                 }
-            } else if(view.getTag(R.id.share_element_info) instanceof ShareVideoViewInfo){
-                videoViewExisted = true;
             }
         }
         transitionSet.addTransition(new ChangeTransform());
@@ -45,8 +42,6 @@ public class DefaultShareElementTransitionFactory implements IShareElementTransi
         } else if (imageViewExisted) {
             transitionSet.addTransition(new ChangeImageTransform());
             transitionSet.addTransition(new ChangeBounds());
-        }else if(videoViewExisted){
-            transitionSet.addTransition(new ChangeVideoBounds());
         }
         return transitionSet;
     }

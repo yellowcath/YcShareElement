@@ -11,6 +11,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.FitCenter;
 import com.bumptech.glide.request.RequestOptions;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
+import com.shuyu.gsyvideoplayer.listener.GSYVideoProgressListener;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import us.pinguo.shareelementdemo.R;
 import us.pinguo.shareelementdemo.advanced.Video;
@@ -34,7 +35,7 @@ public class VideoContentCell extends BaseContentCell<Video> {
     @Override
     protected void onBindViewHolder(BasePagerViewHolder viewHolder) {
         //COVER
-        ImageView coverImg = viewHolder.getView(R.id.content_item_video_cover);
+        final ImageView coverImg = viewHolder.getView(R.id.content_item_video_cover);
         ViewCompat.setTransitionName(coverImg, mData.url);
         Glide.with(coverImg)
                 .load(mData.webpUrl)
@@ -57,6 +58,14 @@ public class VideoContentCell extends BaseContentCell<Video> {
                 .setUrl(mData.url)
                 .setCacheWithPlay(true)
                 .setLooping(true)
+                .setGSYVideoProgressListener(new GSYVideoProgressListener() {
+                    @Override
+                    public void onProgress(int progress, int secProgress, int currentPosition, int duration) {
+                        if (progress > 0) {
+                            coverImg.setVisibility(View.GONE);
+                        }
+                    }
+                })
                 .build(videoView);
         if (mStartPlay) {
             mStartPlay = false;

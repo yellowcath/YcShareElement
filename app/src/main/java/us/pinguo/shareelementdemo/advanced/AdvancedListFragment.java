@@ -21,7 +21,6 @@ import us.pinguo.shareelementdemo.transform.GetShareElement;
 import us.pinguo.shareelementdemo.transform.GlideBitmapSizeCalculator;
 import us.pinguo.shareelementdemo.transform.ShareElementInfo;
 import us.pinguo.shareelementdemo.transform.ShareImageViewInfo;
-import us.pinguo.shareelementdemo.transform.ShareVideoViewInfo;
 import us.pinguo.shareelementdemo.transform.YcShareElement;
 
 import java.util.ArrayList;

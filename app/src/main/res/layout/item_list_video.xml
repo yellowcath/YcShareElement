@@ -2,5 +2,6 @@
 <com.facebook.drawee.view.SimpleDraweeView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/list_item_video"
+    android:scaleType="centerCrop"
     android:layout_width="match_parent"
     android:layout_height="wrap_content" />

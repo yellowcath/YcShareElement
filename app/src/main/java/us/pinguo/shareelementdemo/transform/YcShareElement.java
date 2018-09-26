@@ -183,7 +183,7 @@ public class YcShareElement {
                 ((ShareElementInfo) tag).getTansfromViewBounds().set(view.getLeft(), view.getTop(), view.getRight(), view.getBottom());
             }
             if (tag instanceof ShareImageViewInfo && view instanceof ImageView) {
-                ((ShareImageViewInfo) tag).mTranfromViewScaleType = ((ImageView) view).getScaleType();
+                ((ShareImageViewInfo) tag).setTranfromViewScaleType(((ImageView) view).getScaleType());
             }
         }
     }
@@ -282,7 +282,7 @@ public class YcShareElement {
             return;
         }
         data.setExtrasClassLoader(ShareElementInfo.class.getClassLoader());
-        if(!data.hasExtra(KEY_SHARE_ELEMENTS)){
+        if (!data.hasExtra(KEY_SHARE_ELEMENTS)) {
             return;
         }
         activity.postponeEnterTransition();

@@ -1,6 +1,7 @@
 package us.pinguo.shareelementdemo.transform;
 
 import android.os.Parcel;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.ImageView;
 import us.pinguo.shareelementdemo.advanced.BaseData;
@@ -10,23 +11,28 @@ import java.util.Map;
 /**
  * Created by huangwei on 2018/9/22.
  */
-public class ShareImageViewInfo extends ShareElementInfo<BaseData> {
+public class ShareImageViewInfo<T extends Parcelable> extends ShareElementInfo<T> {
 
     /**
      * 实际做动画的ImageView的ScaleType,由{@link YcShareElement#recordShareElementsBaseBounds(Map)}负责填充
      */
-    public transient ImageView.ScaleType mTranfromViewScaleType = ImageView.ScaleType.FIT_CENTER;
+    protected transient ImageView.ScaleType mTranfromViewScaleType = ImageView.ScaleType.FIT_CENTER;
 
-    public ShareImageViewInfo(View view, BaseData data) {
+    private int mImageWidth;
+    private int mImageHeight;
+
+    public ShareImageViewInfo(View view, T data,int imageWidth,int imageHeight) {
         super(view, data);
+        mImageWidth = imageWidth;
+        mImageHeight = imageHeight;
     }
 
-    public int getPhotoOriginWidth() {
-        return mData.width;
+    public int getImageWidth() {
+        return mImageWidth;
     }
 
-    public int getPhotoOriginHeight() {
-        return mData.height;
+    public int getImageHeight() {
+        return mImageHeight;
     }
 
     public ImageView.ScaleType getTranfromViewScaleType() {
@@ -45,10 +51,14 @@ public class ShareImageViewInfo extends ShareElementInfo<BaseData> {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
+        dest.writeInt(this.mImageWidth);
+        dest.writeInt(this.mImageHeight);
     }
 
     protected ShareImageViewInfo(Parcel in) {
         super(in);
+        this.mImageWidth = in.readInt();
+        this.mImageHeight = in.readInt();
     }
 
     public static final Creator<ShareImageViewInfo> CREATOR = new Creator<ShareImageViewInfo>() {

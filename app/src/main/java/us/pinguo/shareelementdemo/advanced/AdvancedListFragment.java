@@ -116,10 +116,12 @@ public class AdvancedListFragment extends Fragment implements BaseListCell.OnCel
         if (mTransitionCell instanceof VideoListCell) {
 //            ShareVideoViewInfo info = new ShareVideoViewInfo(mTransitionCell.getShareElement(), mTransitionCell.getData(),
 //                    mTransitionCell.getData().width, mTransitionCell.getData().height);
-            ShareImageViewInfo info = new ShareImageViewInfo(mTransitionCell.getShareElement(), mTransitionCell.getData());
+            BaseData data = mTransitionCell.getData();
+            ShareImageViewInfo info = new ShareImageViewInfo(mTransitionCell.getShareElement(), data, data.width, data.height);
             return new ShareElementInfo[]{info};
         } else if (mTransitionCell instanceof ImageListCell) {
-            ShareImageViewInfo info = new ShareImageViewInfo(mTransitionCell.getShareElement(), mTransitionCell.getData());
+            BaseData data = mTransitionCell.getData();
+            ShareImageViewInfo info = new ShareImageViewInfo(mTransitionCell.getShareElement(), data, data.width, data.height);
             return new ShareElementInfo[]{info};
         }
         return new ShareElementInfo[0];

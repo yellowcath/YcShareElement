@@ -111,7 +111,8 @@ public class AdvancedContentFragment extends Fragment implements ViewPager.OnPag
     public ShareElementInfo[] getShareElements() {
         BaseContentCell item = (BaseContentCell) mAdapter.getItem(mViewPager.getCurrentItem());
         if (item != null) {
-            return new ShareElementInfo[]{new ShareImageViewInfo(item.getShareElement(), (BaseData) item.getData())};
+            BaseData baseData = (BaseData) item.getData();
+            return new ShareElementInfo[]{new ShareImageViewInfo(item.getShareElement(),baseData,baseData.width,baseData.height)};
         }
         return new ShareElementInfo[0];
     }

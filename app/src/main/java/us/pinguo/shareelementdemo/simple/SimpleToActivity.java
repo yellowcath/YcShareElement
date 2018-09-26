@@ -48,6 +48,6 @@ public class SimpleToActivity extends AppCompatActivity implements GetShareEleme
 
     @Override
     public ShareElementInfo[] getShareElements() {
-        return new ShareElementInfo[]{new ShareImageViewInfo(mImageView, new BaseData(null, 1024, 768))};
+        return new ShareElementInfo[]{new ShareImageViewInfo(mImageView, new BaseData(null, 1024, 768), 1024, 768)};
     }
 }

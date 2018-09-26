@@ -282,7 +282,11 @@ public class YcShareElement {
     }
 
     public static void onActivityReenter(final Activity activity, int resultCode, Intent data, IShareElementSelector selector) {
-        if (selector == null || resultCode != RESULT_OK || data == null || !data.hasExtra(KEY_SHARE_ELEMENTS)) {
+        if (selector == null || resultCode != RESULT_OK || data == null) {
+            return;
+        }
+        data.setExtrasClassLoader(ShareElementInfo.class.getClassLoader());
+        if(!data.hasExtra(KEY_SHARE_ELEMENTS)){
             return;
         }
         activity.postponeEnterTransition();

@@ -97,8 +97,8 @@ public class ChangeOnlineImageTransform extends Transition {
         BitmapInfo transfromBitmapInfo = sBitmapSizeCalculator.calculateImageSize(
                 transfromViewRect,
                 isEnter ? endScaleType : shareElementInfo.mTranfromViewScaleType,
-                shareElementInfo.getImageOriginWidth(),
-                shareElementInfo.getImageOriginHeight());
+                shareElementInfo.getPhotoOriginWidth(),
+                shareElementInfo.getPhotoOriginHeight());
 
         if (startScaleType == ImageView.ScaleType.MATRIX) {
             startMatrix.set((Matrix) startValues.values.get(PROPNAME_MATRIX));

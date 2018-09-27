@@ -24,7 +24,9 @@ import us.pinguo.shareelementdemo.advanced.Video;
  */
 public class VideoListCell extends BaseListCell<Video, RecyclerView.ViewHolder> {
 
-//    private static final float MIN_VIDEO_RATIO = 3f/4;
+    private static final float MIN_VIDEO_RATIO = 3f/4;
+    private static final float MAX_VIDEO_RATIO = 4f/3;
+
 
     public VideoListCell(Video video) {
         super(video);
@@ -75,11 +77,13 @@ public class VideoListCell extends BaseListCell<Video, RecyclerView.ViewHolder> 
     }
 
     private void setSize(View view) {
-//        float videoRatio = mData.width/mData.height;
-//        videoRatio = Math.max(videoRatio,MIN_VIDEO_RATIO);
+        float videoRatio = mData.width/mData.height;
+        videoRatio = Math.max(videoRatio,MIN_VIDEO_RATIO);
+        videoRatio = Math.min(videoRatio,MAX_VIDEO_RATIO);
+
         int width = (view.getResources().getDisplayMetrics().widthPixels -
                 view.getResources().getDimensionPixelSize(R.dimen.divider) * 3) / 2;
-        int height = width;//(int) (width /videoRatio);
+        int height = (int) (width /videoRatio);
         ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
         layoutParams.height = height;
         view.setLayoutParams(layoutParams);

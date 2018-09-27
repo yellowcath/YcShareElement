@@ -22,7 +22,7 @@ import java.util.Map;
 
 /**
  * Created by huangwei on 2018/9/21 0021.
- *  支持对从网络加载图片的ImageView做Matrix动画
+ * 支持对从网络加载图片的ImageView做Matrix动画
  */
 public class ChangeOnlineImageTransform extends Transition {
     private static final String PROPNAME_SCALE_TYPE = "hw:changeImageTransform:scaletype";
@@ -145,11 +145,9 @@ public class ChangeOnlineImageTransform extends Transition {
                     calculateMatrix(startValues, endValues, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), startMatrix, endMatrix);
                     matrixPair = new Pair<>(startMatrix, endMatrix);
                     matrixArray.put(key, matrixPair);
-                    Log.e("hwLogMatrix", startMatrix.toShortString() + " \n " + endMatrix.toShortString());
                 }
                 //计算中间矩阵
                 Matrix imageMatrix = evaluator.evaluate(animation.getAnimatedFraction(), matrixPair.first, matrixPair.second);
-                Log.e("hwLogMatrix", "imageMatrix:" + imageMatrix.toShortString());
                 imageView.setImageMatrix(imageMatrix);
 
             }

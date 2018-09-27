@@ -24,8 +24,8 @@ import us.pinguo.shareelementdemo.advanced.Video;
  */
 public class VideoListCell extends BaseListCell<Video, RecyclerView.ViewHolder> {
 
-    private static final float MIN_VIDEO_RATIO = 3f/4;
-    private static final float MAX_VIDEO_RATIO = 4f/3;
+    private static final float MIN_VIDEO_RATIO = 3f / 4;
+    private static final float MAX_VIDEO_RATIO = 4f / 3;
 
 
     public VideoListCell(Video video) {
@@ -40,11 +40,11 @@ public class VideoListCell extends BaseListCell<Video, RecyclerView.ViewHolder> 
 
     @Override
     protected void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        super.onBindViewHolder(holder,position);
+        super.onBindViewHolder(holder, position);
         SimpleDraweeView simpleDraweeView = holder.itemView.findViewById(R.id.list_item_video);
-        ViewCompat.setTransitionName(simpleDraweeView,mData.url);
-        setSize(simpleDraweeView);
-        showWebp(simpleDraweeView,mData.webpUrl,true);
+        ViewCompat.setTransitionName(simpleDraweeView, mData.url);
+        setSize(holder.itemView);
+        showWebp(simpleDraweeView, mData.webpUrl, true);
     }
 
     @Override
@@ -77,13 +77,13 @@ public class VideoListCell extends BaseListCell<Video, RecyclerView.ViewHolder> 
     }
 
     private void setSize(View view) {
-        float videoRatio = mData.width/mData.height;
-        videoRatio = Math.max(videoRatio,MIN_VIDEO_RATIO);
-        videoRatio = Math.min(videoRatio,MAX_VIDEO_RATIO);
+        float videoRatio = mData.width / mData.height;
+        videoRatio = Math.max(videoRatio, MIN_VIDEO_RATIO);
+        videoRatio = Math.min(videoRatio, MAX_VIDEO_RATIO);
 
         int width = (view.getResources().getDisplayMetrics().widthPixels -
                 view.getResources().getDimensionPixelSize(R.dimen.divider) * 3) / 2;
-        int height = (int) (width /videoRatio);
+        int height = (int) (width / videoRatio);
         ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
         layoutParams.height = height;
         view.setLayoutParams(layoutParams);

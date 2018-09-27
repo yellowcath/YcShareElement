@@ -32,7 +32,7 @@ public class ImageListCell extends BaseListCell<Image, RecyclerView.ViewHolder> 
         super.onBindViewHolder(holder, position);
         ImageView imageView = holder.itemView.findViewById(R.id.list_item_img);
         ViewCompat.setTransitionName(imageView, mData.url);
-        setSize(imageView);
+        setSize(holder.itemView);
 
         Glide.with(imageView)
                 .load(mData.url)
@@ -50,13 +50,13 @@ public class ImageListCell extends BaseListCell<Image, RecyclerView.ViewHolder> 
         return new BaseViewHolder(view);
     }
 
-    private void setSize(ImageView imageView) {
-        int width = (imageView.getResources().getDisplayMetrics().widthPixels -
-                imageView.getResources().getDimensionPixelSize(R.dimen.divider) * 3) / 2;
+    private void setSize(View view) {
+        int width = (view.getResources().getDisplayMetrics().widthPixels -
+                view.getResources().getDimensionPixelSize(R.dimen.divider) * 3) / 2;
         int height = width;//(int) (mData.height / (float) mData.width * width);
-        ViewGroup.LayoutParams layoutParams = imageView.getLayoutParams();
+        ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
         layoutParams.height = height;
-        imageView.setLayoutParams(layoutParams);
+        view.setLayoutParams(layoutParams);
     }
 
     @Override

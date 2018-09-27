@@ -46,7 +46,6 @@ public class DefaultShareElementTransitionFactory implements IShareElementTransi
             } else {
                 transitionSet.addTransition(new ChangeOnlineImageTransform());
             }
-            transitionSet.addTransition(new ChangeBounds());
         }
         return transitionSet;
     }

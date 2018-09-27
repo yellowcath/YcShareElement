@@ -138,7 +138,6 @@ public class ChangeOnlineImageTransform extends Transition {
                 //是否已经计算过了
                 int key = drawable.hashCode();
                 Pair<Matrix, Matrix> matrixPair = matrixArray.get(key);
-                Log.e("hwLogMatrix", "drawable:" + drawable.getBitmap() + " " + drawable.getIntrinsicWidth());
                 if (matrixPair == null) {
                     //计算对应的变化矩阵
                     Matrix startMatrix = new Matrix();
@@ -150,6 +149,7 @@ public class ChangeOnlineImageTransform extends Transition {
                 }
                 //计算中间矩阵
                 Matrix imageMatrix = evaluator.evaluate(animation.getAnimatedFraction(), matrixPair.first, matrixPair.second);
+                Log.e("hwLogMatrix", "imageMatrix:" + imageMatrix.toShortString());
                 imageView.setImageMatrix(imageMatrix);
 
             }

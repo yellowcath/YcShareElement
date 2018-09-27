@@ -17,7 +17,6 @@ import us.pinguo.shareelementdemo.TransitionHelper;
 import us.pinguo.shareelementdemo.advanced.BaseData;
 import us.pinguo.shareelementdemo.transform.ChangeOnlineImageTransform;
 import us.pinguo.shareelementdemo.transform.GetShareElement;
-import us.pinguo.shareelementdemo.transform.GlideBitmapSizeCalculator;
 import us.pinguo.shareelementdemo.transform.ShareElementInfo;
 import us.pinguo.shareelementdemo.transform.YcShareElement;
 
@@ -43,7 +42,6 @@ public class SimpleFromActivity extends AppCompatActivity implements GetShareEle
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SimpleFromActivity.this, SimpleToActivity.class);
-                ChangeOnlineImageTransform.setsBitmapSizeCalculator(new GlideBitmapSizeCalculator());
                 Bundle optionsBundle = YcShareElement.buildOptionsBundle(SimpleFromActivity.this,SimpleFromActivity.this);
                 startActivity(intent, optionsBundle);
             }

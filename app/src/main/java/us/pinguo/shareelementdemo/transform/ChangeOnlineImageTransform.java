@@ -1,16 +1,18 @@
 package us.pinguo.shareelementdemo.transform;
 
 import android.animation.Animator;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.animation.TypeEvaluator;
+import android.animation.ValueAnimator;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.transition.Transition;
 import android.transition.TransitionValues;
-import android.util.Property;
+import android.util.Log;
+import android.util.Pair;
+import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -20,16 +22,13 @@ import java.util.Map;
 
 /**
  * Created by huangwei on 2018/9/21 0021.
+ *  支持对从网络加载图片的ImageView做Matrix动画
  */
 public class ChangeOnlineImageTransform extends Transition {
-    private static final String TAG = "YcShareElement";
-
     private static final String PROPNAME_SCALE_TYPE = "hw:changeImageTransform:scaletype";
     private static final String PROPNAME_BOUNDS = "hw:changeImageTransform:bounds";
     private static final String PROPNAME_MATRIX = "hw:changeImageTransform:matrix";
     private static final String PROPNAME_INFO = "hw:changeImageTransform:info";
-
-    private static IBitmapSizeCalculator sBitmapSizeCalculator = new DefaultBitmapSizeCalculator();
 
     @Override
     public void captureStartValues(TransitionValues transitionValues) {
@@ -53,8 +52,8 @@ public class ChangeOnlineImageTransform extends Transition {
         }
         Map<String, Object> values = transitionValues.values;
         Object tag = imageView.getTag(R.id.share_element_info);
-        if (tag instanceof ShareImageViewInfo) {
-            ShareImageViewInfo shareElementInfo = (ShareImageViewInfo) tag;
+        if (tag instanceof ShareElementInfo) {
+            ShareElementInfo shareElementInfo = (ShareElementInfo) tag;
             values.put(PROPNAME_INFO, shareElementInfo);
         }
 
@@ -71,7 +70,7 @@ public class ChangeOnlineImageTransform extends Transition {
         }
     }
 
-    protected void calculateMatrix(TransitionValues startValues, TransitionValues endValues, Matrix startMatrix, Matrix endMatrix) {
+    protected void calculateMatrix(TransitionValues startValues, TransitionValues endValues, int imageWidth, int imageHeight, Matrix startMatrix, Matrix endMatrix) {
         if (startValues == null || endValues == null || startMatrix == null || endMatrix == null) {
             return;
         }
@@ -82,90 +81,83 @@ public class ChangeOnlineImageTransform extends Transition {
         }
         Rect startBounds = (Rect) startValues.values.get(PROPNAME_BOUNDS);
         Rect endBounds = (Rect) endValues.values.get(PROPNAME_BOUNDS);
-        ShareImageViewInfo shareElementInfo = (ShareImageViewInfo) startValues.values.get(PROPNAME_INFO);
-
-        Rect transfromViewRect = new Rect();
-        boolean isEnter = shareElementInfo.getTansfromViewBounds().width() == 0;
-        if (isEnter) {
-            transfromViewRect.set(endBounds);
-        } else {
-            transfromViewRect.set(shareElementInfo.getTansfromViewBounds());
-        }
 
         ImageView.ScaleType startScaleType = (ImageView.ScaleType) startValues.values.get(PROPNAME_SCALE_TYPE);
         ImageView.ScaleType endScaleType = (ImageView.ScaleType) endValues.values.get(PROPNAME_SCALE_TYPE);
-        BitmapInfo transfromBitmapInfo = sBitmapSizeCalculator.calculateImageSize(
-                transfromViewRect,
-                isEnter ? endScaleType : shareElementInfo.getTranfromViewScaleType(),
-                shareElementInfo.getImageWidth(),
-                shareElementInfo.getImageHeight());
 
         if (startScaleType == ImageView.ScaleType.MATRIX) {
             startMatrix.set((Matrix) startValues.values.get(PROPNAME_MATRIX));
         } else {
-            //注意：这里要计算的是如何给出的ImageView模拟出初始状态的ImageView
-            //这里不管是进入还是退出，都用的是第二个Activity的控件，因此Bitmap都是第二个Activity的，需要据此Bitmap的大小计算动画
-            startMatrix.set(getImageViewMatrix(startBounds, startScaleType, transfromBitmapInfo.width, transfromBitmapInfo.height));
+            startMatrix.set(getImageViewMatrix(startBounds, startScaleType, imageWidth, imageHeight));
         }
 
         if (endScaleType == ImageView.ScaleType.MATRIX) {
             endMatrix.set((Matrix) endValues.values.get(PROPNAME_MATRIX));
         } else {
             //这里要计算的是如何给出的ImageView模拟出结束状态的ImageView
-            endMatrix.set(getImageViewMatrix(endBounds, endScaleType, transfromBitmapInfo.width, transfromBitmapInfo.height));
+            endMatrix.set(getImageViewMatrix(endBounds, endScaleType, imageWidth, imageHeight));
         }
     }
 
     @Override
     public Animator createAnimator(ViewGroup sceneRoot, TransitionValues startValues, TransitionValues endValues) {
-        if (startValues == null || endValues == null) {
+        if (startValues == null || endValues == null || !(endValues.view instanceof ImageView)) {
             return null;
         }
         Rect startBounds = (Rect) startValues.values.get(PROPNAME_BOUNDS);
         Rect endBounds = (Rect) endValues.values.get(PROPNAME_BOUNDS);
+        final ImageView imageView = (ImageView) endValues.view;
         if (startBounds == null || endBounds == null) {
             return null;
         }
-        final ImageView imageView = (ImageView) endValues.view;
-
-        Matrix startMatrix = new Matrix();
-        Matrix endMatrix = new Matrix();
-        calculateMatrix(startValues, endValues, startMatrix, endMatrix);
-        boolean matricesEqual = (startMatrix == null && endMatrix == null) ||
-                (startMatrix != null && startMatrix.equals(endMatrix));
-
-        if (startBounds.equals(endBounds) && matricesEqual) {
+        if (startBounds.equals(endBounds)) {
             return null;
         }
+        return createMatrixAnimator(imageView, startValues, endValues);
+    }
 
-        //matrix
-        final Drawable drawable = imageView.getDrawable();
-        int drawableWidth = drawable.getIntrinsicWidth();
-        int drawableHeight = drawable.getIntrinsicHeight();
-
-        //Matrix Animator
-        ObjectAnimator matrixAnimator;
-        if (drawableWidth == 0 || drawableHeight == 0) {
-            matrixAnimator = createNullAnimator(imageView);
-        } else {
-            if (startMatrix == null) {
-                startMatrix = new Matrix();
-            }
-            if (endMatrix == null) {
-                endMatrix = new Matrix();
-            }
-            ANIMATED_TRANSFORM_PROPERTY.set(imageView, startMatrix);
-            matrixAnimator = createMatrixAnimator(imageView, startMatrix, endMatrix);
-        }
-
-        AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.play(matrixAnimator);
+    private ValueAnimator createMatrixAnimator(final ImageView imageView, final TransitionValues startValues, final TransitionValues endValues) {
+        ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f);
+        final SparseArray<Pair<Matrix, Matrix>> matrixArray = new SparseArray<>(2);
+        final MatrixEvaluator evaluator = new MatrixEvaluator();
         final ImageView.ScaleType scaleType = imageView.getScaleType();
-        imageView.setScaleType(ImageView.ScaleType.MATRIX);
-        animatorSet.addListener(new Animator.AnimatorListener() {
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                //没有内容，无需做矩阵动画
+                if (imageView.getDrawable() == null) {
+                    return;
+                }
+                if (!(imageView.getDrawable() instanceof BitmapDrawable)) {
+                    return;
+                }
+                BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
+                if (drawable.getIntrinsicWidth() == 0 || drawable.getIntrinsicHeight() == 0) {
+                    return;
+                }
+                //是否已经计算过了
+                int key = drawable.hashCode();
+                Pair<Matrix, Matrix> matrixPair = matrixArray.get(key);
+                Log.e("hwLogMatrix", "drawable:" + drawable.getBitmap() + " " + drawable.getIntrinsicWidth());
+                if (matrixPair == null) {
+                    //计算对应的变化矩阵
+                    Matrix startMatrix = new Matrix();
+                    Matrix endMatrix = new Matrix();
+                    calculateMatrix(startValues, endValues, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), startMatrix, endMatrix);
+                    matrixPair = new Pair<>(startMatrix, endMatrix);
+                    matrixArray.put(key, matrixPair);
+                    Log.e("hwLogMatrix", startMatrix.toShortString() + " \n " + endMatrix.toShortString());
+                }
+                //计算中间矩阵
+                Matrix imageMatrix = evaluator.evaluate(animation.getAnimatedFraction(), matrixPair.first, matrixPair.second);
+                imageView.setImageMatrix(imageMatrix);
+
+            }
+        });
+        animator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-
+                imageView.setScaleType(ImageView.ScaleType.MATRIX);
             }
 
             @Override
@@ -183,39 +175,8 @@ public class ChangeOnlineImageTransform extends Transition {
 
             }
         });
-        return animatorSet;
+        return animator;
     }
-
-    private ObjectAnimator createNullAnimator(ImageView imageView) {
-        return ObjectAnimator.ofObject(imageView, ANIMATED_TRANSFORM_PROPERTY,
-                NULL_MATRIX_EVALUATOR, null, null);
-    }
-
-    private ObjectAnimator createMatrixAnimator(final ImageView imageView, Matrix startMatrix,
-                                                final Matrix endMatrix) {
-        return ObjectAnimator.ofObject(imageView, ANIMATED_TRANSFORM_PROPERTY,
-                new MatrixEvaluator(), startMatrix, endMatrix);
-    }
-
-    private static Property<ImageView, Matrix> ANIMATED_TRANSFORM_PROPERTY
-            = new Property<ImageView, Matrix>(Matrix.class, "animatedTransform") {
-        @Override
-        public void set(ImageView object, Matrix value) {
-            object.setImageMatrix(value);
-        }
-
-        @Override
-        public Matrix get(ImageView object) {
-            return object.getImageMatrix();
-        }
-    };
-
-    private static TypeEvaluator<Matrix> NULL_MATRIX_EVALUATOR = new TypeEvaluator<Matrix>() {
-        @Override
-        public Matrix evaluate(float fraction, Matrix startValue, Matrix endValue) {
-            return null;
-        }
-    };
 
     public static class MatrixEvaluator implements TypeEvaluator<Matrix> {
 
@@ -320,10 +281,4 @@ public class ChangeOnlineImageTransform extends Transition {
             Matrix.ScaleToFit.CENTER,
             Matrix.ScaleToFit.END
     };
-
-    public static void setsBitmapSizeCalculator(IBitmapSizeCalculator bitmapSizeCalculator) {
-        if (bitmapSizeCalculator != null) {
-            sBitmapSizeCalculator = bitmapSizeCalculator;
-        }
-    }
 }

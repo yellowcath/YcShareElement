@@ -1,6 +1,7 @@
 package us.pinguo.shareelementdemo.advanced;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -12,15 +13,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import us.pinguo.shareelementdemo.R;
+import us.pinguo.shareelementdemo.advanced.content.BitmapThumbnail;
 import us.pinguo.shareelementdemo.advanced.list.AdvancedListAdapter;
 import us.pinguo.shareelementdemo.advanced.list.BaseListCell;
 import us.pinguo.shareelementdemo.advanced.list.ImageListCell;
+import us.pinguo.shareelementdemo.advanced.list.ShareContentInfo;
 import us.pinguo.shareelementdemo.advanced.list.VideoListCell;
-import us.pinguo.shareelementdemo.transform.ChangeOnlineImageTransform;
 import us.pinguo.shareelementdemo.transform.GetShareElement;
-import us.pinguo.shareelementdemo.transform.GlideBitmapSizeCalculator;
 import us.pinguo.shareelementdemo.transform.ShareElementInfo;
-import us.pinguo.shareelementdemo.transform.ShareImageViewInfo;
 import us.pinguo.shareelementdemo.transform.YcShareElement;
 
 import java.util.ArrayList;
@@ -31,6 +31,9 @@ import java.util.List;
  * Created by huangwei on 2018/9/18 0018.
  */
 public class AdvancedListFragment extends Fragment implements BaseListCell.OnCellClickListener, GetShareElement {
+    public static final String KEY_DATA = "data";
+    public static final String KEY_SELECT = "select";
+
     static final int REQUEST_CONTENT = 223;
 
     private RecyclerView mRecyclerView;
@@ -95,9 +98,13 @@ public class AdvancedListFragment extends Fragment implements BaseListCell.OnCel
     public void onCellClick(BaseListCell cell) {
         mTransitionCell = cell;
         Intent intent = new Intent(getActivity(), AdvancedContentActivity.class);
-        intent.putParcelableArrayListExtra("data", mDataList);
-        intent.putExtra("select", mDataList.indexOf(cell.getData()));
-        ChangeOnlineImageTransform.setsBitmapSizeCalculator(new GlideBitmapSizeCalculator());
+        intent.putParcelableArrayListExtra(KEY_DATA, mDataList);
+        intent.putExtra(KEY_SELECT, mDataList.indexOf(cell.getData()));
+        Bitmap thumbnail = mTransitionCell.getThumbnail();
+        if(thumbnail!=null) {
+            BitmapThumbnail.sBitmap = thumbnail;
+            BitmapThumbnail.sKey = mTransitionCell.getData().url;
+        }
         Bundle options = YcShareElement.buildOptionsBundle(getActivity(), this);
         startActivityForResult(intent, REQUEST_CONTENT, options);
     }
@@ -114,14 +121,12 @@ public class AdvancedListFragment extends Fragment implements BaseListCell.OnCel
     @Override
     public ShareElementInfo[] getShareElements() {
         if (mTransitionCell instanceof VideoListCell) {
-//            ShareVideoViewInfo info = new ShareVideoViewInfo(mTransitionCell.getShareElement(), mTransitionCell.getData(),
-//                    mTransitionCell.getData().width, mTransitionCell.getData().height);
             BaseData data = mTransitionCell.getData();
-            ShareImageViewInfo info = new ShareImageViewInfo(mTransitionCell.getShareElement(), data, data.width, data.height);
+            ShareElementInfo info = new ShareContentInfo(mTransitionCell.getShareElement(), data);
             return new ShareElementInfo[]{info};
         } else if (mTransitionCell instanceof ImageListCell) {
             BaseData data = mTransitionCell.getData();
-            ShareImageViewInfo info = new ShareImageViewInfo(mTransitionCell.getShareElement(), data, data.width, data.height);
+            ShareElementInfo info = new ShareContentInfo(mTransitionCell.getShareElement(), data);
             return new ShareElementInfo[]{info};
         }
         return new ShareElementInfo[0];

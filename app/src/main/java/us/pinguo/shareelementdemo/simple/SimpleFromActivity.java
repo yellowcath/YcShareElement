@@ -19,7 +19,6 @@ import us.pinguo.shareelementdemo.transform.ChangeOnlineImageTransform;
 import us.pinguo.shareelementdemo.transform.GetShareElement;
 import us.pinguo.shareelementdemo.transform.GlideBitmapSizeCalculator;
 import us.pinguo.shareelementdemo.transform.ShareElementInfo;
-import us.pinguo.shareelementdemo.transform.ShareImageViewInfo;
 import us.pinguo.shareelementdemo.transform.YcShareElement;
 
 /**
@@ -59,6 +58,6 @@ public class SimpleFromActivity extends AppCompatActivity implements GetShareEle
     @Override
     public ShareElementInfo[] getShareElements() {
         final ImageView imgView = findViewById(R.id.s1_img);
-        return new ShareElementInfo[]{new ShareImageViewInfo(imgView, new BaseData(null,1024, 768),1024,768)};
+        return new ShareElementInfo[]{new ShareElementInfo(imgView, new BaseData(null,1024, 768))};
     }
 }

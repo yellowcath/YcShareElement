@@ -1,5 +1,6 @@
 package us.pinguo.shareelementdemo.advanced;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -12,11 +13,11 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import us.pinguo.shareelementdemo.advanced.content.BaseContentCell;
+import us.pinguo.shareelementdemo.advanced.content.BitmapThumbnail;
 import us.pinguo.shareelementdemo.advanced.content.ImageContentCell;
 import us.pinguo.shareelementdemo.advanced.content.VideoContentCell;
 import us.pinguo.shareelementdemo.advanced.content.viewpager.BasePagerAdapter;
 import us.pinguo.shareelementdemo.transform.ShareElementInfo;
-import us.pinguo.shareelementdemo.transform.ShareImageViewInfo;
 import us.pinguo.shareelementdemo.transform.YcShareElement;
 
 import java.util.ArrayList;
@@ -41,7 +42,6 @@ public class AdvancedContentFragment extends Fragment implements ViewPager.OnPag
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mViewPager = (ViewPager) view;
-        mViewPager.setBackgroundColor(0xFF323232);
         mAdapter = new BasePagerAdapter();
         mViewPager.addOnPageChangeListener(this);
         initCells();
@@ -49,12 +49,14 @@ public class AdvancedContentFragment extends Fragment implements ViewPager.OnPag
     }
 
     private void initCells() {
-        ArrayList<Parcelable> dataList = getArguments().getParcelableArrayList("data");
-        int select = getArguments().getInt("select", 0);
+        ArrayList<Parcelable> dataList = getArguments().getParcelableArrayList(AdvancedListFragment.KEY_DATA);
+        int select = getArguments().getInt(AdvancedListFragment.KEY_SELECT, 0);
         List<BaseContentCell> cellList = new ArrayList<>(dataList.size());
-        for (Parcelable data : dataList) {
+        for (int i = 0; i < dataList.size(); i++) {
+            Parcelable data = dataList.get(i);
             if (data instanceof Image) {
-                cellList.add(new ImageContentCell((Image) data));
+                ImageContentCell contentCell = new ImageContentCell((Image) data);
+                cellList.add(contentCell);
             } else if (data instanceof Video) {
                 cellList.add(new VideoContentCell((Video) data));
             }
@@ -112,8 +114,14 @@ public class AdvancedContentFragment extends Fragment implements ViewPager.OnPag
         BaseContentCell item = (BaseContentCell) mAdapter.getItem(mViewPager.getCurrentItem());
         if (item != null) {
             BaseData baseData = (BaseData) item.getData();
-            return new ShareElementInfo[]{new ShareImageViewInfo(item.getShareElement(),baseData,baseData.width,baseData.height)};
+            return new ShareElementInfo[]{new ShareElementInfo(item.getShareElement(), baseData)};
         }
         return new ShareElementInfo[0];
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        BitmapThumbnail.clear();
     }
 }

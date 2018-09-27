@@ -1,5 +1,6 @@
 package us.pinguo.shareelementdemo.advanced;
 
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +21,7 @@ public class AdvancedContentActivity extends AppCompatActivity implements GetSha
         YcShareElement.postponeEnterTransition(this, this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple);
+        getWindow().setBackgroundDrawable(new ColorDrawable(0xFF323232));
         mFragment = new AdvancedContentFragment();
         mFragment.setArguments(getIntent().getExtras());
         getSupportFragmentManager().beginTransaction().add(R.id.simple_container, mFragment).commit();

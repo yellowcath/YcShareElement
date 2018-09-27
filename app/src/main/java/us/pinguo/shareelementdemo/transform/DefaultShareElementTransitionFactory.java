@@ -4,6 +4,9 @@ import android.transition.ChangeBounds;
 import android.transition.ChangeClipBounds;
 import android.transition.ChangeImageTransform;
 import android.transition.ChangeTransform;
+import android.transition.Explode;
+import android.transition.Fade;
+import android.transition.Slide;
 import android.transition.Transition;
 import android.transition.TransitionSet;
 import android.view.View;
@@ -16,6 +19,9 @@ import java.util.List;
  * Created by huangwei on 2018/9/22.
  */
 public class DefaultShareElementTransitionFactory implements IShareElementTransitionFactory {
+
+    private boolean mUseDefaultImageTransform = false;
+
     @Override
     public Transition buildShareElementEnterTransition(List<View> shareViewList) {
         TransitionSet transitionSet = new TransitionSet();
@@ -23,24 +29,23 @@ public class DefaultShareElementTransitionFactory implements IShareElementTransi
             return transitionSet;
         }
         transitionSet.addTransition(new ChangeClipBounds());
-        boolean shareImageViewInfoExisted = false;
         boolean imageViewExisted = false;
         for (View view : shareViewList) {
             if (view instanceof ImageView) {
                 imageViewExisted = true;
-                if (view.getTag(R.id.share_element_info) instanceof ShareImageViewInfo) {
-                    shareImageViewInfoExisted = true;
-                }
+                break;
             }
         }
         transitionSet.addTransition(new ChangeTransform());
         transitionSet.addTransition(new ChangeClipBounds());
+        transitionSet.addTransition(new ChangeBounds());
 
-        if (shareImageViewInfoExisted) {
-            transitionSet.addTransition(new ChangeOnlineImageTransform());
-            transitionSet.addTransition(new ChangeBounds());
-        } else if (imageViewExisted) {
-            transitionSet.addTransition(new ChangeImageTransform());
+        if (imageViewExisted) {
+            if (mUseDefaultImageTransform) {
+                transitionSet.addTransition(new ChangeImageTransform());
+            } else {
+                transitionSet.addTransition(new ChangeOnlineImageTransform());
+            }
             transitionSet.addTransition(new ChangeBounds());
         }
         return transitionSet;
@@ -53,11 +58,11 @@ public class DefaultShareElementTransitionFactory implements IShareElementTransi
 
     @Override
     public Transition buildEnterTransition() {
-        return null;
+        return new Fade();
     }
 
     @Override
     public Transition buildExitTransition() {
-        return null;
+        return new Fade();
     }
 }

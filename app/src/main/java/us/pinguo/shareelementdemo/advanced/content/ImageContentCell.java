@@ -1,6 +1,8 @@
 package us.pinguo.shareelementdemo.advanced.content;
 
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.view.ViewCompat;
 import android.view.View;
@@ -25,25 +27,26 @@ public class ImageContentCell extends BaseContentCell<Image> {
 
     @Override
     public View getShareElement() {
-        return mViewHolder==null?null:mViewHolder.getView(R.id.content_item_img);
+        return mViewHolder == null ? null : mViewHolder.getView(R.id.content_item_img);
     }
 
     @Override
     protected BasePagerViewHolder createViewHolder(ViewGroup parent) {
-        return createHolderByLayout(R.layout.item_content_image,parent);
+        return createHolderByLayout(R.layout.item_content_image, parent);
     }
 
     @Override
     protected void onBindViewHolder(BasePagerViewHolder viewHolder) {
         ImageView imageView = viewHolder.getView(R.id.content_item_img);
-        ViewCompat.setTransitionName(imageView,mData.url);
+        ViewCompat.setTransitionName(imageView, mData.url);
+        Bitmap thumbnail = mData.url.equals(BitmapThumbnail.sKey)?BitmapThumbnail.sBitmap:null;
         Glide.with(imageView)
                 .load(mData.url)
                 .apply(new RequestOptions()
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .transform(new FitCenter())
                         .skipMemoryCache(true)
-                        .placeholder(new ColorDrawable(Color.GRAY)))
+                        .placeholder(thumbnail == null ? new ColorDrawable(Color.GRAY) : new BitmapDrawable(imageView.getResources(), thumbnail)))
                 .into(imageView);
     }
 
@@ -52,5 +55,4 @@ public class ImageContentCell extends BaseContentCell<Image> {
     protected int getType() {
         return 0;
     }
-
 }

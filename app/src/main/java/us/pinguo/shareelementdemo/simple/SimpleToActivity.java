@@ -14,7 +14,6 @@ import us.pinguo.shareelementdemo.R;
 import us.pinguo.shareelementdemo.advanced.BaseData;
 import us.pinguo.shareelementdemo.transform.GetShareElement;
 import us.pinguo.shareelementdemo.transform.ShareElementInfo;
-import us.pinguo.shareelementdemo.transform.ShareImageViewInfo;
 import us.pinguo.shareelementdemo.transform.YcShareElement;
 
 /**
@@ -48,6 +47,6 @@ public class SimpleToActivity extends AppCompatActivity implements GetShareEleme
 
     @Override
     public ShareElementInfo[] getShareElements() {
-        return new ShareElementInfo[]{new ShareImageViewInfo(mImageView, new BaseData(null, 1024, 768), 1024, 768)};
+        return new ShareElementInfo[]{new ShareElementInfo(mImageView, new BaseData(null, 1024, 768))};
     }
 }

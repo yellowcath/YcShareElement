@@ -1,5 +1,6 @@
 package us.pinguo.shareelementdemo.advanced.list;
 
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.ColorDrawable;
@@ -79,4 +80,10 @@ public class VideoListCell extends BaseListCell<Video, RecyclerView.ViewHolder> 
         layoutParams.height = height;
         view.setLayoutParams(layoutParams);
     }
+
+    @Override
+    public Bitmap getThumbnail() {
+        return null;
+    }
+
 }

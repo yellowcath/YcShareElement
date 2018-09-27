@@ -1,6 +1,8 @@
 package us.pinguo.shareelementdemo.advanced.list;
 
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewCompat;
@@ -19,7 +21,7 @@ import us.pinguo.shareelementdemo.advanced.Image;
 /**
  * Created by huangwei on 2018/9/19 0019.
  */
-public class ImageListCell extends BaseListCell<Image,RecyclerView.ViewHolder> {
+public class ImageListCell extends BaseListCell<Image, RecyclerView.ViewHolder> {
 
     public ImageListCell(Image image) {
         super(image);
@@ -27,9 +29,9 @@ public class ImageListCell extends BaseListCell<Image,RecyclerView.ViewHolder> {
 
     @Override
     protected void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        super.onBindViewHolder(holder,position);
+        super.onBindViewHolder(holder, position);
         ImageView imageView = holder.itemView.findViewById(R.id.list_item_img);
-        ViewCompat.setTransitionName(imageView,mData.url);
+        ViewCompat.setTransitionName(imageView, mData.url);
         setSize(imageView);
 
         Glide.with(imageView)
@@ -65,5 +67,17 @@ public class ImageListCell extends BaseListCell<Image,RecyclerView.ViewHolder> {
     @Override
     public View getShareElement() {
         return mViewHolder.itemView.findViewById(R.id.list_item_img);
+    }
+
+    @Override
+    public Bitmap getThumbnail() {
+        if (mViewHolder == null || mViewHolder.itemView == null) {
+            return null;
+        }
+        ImageView imageView = mViewHolder.itemView.findViewById(R.id.list_item_img);
+        if (imageView.getDrawable() instanceof BitmapDrawable) {
+            return ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+        }
+        return null;
     }
 }

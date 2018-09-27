@@ -1,6 +1,5 @@
 package us.pinguo.shareelementdemo.transform;
 
-import android.graphics.Rect;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -22,10 +21,6 @@ public class ShareElementInfo<T extends Parcelable> implements Parcelable {
      * 存放View相关的数据。用于定位切换页面后新的ShareElement
      */
     protected T mData;
-    /**
-     * 实际做动画的View的大小,由{@link YcShareElement#recordShareElementsBaseBounds}负责填充
-     */
-    protected Rect mTansfromViewBounds = new Rect();
 
     public ShareElementInfo(@NonNull View view, @Nullable T data) {
         this.mView = view;
@@ -49,13 +44,6 @@ public class ShareElementInfo<T extends Parcelable> implements Parcelable {
         return mData;
     }
 
-    public Rect getTansfromViewBounds() {
-        return mTansfromViewBounds;
-    }
-
-    public void setTansfromViewBounds(Rect tansfromViewBounds) {
-        mTansfromViewBounds.set(tansfromViewBounds);
-    }
 
     @Override
     public int describeContents() {
@@ -65,7 +53,7 @@ public class ShareElementInfo<T extends Parcelable> implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeParcelable(this.mSnapshot, flags);
-        dest.writeParcelable(mData, 0);
+        dest.writeParcelable(this.mData, flags);
     }
 
     protected ShareElementInfo(Parcel in) {
@@ -73,4 +61,15 @@ public class ShareElementInfo<T extends Parcelable> implements Parcelable {
         this.mData = in.readParcelable(getClass().getClassLoader());
     }
 
+    public static final Creator<ShareElementInfo> CREATOR = new Creator<ShareElementInfo>() {
+        @Override
+        public ShareElementInfo createFromParcel(Parcel source) {
+            return new ShareElementInfo(source);
+        }
+
+        @Override
+        public ShareElementInfo[] newArray(int size) {
+            return new ShareElementInfo[size];
+        }
+    };
 }

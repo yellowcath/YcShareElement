@@ -1,5 +1,6 @@
 package us.pinguo.shareelementdemo.advanced.list;
 
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -31,6 +32,8 @@ public abstract class BaseListCell<DATA extends BaseData,VH extends RecyclerView
     public void setOnCellClickListener(OnCellClickListener onCellClickListener) {
         this.mOnCellClickListener = onCellClickListener;
     }
+
+    public abstract Bitmap getThumbnail();
 
     public interface OnCellClickListener{
         void onCellClick(BaseListCell cell);

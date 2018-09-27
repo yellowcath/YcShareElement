@@ -175,17 +175,11 @@ public class YcShareElement {
         if (sharedElements == null) {
             return;
         }
-        Iterator<View> values = sharedElements.values().iterator();
-        while (values.hasNext()) {
-            View view = values.next();
-            Object tag = view.getTag(R.id.share_element_info);
-            if (tag instanceof ShareElementInfo) {
-                ((ShareElementInfo) tag).getTansfromViewBounds().set(view.getLeft(), view.getTop(), view.getRight(), view.getBottom());
-            }
-            if (tag instanceof ShareImageViewInfo && view instanceof ImageView) {
-                ((ShareImageViewInfo) tag).setTranfromViewScaleType(((ImageView) view).getScaleType());
-            }
-        }
+//        Iterator<View> values = sharedElements.values().iterator();
+//        while (values.hasNext()) {
+//            View view = values.next();
+//            Object tag = view.getTag(R.id.share_element_info);
+//        }
     }
 
     public static void callReadyAfterPreDraw(final Activity activity) {
@@ -299,10 +293,11 @@ public class YcShareElement {
         });
     }
 
-    private static AtomicBoolean sInited = new AtomicBoolean(false);
+    private static boolean sInited = false;
 
     public static void init(Application application) {
-        if (!sInited.getAndSet(true)) {
+        if (!sInited) {
+            sInited = true;
             application.registerActivityLifecycleCallbacks(new Application.ActivityLifecycleCallbacks() {
                 @Override
                 public void onActivityCreated(Activity activity, Bundle savedInstanceState) {

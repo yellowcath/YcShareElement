@@ -1,4 +1,4 @@
-package us.pinguo.shareelementdemo.transform;
+package com.hw.ycshareelement;
 
 import android.app.Activity;
 import android.app.Application;
@@ -8,10 +8,12 @@ import android.content.Intent;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.view.ViewCompat;
 import android.transition.Transition;
 import android.util.Log;
@@ -19,8 +21,11 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.widget.ImageView;
-import us.pinguo.shareelementdemo.R;
-import us.pinguo.shareelementdemo.TransitionHelper;
+import com.hw.ycshareelement.transform.DefaultShareElementTransitionFactory;
+import com.hw.ycshareelement.transform.GetShareElement;
+import com.hw.ycshareelement.transform.IShareElementSelector;
+import com.hw.ycshareelement.transform.IShareElementTransitionFactory;
+import com.hw.ycshareelement.transform.ShareElementInfo;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,6 +45,9 @@ public class YcShareElement {
     private static IShareElementTransitionFactory sTransitionFactory = new DefaultShareElementTransitionFactory();
 
     public static Bundle buildOptionsBundle(@NonNull final Activity activity, @Nullable final GetShareElement getShareElement) {
+        if(!TransitionHelper.ENABLE){
+            return new Bundle();
+        }
         activity.setExitSharedElementCallback(new SharedElementCallback() {
             @Override
             public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
@@ -103,6 +111,9 @@ public class YcShareElement {
     }
 
     public static void postponeEnterTransition(@NonNull final Activity activity, @Nullable final GetShareElement getShareElement) {
+        if(!TransitionHelper.ENABLE){
+            return;
+        }
         activity.postponeEnterTransition();
         activity.setEnterSharedElementCallback(new SharedElementCallback() {
 
@@ -195,11 +206,17 @@ public class YcShareElement {
     }
 
     public static void onShareElementReady(Activity activity) {
+        if(!TransitionHelper.ENABLE){
+            return;
+        }
         activity.startPostponedEnterTransition();
     }
 
 
     private static void setTransform(Activity activity, List<View> sharedElements) {
+        if(!TransitionHelper.ENABLE){
+            return;
+        }
         if (sTransitionFactory != null) {
             Transition enterShareElementTransition = sTransitionFactory.buildShareElementEnterTransition(sharedElements);
             Transition exitShareElementTransition = sTransitionFactory.buildShareElementExitTransition(sharedElements);
@@ -272,6 +289,9 @@ public class YcShareElement {
     }
 
     public static void onActivityReenter(final Activity activity, int resultCode, Intent data, IShareElementSelector selector) {
+        if(!TransitionHelper.ENABLE){
+            return;
+        }
         if (selector == null || resultCode != RESULT_OK || data == null) {
             return;
         }
@@ -284,6 +304,7 @@ public class YcShareElement {
         selector.selectShareElements(shareElementsList);
 
         activity.getWindow().getDecorView().getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public boolean onPreDraw() {
                 activity.getWindow().getDecorView().getViewTreeObserver().removeOnPreDrawListener(this);
@@ -295,7 +316,7 @@ public class YcShareElement {
 
     private static boolean sInited = false;
 
-    public static void init(Application application) {
+    public static void enableContentTransition(Application application) {
         if (!sInited) {
             sInited = true;
             application.registerActivityLifecycleCallbacks(new Application.ActivityLifecycleCallbacks() {

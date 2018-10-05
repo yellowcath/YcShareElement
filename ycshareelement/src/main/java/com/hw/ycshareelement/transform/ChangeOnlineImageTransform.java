@@ -1,4 +1,4 @@
-package us.pinguo.shareelementdemo.transform;
+package com.hw.ycshareelement.transform;
 
 import android.animation.Animator;
 import android.animation.TypeEvaluator;
@@ -8,15 +8,16 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.transition.Transition;
 import android.transition.TransitionValues;
-import android.util.Log;
 import android.util.Pair;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import us.pinguo.shareelementdemo.R;
+import com.hw.ycshareelement.R;
 
 import java.util.Map;
 
@@ -24,6 +25,7 @@ import java.util.Map;
  * Created by huangwei on 2018/9/21 0021.
  * 支持对从网络加载图片的ImageView做Matrix动画
  */
+@RequiresApi(api = Build.VERSION_CODES.KITKAT)
 public class ChangeOnlineImageTransform extends Transition {
     private static final String PROPNAME_SCALE_TYPE = "hw:changeImageTransform:scaletype";
     private static final String PROPNAME_BOUNDS = "hw:changeImageTransform:bounds";

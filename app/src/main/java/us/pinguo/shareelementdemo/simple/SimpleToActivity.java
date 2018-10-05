@@ -10,11 +10,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.FitCenter;
 import com.bumptech.glide.request.RequestOptions;
+import com.hw.ycshareelement.YcShareElement;
 import us.pinguo.shareelementdemo.R;
 import us.pinguo.shareelementdemo.advanced.BaseData;
-import us.pinguo.shareelementdemo.transform.GetShareElement;
-import us.pinguo.shareelementdemo.transform.ShareElementInfo;
-import us.pinguo.shareelementdemo.transform.YcShareElement;
+import com.hw.ycshareelement.transform.GetShareElement;
+import com.hw.ycshareelement.transform.ShareElementInfo;
 
 /**
  * Created by huangwei on 2018/9/18 0018.

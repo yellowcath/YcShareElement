@@ -1,4 +1,4 @@
-package us.pinguo.shareelementdemo;
+package com.hw.ycshareelement;
 
 import android.app.Activity;
 import android.os.Build;

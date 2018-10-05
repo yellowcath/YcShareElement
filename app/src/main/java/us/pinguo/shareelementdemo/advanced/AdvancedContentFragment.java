@@ -1,6 +1,5 @@
 package us.pinguo.shareelementdemo.advanced;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -10,15 +9,14 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
+import com.hw.ycshareelement.YcShareElement;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import us.pinguo.shareelementdemo.advanced.content.BaseContentCell;
 import us.pinguo.shareelementdemo.advanced.content.BitmapThumbnail;
 import us.pinguo.shareelementdemo.advanced.content.ImageContentCell;
 import us.pinguo.shareelementdemo.advanced.content.VideoContentCell;
 import us.pinguo.shareelementdemo.advanced.content.viewpager.BasePagerAdapter;
-import us.pinguo.shareelementdemo.transform.ShareElementInfo;
-import us.pinguo.shareelementdemo.transform.YcShareElement;
+import com.hw.ycshareelement.transform.ShareElementInfo;
 
 import java.util.ArrayList;
 import java.util.List;

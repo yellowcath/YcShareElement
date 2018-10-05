@@ -48,4 +48,5 @@ dependencies {
     implementation 'com.shuyu:gsyVideoPlayer-armv7a:6.0.0-beta'
     implementation 'com.shuyu:gsyVideoPlayer-x86:6.0.0-beta'
 
+    compile project(path: ':ycshareelement')
 }

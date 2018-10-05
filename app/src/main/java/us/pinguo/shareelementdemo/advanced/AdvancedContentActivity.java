@@ -4,10 +4,10 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import com.hw.ycshareelement.YcShareElement;
+import com.hw.ycshareelement.transform.GetShareElement;
+import com.hw.ycshareelement.transform.ShareElementInfo;
 import us.pinguo.shareelementdemo.R;
-import us.pinguo.shareelementdemo.transform.GetShareElement;
-import us.pinguo.shareelementdemo.transform.ShareElementInfo;
-import us.pinguo.shareelementdemo.transform.YcShareElement;
 
 /**
  * Created by huangwei on 2018/9/18 0018.

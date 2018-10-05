@@ -1,23 +1,23 @@
-package us.pinguo.shareelementdemo.transform;
+package com.hw.ycshareelement.transform;
 
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.transition.ChangeBounds;
 import android.transition.ChangeClipBounds;
 import android.transition.ChangeImageTransform;
 import android.transition.ChangeTransform;
-import android.transition.Explode;
 import android.transition.Fade;
-import android.transition.Slide;
 import android.transition.Transition;
 import android.transition.TransitionSet;
 import android.view.View;
 import android.widget.ImageView;
-import us.pinguo.shareelementdemo.R;
 
 import java.util.List;
 
 /**
  * Created by huangwei on 2018/9/22.
  */
+@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class DefaultShareElementTransitionFactory implements IShareElementTransitionFactory {
 
     private boolean mUseDefaultImageTransform = false;

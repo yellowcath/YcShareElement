@@ -1,11 +1,11 @@
-package us.pinguo.shareelementdemo.transform;
+package com.hw.ycshareelement.transform;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
-import us.pinguo.shareelementdemo.R;
+import com.hw.ycshareelement.R;
 
 /**
  * Created by huangwei on 2018/9/22.

@@ -4,16 +4,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import com.hw.ycshareelement.YcShareElement;
 import us.pinguo.shareelementdemo.advanced.AdvancedListActivity;
 import us.pinguo.shareelementdemo.simple.SimpleFragmentActivity;
 import us.pinguo.shareelementdemo.simple.SimpleFromActivity;
-import us.pinguo.shareelementdemo.transform.YcShareElement;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        YcShareElement.init(getApplication());
+        YcShareElement.enableContentTransition(getApplication());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 

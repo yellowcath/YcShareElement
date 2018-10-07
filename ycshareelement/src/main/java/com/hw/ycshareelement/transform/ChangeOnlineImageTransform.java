@@ -12,6 +12,7 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.transition.Transition;
 import android.transition.TransitionValues;
+import android.util.Log;
 import android.util.Pair;
 import android.util.SparseArray;
 import android.view.View;
@@ -44,7 +45,7 @@ public class ChangeOnlineImageTransform extends Transition {
 
     private void captureBoundsAndInfo(TransitionValues transitionValues) {
         View view = transitionValues.view;
-        if (!(view instanceof ImageView) || view.getVisibility() != View.VISIBLE) {
+        if (!(view instanceof ImageView) || view.getVisibility() != View.VISIBLE || isFrescoView(view)) {
             return;
         }
         ImageView imageView = (ImageView) view;
@@ -120,6 +121,7 @@ public class ChangeOnlineImageTransform extends Transition {
 
     private ValueAnimator createMatrixAnimator(final ImageView imageView, final TransitionValues startValues, final TransitionValues endValues) {
         ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f);
+
         final SparseArray<Pair<Matrix, Matrix>> matrixArray = new SparseArray<>(2);
         final MatrixEvaluator evaluator = new MatrixEvaluator();
         final ImageView.ScaleType scaleType = imageView.getScaleType();
@@ -281,4 +283,8 @@ public class ChangeOnlineImageTransform extends Transition {
             Matrix.ScaleToFit.CENTER,
             Matrix.ScaleToFit.END
     };
+
+    public boolean isFrescoView(View view) {
+        return view.getClass().getName().startsWith("com.facebook.drawee");
+    }
 }

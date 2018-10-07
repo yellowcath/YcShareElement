@@ -58,15 +58,4 @@ public class BaseData implements Parcelable {
         this.height = in.readInt();
     }
 
-    public static final Creator<BaseData> CREATOR = new Creator<BaseData>() {
-        @Override
-        public BaseData createFromParcel(Parcel source) {
-            return new BaseData(source);
-        }
-
-        @Override
-        public BaseData[] newArray(int size) {
-            return new BaseData[size];
-        }
-    };
 }

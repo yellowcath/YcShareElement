@@ -9,14 +9,18 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import com.facebook.drawee.drawable.ScalingUtils;
 import com.hw.ycshareelement.YcShareElement;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import us.pinguo.shareelementdemo.advanced.content.BaseContentCell;
 import us.pinguo.shareelementdemo.advanced.content.BitmapThumbnail;
 import us.pinguo.shareelementdemo.advanced.content.ImageContentCell;
+import us.pinguo.shareelementdemo.advanced.content.ImageFrescoContentCell;
 import us.pinguo.shareelementdemo.advanced.content.VideoContentCell;
 import us.pinguo.shareelementdemo.advanced.content.viewpager.BasePagerAdapter;
 import com.hw.ycshareelement.transform.ShareElementInfo;
+import us.pinguo.shareelementdemo.advanced.list.ImageFrescoListCell;
+import us.pinguo.shareelementdemo.advanced.list.ShareFrescoInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +57,7 @@ public class AdvancedContentFragment extends Fragment implements ViewPager.OnPag
         for (int i = 0; i < dataList.size(); i++) {
             Parcelable data = dataList.get(i);
             if (data instanceof Image) {
-                ImageContentCell contentCell = new ImageContentCell((Image) data);
+                BaseContentCell contentCell = ((Image) data).isShowInFresco() ? new ImageFrescoContentCell((Image) data) : new ImageContentCell((Image) data);
                 cellList.add(contentCell);
             } else if (data instanceof Video) {
                 cellList.add(new VideoContentCell((Video) data));
@@ -72,7 +76,11 @@ public class AdvancedContentFragment extends Fragment implements ViewPager.OnPag
     @Override
     public void onPageSelected(int position) {
         if (mPlayingCell != null) {
-            GSYVideoManager.instance().stop();
+            try {
+                GSYVideoManager.instance().stop();
+            } catch (IllegalStateException e) {
+                e.printStackTrace();
+            }
         }
         if (mAdapter.getItem(position) instanceof VideoContentCell) {
             mPlayingCell = ((VideoContentCell) mAdapter.getItem(position));
@@ -112,7 +120,12 @@ public class AdvancedContentFragment extends Fragment implements ViewPager.OnPag
         BaseContentCell item = (BaseContentCell) mAdapter.getItem(mViewPager.getCurrentItem());
         if (item != null) {
             BaseData baseData = (BaseData) item.getData();
-            return new ShareElementInfo[]{new ShareElementInfo(item.getShareElement(), baseData)};
+            if (item instanceof ImageFrescoContentCell) {
+                ShareElementInfo info = new ShareFrescoInfo(item.getShareElement(), baseData, ScalingUtils.ScaleType.FIT_CENTER, ScalingUtils.ScaleType.CENTER_CROP);
+                return new ShareElementInfo[]{info};
+            } else {
+                return new ShareElementInfo[]{new ShareElementInfo(item.getShareElement(), baseData)};
+            }
         }
         return new ShareElementInfo[0];
     }

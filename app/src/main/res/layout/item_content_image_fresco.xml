@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <com.facebook.drawee.view.SimpleDraweeView
-        android:id="@+id/content_item_img_fresco"
+        android:id="@+id/content_item_img"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

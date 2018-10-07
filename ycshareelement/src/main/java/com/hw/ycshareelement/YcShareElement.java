@@ -20,16 +20,15 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
-import android.widget.ImageView;
 import com.hw.ycshareelement.transform.DefaultShareElementTransitionFactory;
 import com.hw.ycshareelement.transform.GetShareElement;
 import com.hw.ycshareelement.transform.IShareElementSelector;
 import com.hw.ycshareelement.transform.IShareElementTransitionFactory;
 import com.hw.ycshareelement.transform.ShareElementInfo;
 
+import java.lang.ref.Reference;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -45,7 +44,7 @@ public class YcShareElement {
     private static IShareElementTransitionFactory sTransitionFactory = new DefaultShareElementTransitionFactory();
 
     public static Bundle buildOptionsBundle(@NonNull final Activity activity, @Nullable final GetShareElement getShareElement) {
-        if(!TransitionHelper.ENABLE){
+        if (!TransitionHelper.ENABLE) {
             return new Bundle();
         }
         activity.setExitSharedElementCallback(new SharedElementCallback() {
@@ -58,11 +57,12 @@ public class YcShareElement {
 
             @Override
             public Parcelable onCaptureSharedElementSnapshot(View sharedElement, Matrix viewToGlobalMatrix, RectF screenBounds) {
-                Log.w("hwLog", "onCaptureSharedElementSnapshot");
+                Log.w("hwLog", "recordToBundle");
                 Object tag = sharedElement.getTag(R.id.share_element_info);
 
                 if (tag instanceof ShareElementInfo) {
                     ShareElementInfo shareElementInfo = (ShareElementInfo) tag;
+                    shareElementInfo.recordToBundle(sharedElement, shareElementInfo.getBundle());
                     shareElementInfo.setSnapshot(super.onCaptureSharedElementSnapshot(sharedElement, viewToGlobalMatrix, screenBounds));
                     return shareElementInfo;
                 }
@@ -97,7 +97,6 @@ public class YcShareElement {
 
             @Override
             public View onCreateSnapshotView(Context context, Parcelable snapshot) {
-                Log.w("hwLog", "onCreateSnapshotView");
                 return super.onCreateSnapshotView(context, snapshot);
             }
         });
@@ -111,9 +110,10 @@ public class YcShareElement {
     }
 
     public static void postponeEnterTransition(@NonNull final Activity activity, @Nullable final GetShareElement getShareElement) {
-        if(!TransitionHelper.ENABLE){
+        if (!TransitionHelper.ENABLE) {
             return;
         }
+        final AtomicBoolean isEnter = new AtomicBoolean(true);
         activity.postponeEnterTransition();
         activity.setEnterSharedElementCallback(new SharedElementCallback() {
 
@@ -139,7 +139,6 @@ public class YcShareElement {
 
             @Override
             public View onCreateSnapshotView(Context context, Parcelable snapshot) {
-                Log.e("hwLog", "onCreateSnapshotView");
                 if (snapshot instanceof ShareElementInfo) {
                     View view = super.onCreateSnapshotView(context, ((ShareElementInfo) snapshot).getSnapshot());
                     view.setTag(R.id.share_element_info, snapshot);
@@ -155,15 +154,28 @@ public class YcShareElement {
                 if (sharedElements != null && sharedElementSnapshots != null) {
                     for (int i = 0; i < sharedElements.size(); i++) {
                         View snapshotView = sharedElementSnapshots.get(i);
-                        Object tag = snapshotView.getTag(R.id.share_element_info);
-                        if (tag instanceof ShareElementInfo) {
-                            sharedElements.get(i).setTag(R.id.share_element_info, tag);
+                        View shareElementView = sharedElements.get(i);
+                        ShareElementInfo shareElementInfo = null;
+                        if(isEnter.get()){
+                            //进入时使用前一个Activity传过来的值
+                            if (snapshotView != null && snapshotView.getTag(R.id.share_element_info) instanceof ShareElementInfo) {
+                                shareElementInfo = (ShareElementInfo) snapshotView.getTag(R.id.share_element_info);
+                            }
+                        }else{
+                            //退出时使用当前Activity设置的值
+                            if (shareElementView != null && shareElementView.getTag(R.id.share_element_info) instanceof ShareElementInfo) {
+                                shareElementInfo = (ShareElementInfo) shareElementView.getTag(R.id.share_element_info);
+                            }
                         }
+                        if(shareElementInfo!=null){
+                            shareElementView.setTag(R.id.share_element_info, shareElementInfo);
+                        }
+                        shareElementInfo.bundleToView(sharedElements.get(i),shareElementInfo.getBundle());
                     }
                 }
                 setTransform(activity, sharedElements);
                 Log.e("hwLog", "onSharedElementStart");
-
+                isEnter.set(false);
             }
 
             @Override
@@ -176,7 +188,7 @@ public class YcShareElement {
             //以下不回调
             @Override
             public Parcelable onCaptureSharedElementSnapshot(View sharedElement, Matrix viewToGlobalMatrix, RectF screenBounds) {
-                Log.e("hwLog", "onCaptureSharedElementSnapshot");
+                Log.e("hwLog", "recordToBundle");
                 return super.onCaptureSharedElementSnapshot(sharedElement, viewToGlobalMatrix, screenBounds);
             }
         });
@@ -206,7 +218,7 @@ public class YcShareElement {
     }
 
     public static void onShareElementReady(Activity activity) {
-        if(!TransitionHelper.ENABLE){
+        if (!TransitionHelper.ENABLE) {
             return;
         }
         activity.startPostponedEnterTransition();
@@ -214,7 +226,7 @@ public class YcShareElement {
 
 
     private static void setTransform(Activity activity, List<View> sharedElements) {
-        if(!TransitionHelper.ENABLE){
+        if (!TransitionHelper.ENABLE) {
             return;
         }
         if (sTransitionFactory != null) {
@@ -289,7 +301,7 @@ public class YcShareElement {
     }
 
     public static void onActivityReenter(final Activity activity, int resultCode, Intent data, IShareElementSelector selector) {
-        if(!TransitionHelper.ENABLE){
+        if (!TransitionHelper.ENABLE) {
             return;
         }
         if (selector == null || resultCode != RESULT_OK || data == null) {

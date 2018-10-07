@@ -5,10 +5,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.hw.ycshareelement.YcShareElement;
 import us.pinguo.shareelementdemo.R;
 import com.hw.ycshareelement.transform.IShareElementSelector;
 import com.hw.ycshareelement.transform.ShareElementInfo;
+import us.pinguo.shareelementdemo.advanced.list.FrescoShareElementTransitionfactory;
 
 import java.util.List;
 
@@ -20,6 +22,7 @@ public class AdvancedListActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        YcShareElement.setShareElementTransitionFactory(new FrescoShareElementTransitionfactory());
         super.onCreate(savedInstanceState);
         Fresco.initialize(getApplicationContext());
         setContentView(R.layout.activity_simple);

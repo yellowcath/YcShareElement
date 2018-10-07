@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.FitCenter;
@@ -50,9 +51,9 @@ public class ImageListCell extends BaseListCell<Image, RecyclerView.ViewHolder> 
         return new BaseViewHolder(view);
     }
 
-    private void setSize(View view) {
+    protected void setSize(View view) {
         int width = (view.getResources().getDisplayMetrics().widthPixels -
-                view.getResources().getDimensionPixelSize(R.dimen.divider) * 3) / 2;
+                view.getResources().getDimensionPixelSize(R.dimen.divider) * 2) / 2;
         int height = width;//(int) (mData.height / (float) mData.width * width);
         ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
         layoutParams.height = height;

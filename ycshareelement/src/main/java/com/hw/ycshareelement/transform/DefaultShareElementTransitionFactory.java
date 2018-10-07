@@ -20,10 +20,19 @@ import java.util.List;
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class DefaultShareElementTransitionFactory implements IShareElementTransitionFactory {
 
-    private boolean mUseDefaultImageTransform = false;
+    protected boolean mUseDefaultImageTransform = false;
 
     @Override
     public Transition buildShareElementEnterTransition(List<View> shareViewList) {
+        return buildShareElementsTransition(shareViewList);
+    }
+
+    @Override
+    public Transition buildShareElementExitTransition(List<View> shareViewList) {
+        return buildShareElementsTransition(shareViewList);
+    }
+
+    protected TransitionSet buildShareElementsTransition(List<View> shareViewList) {
         TransitionSet transitionSet = new TransitionSet();
         if (shareViewList == null || shareViewList.size() == 0) {
             return transitionSet;
@@ -48,11 +57,6 @@ public class DefaultShareElementTransitionFactory implements IShareElementTransi
             }
         }
         return transitionSet;
-    }
-
-    @Override
-    public Transition buildShareElementExitTransition(List<View> shareViewList) {
-        return buildShareElementEnterTransition(shareViewList);
     }
 
     @Override

@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import com.hw.ycshareelement.YcShareElement;
 import us.pinguo.shareelementdemo.advanced.AdvancedListActivity;
+import us.pinguo.shareelementdemo.contacts.ContactActivity;
 import us.pinguo.shareelementdemo.simple.SimpleFragmentActivity;
 import us.pinguo.shareelementdemo.simple.SimpleFromActivity;
 
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(new Intent(this, SimpleFragmentActivity.class));
                 break;
             case R.id.simple_activity_btn:
-                startActivity(new Intent(this, SimpleFromActivity.class));
+                startActivity(new Intent(this, ContactActivity.class));
                 break;
             case R.id.recyclerview_btn:
                 startActivity(new Intent(this, AdvancedListActivity.class));

@@ -1,5 +1,6 @@
 package com.hw.ycshareelement.transform;
 
+import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -21,6 +22,8 @@ public class ShareElementInfo<T extends Parcelable> implements Parcelable {
      * 存放View相关的数据。用于定位切换页面后新的ShareElement
      */
     protected T mData;
+
+    protected Bundle mBundle = new Bundle();
 
     public ShareElementInfo(@NonNull View view, @Nullable T data) {
         this.mView = view;
@@ -44,6 +47,13 @@ public class ShareElementInfo<T extends Parcelable> implements Parcelable {
         return mData;
     }
 
+    public void recordToBundle(View view, Bundle bundle){}
+
+    public void bundleToView(View view, Bundle bundle){}
+
+    public Bundle getBundle() {
+        return mBundle;
+    }
 
     @Override
     public int describeContents() {
@@ -54,11 +64,13 @@ public class ShareElementInfo<T extends Parcelable> implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeParcelable(this.mSnapshot, flags);
         dest.writeParcelable(this.mData, flags);
+        dest.writeBundle(this.mBundle);
     }
 
     protected ShareElementInfo(Parcel in) {
         this.mSnapshot = in.readParcelable(Parcelable.class.getClassLoader());
         this.mData = in.readParcelable(getClass().getClassLoader());
+        this.mBundle = in.readBundle();
     }
 
     public static final Creator<ShareElementInfo> CREATOR = new Creator<ShareElementInfo>() {

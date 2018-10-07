@@ -7,18 +7,22 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import com.facebook.drawee.drawable.ScalingUtils;
 import com.hw.ycshareelement.YcShareElement;
 import us.pinguo.shareelementdemo.R;
 import us.pinguo.shareelementdemo.advanced.content.BitmapThumbnail;
 import us.pinguo.shareelementdemo.advanced.list.AdvancedListAdapter;
 import us.pinguo.shareelementdemo.advanced.list.BaseListCell;
+import us.pinguo.shareelementdemo.advanced.list.ImageFrescoListCell;
 import us.pinguo.shareelementdemo.advanced.list.ImageListCell;
 import us.pinguo.shareelementdemo.advanced.list.ShareContentInfo;
+import us.pinguo.shareelementdemo.advanced.list.ShareFrescoInfo;
 import us.pinguo.shareelementdemo.advanced.list.VideoListCell;
 import com.hw.ycshareelement.transform.GetShareElement;
 import com.hw.ycshareelement.transform.ShareElementInfo;
@@ -54,15 +58,18 @@ public class AdvancedListFragment extends Fragment implements BaseListCell.OnCel
         mRecyclerView.setBackgroundColor(0xFF323232);
         mAdapter = new AdvancedListAdapter();
         mRecyclerView.setAdapter(mAdapter);
+        int divider = getResources().getDimensionPixelSize(R.dimen.divider);
+        mRecyclerView.setPadding(divider/2,divider/2,divider/2,divider/2);
         RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+
         mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.addItemDecoration(new SpaceItemDecoration(getResources().getDimensionPixelSize(R.dimen.divider)));
+        mRecyclerView.addItemDecoration(new SpaceItemDecoration(divider));
         initCells();
     }
 
     private void initCells() {
         List<BaseListCell> cellList = new LinkedList<>();
-        mDataList.add(new Image("http://phototask.c360dn.com/Fl-0qph8x14uLb2JwRzko8fOmfqw", 1024, 738));
+        mDataList.add(new Image("http://phototask.c360dn.com/Fl-0qph8x14uLb2JwRzko8fOmfqw", 1024, 738).setShowInFresco(true));
         mDataList.add(new Image("http://phototask.c360dn.com/FuOUEYx1YLf9gUAykzueD9TzX8Lq", 1280, 800));
         mDataList.add(new Video("https://phototask.c360dn.com/lm7e8LQIsnHteaGlkv6Q6lu05ri8",
                 "https://phototask.c360dn.com/lm7e8LQIsnHteaGlkv6Q6lu05ri8-2018081621-preview.webp",
@@ -87,7 +94,9 @@ public class AdvancedListFragment extends Fragment implements BaseListCell.OnCel
         mDataList.add(new Image("http://phototask.c360dn.com/FsOmrix9LiKJXKqi4vOU7fbUmlbQ", 1080, 960));
 
         for (Parcelable data : mDataList) {
-            BaseListCell cell = data instanceof Image ? new ImageListCell((Image) data) : new VideoListCell((Video) data);
+            BaseListCell cell = data instanceof Image ?
+                    (((Image) data).isShowInFresco()?new ImageFrescoListCell((Image)data):new ImageListCell((Image) data))
+                    : new VideoListCell((Video) data);
             cell.setOnCellClickListener(this);
             cellList.add(cell);
         }
@@ -126,7 +135,12 @@ public class AdvancedListFragment extends Fragment implements BaseListCell.OnCel
             return new ShareElementInfo[]{info};
         } else if (mTransitionCell instanceof ImageListCell) {
             BaseData data = mTransitionCell.getData();
-            ShareElementInfo info = new ShareContentInfo(mTransitionCell.getShareElement(), data);
+            ShareElementInfo info;
+            if(mTransitionCell instanceof ImageFrescoListCell){
+                info = new ShareFrescoInfo(mTransitionCell.getShareElement(), data, ScalingUtils.ScaleType.CENTER_CROP, ScalingUtils.ScaleType.FIT_CENTER);
+            }else{
+                info = new ShareContentInfo(mTransitionCell.getShareElement(), data);
+            }
             return new ShareElementInfo[]{info};
         }
         return new ShareElementInfo[0];

@@ -20,8 +20,9 @@ public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
         super.getItemOffsets(outRect, view, parent, state);
         StaggeredGridLayoutManager.LayoutParams lp = (StaggeredGridLayoutManager.LayoutParams) view.getLayoutParams();
-        lp.topMargin = mSpace;
+        lp.topMargin = mSpace/2;
         lp.leftMargin = mSpace/2;
         lp.rightMargin = mSpace/2;
+        lp.bottomMargin = mSpace/2;
     }
 }

@@ -1,33 +1,30 @@
-package us.pinguo.shareelementdemo.advanced.list;
+package us.pinguo.shareelementdemo.advanced;
 
 import android.os.Bundle;
-import android.os.Parcel;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.View;
 import com.facebook.drawee.drawable.ScalingUtils;
+import com.facebook.drawee.view.GenericDraweeView;
 import com.facebook.drawee.view.SimpleDraweeView;
-import us.pinguo.shareelementdemo.advanced.BaseData;
+import com.hw.ycshareelement.transform.ViewStateSaver;
 
 /**
- * Created by huangwei on 2018/10/6.
+ * Created by huangwei on 2018/10/7.
  */
-public class ShareFrescoInfo extends ShareContentInfo {
-    private ScalingUtils.ScaleType mFromScale;
-    private ScalingUtils.ScaleType mToScale;
+public class FrescoViewStateSaver extends ViewStateSaver {
 
-    public ShareFrescoInfo(@NonNull View view, @Nullable BaseData data, ScalingUtils.ScaleType fromScaleType, ScalingUtils.ScaleType toScaleType) {
-        super(view, data);
-        mFromScale = fromScaleType;
-        mToScale = toScaleType;
+    @Override
+    public void setViewState(View view, Bundle bundle) {
+        if (view instanceof GenericDraweeView) {
+            int scaleType = bundle.getInt("scaleType", 0);
+            ((GenericDraweeView) view).getHierarchy().setActualImageScaleType(intToScaleType(scaleType));
+        }
     }
 
-    public ScalingUtils.ScaleType getFromScale() {
-        return mFromScale;
-    }
-
-    public ScalingUtils.ScaleType getToScale() {
-        return mToScale;
+    @Override
+    protected void captureViewInfo(View view, Bundle bundle) {
+        if (view instanceof GenericDraweeView) {
+            bundle.putInt("scaleType", scaleTypeToInt(((GenericDraweeView) view).getHierarchy().getActualImageScaleType()));
+        }
     }
 
     private ScalingUtils.ScaleType intToScaleType(int index) {
@@ -73,34 +70,4 @@ public class ShareFrescoInfo extends ShareContentInfo {
         }
         return -1;
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        super.writeToParcel(dest, flags);
-        dest.writeInt(scaleTypeToInt(mFromScale));
-        dest.writeInt(scaleTypeToInt(mToScale));
-    }
-
-    protected ShareFrescoInfo(Parcel in) {
-        super(in);
-        mFromScale = intToScaleType(in.readInt());
-        mToScale = intToScaleType(in.readInt());
-    }
-
-    public static final Creator<ShareFrescoInfo> CREATOR = new Creator<ShareFrescoInfo>() {
-        @Override
-        public ShareFrescoInfo createFromParcel(Parcel source) {
-            return new ShareFrescoInfo(source);
-        }
-
-        @Override
-        public ShareFrescoInfo[] newArray(int size) {
-            return new ShareFrescoInfo[size];
-        }
-    };
 }

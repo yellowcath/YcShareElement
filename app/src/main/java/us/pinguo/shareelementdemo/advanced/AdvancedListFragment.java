@@ -13,7 +13,6 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.facebook.drawee.drawable.ScalingUtils;
 import com.hw.ycshareelement.YcShareElement;
 import us.pinguo.shareelementdemo.R;
 import us.pinguo.shareelementdemo.advanced.content.BitmapThumbnail;
@@ -22,7 +21,6 @@ import us.pinguo.shareelementdemo.advanced.list.BaseListCell;
 import us.pinguo.shareelementdemo.advanced.list.ImageFrescoListCell;
 import us.pinguo.shareelementdemo.advanced.list.ImageListCell;
 import us.pinguo.shareelementdemo.advanced.list.ShareContentInfo;
-import us.pinguo.shareelementdemo.advanced.list.ShareFrescoInfo;
 import us.pinguo.shareelementdemo.advanced.list.VideoListCell;
 import com.hw.ycshareelement.transform.GetShareElement;
 import com.hw.ycshareelement.transform.ShareElementInfo;
@@ -137,7 +135,7 @@ public class AdvancedListFragment extends Fragment implements BaseListCell.OnCel
             BaseData data = mTransitionCell.getData();
             ShareElementInfo info;
             if(mTransitionCell instanceof ImageFrescoListCell){
-                info = new ShareFrescoInfo(mTransitionCell.getShareElement(), data, ScalingUtils.ScaleType.CENTER_CROP, ScalingUtils.ScaleType.FIT_CENTER);
+                info = new ShareElementInfo(mTransitionCell.getShareElement(), data, new FrescoViewStateSaver());
             }else{
                 info = new ShareContentInfo(mTransitionCell.getShareElement(), data);
             }

@@ -9,7 +9,6 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.facebook.drawee.drawable.ScalingUtils;
 import com.hw.ycshareelement.YcShareElement;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import us.pinguo.shareelementdemo.advanced.content.BaseContentCell;
@@ -19,8 +18,6 @@ import us.pinguo.shareelementdemo.advanced.content.ImageFrescoContentCell;
 import us.pinguo.shareelementdemo.advanced.content.VideoContentCell;
 import us.pinguo.shareelementdemo.advanced.content.viewpager.BasePagerAdapter;
 import com.hw.ycshareelement.transform.ShareElementInfo;
-import us.pinguo.shareelementdemo.advanced.list.ImageFrescoListCell;
-import us.pinguo.shareelementdemo.advanced.list.ShareFrescoInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -121,7 +118,7 @@ public class AdvancedContentFragment extends Fragment implements ViewPager.OnPag
         if (item != null) {
             BaseData baseData = (BaseData) item.getData();
             if (item instanceof ImageFrescoContentCell) {
-                ShareElementInfo info = new ShareFrescoInfo(item.getShareElement(), baseData, ScalingUtils.ScaleType.FIT_CENTER, ScalingUtils.ScaleType.CENTER_CROP);
+                ShareElementInfo info = new ShareElementInfo(item.getShareElement(), baseData, new FrescoViewStateSaver());
                 return new ShareElementInfo[]{info};
             } else {
                 return new ShareElementInfo[]{new ShareElementInfo(item.getShareElement(), baseData)};

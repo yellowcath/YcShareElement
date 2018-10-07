@@ -1,5 +1,6 @@
 package com.hw.ycshareelement.transform;
 
+import android.graphics.RectF;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -22,13 +23,32 @@ public class ShareElementInfo<T extends Parcelable> implements Parcelable {
      * 存放View相关的数据。用于定位切换页面后新的ShareElement
      */
     protected T mData;
+    /**
+     * 用于Transition判断当前是进入还是退出
+     */
+    protected boolean mIsEnter;
 
     protected Bundle mBundle = new Bundle();
 
+    protected ViewStateSaver mViewStateSaver;
+
     public ShareElementInfo(@NonNull View view, @Nullable T data) {
+        this(view, data, null);
+    }
+
+    public ShareElementInfo(@NonNull View view, @Nullable T data, ViewStateSaver viewStateSaver) {
         this.mView = view;
         this.mData = data;
         view.setTag(R.id.share_element_info, this);
+        mViewStateSaver = viewStateSaver;
+    }
+
+    public Bundle getBundle() {
+        return mBundle;
+    }
+
+    public void setBundle(Bundle bundle) {
+        mBundle = bundle;
     }
 
     public View getView() {
@@ -47,12 +67,28 @@ public class ShareElementInfo<T extends Parcelable> implements Parcelable {
         return mData;
     }
 
-    public void recordToBundle(View view, Bundle bundle){}
+    public boolean isEnter() {
+        return mIsEnter;
+    }
 
-    public void bundleToView(View view, Bundle bundle){}
+    public void setEnter(boolean enter) {
+        mIsEnter = enter;
+    }
 
-    public Bundle getBundle() {
-        return mBundle;
+
+    public static ShareElementInfo getFromView(View view) {
+        if (view == null) {
+            return null;
+        }
+        Object tag = view.getTag(R.id.share_element_info);
+        return tag instanceof ShareElementInfo ? (ShareElementInfo) tag : null;
+    }
+
+    public static void saveToView(View view, ShareElementInfo info) {
+        if (view == null) {
+            return;
+        }
+        view.setTag(R.id.share_element_info, info);
     }
 
     @Override
@@ -64,12 +100,16 @@ public class ShareElementInfo<T extends Parcelable> implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeParcelable(this.mSnapshot, flags);
         dest.writeParcelable(this.mData, flags);
-        dest.writeBundle(this.mBundle);
+        dest.writeByte(this.mIsEnter ? (byte) 1 : (byte) 0);
+        dest.writeParcelable(this.mViewStateSaver, flags);
+        dest.writeBundle(mBundle);
     }
 
     protected ShareElementInfo(Parcel in) {
         this.mSnapshot = in.readParcelable(Parcelable.class.getClassLoader());
         this.mData = in.readParcelable(getClass().getClassLoader());
+        this.mIsEnter = in.readByte() != 0;
+        this.mViewStateSaver = in.readParcelable(ViewStateSaver.class.getClassLoader());
         this.mBundle = in.readBundle();
     }
 
@@ -84,4 +124,26 @@ public class ShareElementInfo<T extends Parcelable> implements Parcelable {
             return new ShareElementInfo[size];
         }
     };
+
+    public void captureExtraInfo(View view) {
+        if (mViewStateSaver != null) {
+            mViewStateSaver.captureViewInfo(view, mBundle);
+        }
+    }
+
+    public void setStartViewState(View shareElementView) {
+        if (mViewStateSaver != null) {
+            Bundle originStateBundle = new Bundle();
+            mViewStateSaver.captureViewInfo(shareElementView, originStateBundle);
+            mViewStateSaver.setViewState(shareElementView, mBundle);
+            mBundle.clear();
+            mBundle.putAll(originStateBundle);
+        }
+    }
+
+    public void setEndViewState(View shareElementView) {
+        if (mViewStateSaver != null) {
+            mViewStateSaver.setViewState(shareElementView, mBundle);
+        }
+    }
 }

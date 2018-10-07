@@ -54,7 +54,6 @@ public class ImageFrescoListCell extends ImageListCell {
         SimpleDraweeView imageView = holder.itemView.findViewById(R.id.list_item_img_fresco);
         ViewCompat.setTransitionName(imageView, mData.url);
         setSize(holder.itemView);
-        imageView.setBackgroundColor(Color.RED);
 
         GenericDraweeHierarchy hierarchy = imageView.getHierarchy();
         hierarchy.setActualImageScaleType(ScalingUtils.ScaleType.CENTER_CROP);

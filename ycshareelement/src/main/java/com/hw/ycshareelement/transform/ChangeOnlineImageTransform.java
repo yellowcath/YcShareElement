@@ -31,7 +31,6 @@ public class ChangeOnlineImageTransform extends Transition {
     private static final String PROPNAME_SCALE_TYPE = "hw:changeImageTransform:scaletype";
     private static final String PROPNAME_BOUNDS = "hw:changeImageTransform:bounds";
     private static final String PROPNAME_MATRIX = "hw:changeImageTransform:matrix";
-    private static final String PROPNAME_INFO = "hw:changeImageTransform:info";
 
     @Override
     public void captureStartValues(TransitionValues transitionValues) {
@@ -54,12 +53,6 @@ public class ChangeOnlineImageTransform extends Transition {
             return;
         }
         Map<String, Object> values = transitionValues.values;
-        Object tag = imageView.getTag(R.id.share_element_info);
-        if (tag instanceof ShareElementInfo) {
-            ShareElementInfo shareElementInfo = (ShareElementInfo) tag;
-            values.put(PROPNAME_INFO, shareElementInfo);
-        }
-
         int left = view.getLeft();
         int top = view.getTop();
         int right = view.getRight();
@@ -75,11 +68,6 @@ public class ChangeOnlineImageTransform extends Transition {
 
     protected void calculateMatrix(TransitionValues startValues, TransitionValues endValues, int imageWidth, int imageHeight, Matrix startMatrix, Matrix endMatrix) {
         if (startValues == null || endValues == null || startMatrix == null || endMatrix == null) {
-            return;
-        }
-        if (!startValues.values.containsKey(PROPNAME_INFO)) {
-            startMatrix.set(((ImageView) startValues.view).getImageMatrix());
-            endMatrix.set(((ImageView) endValues.view).getImageMatrix());
             return;
         }
         Rect startBounds = (Rect) startValues.values.get(PROPNAME_BOUNDS);

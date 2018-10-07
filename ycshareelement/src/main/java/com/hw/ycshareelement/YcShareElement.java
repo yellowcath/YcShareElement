@@ -26,7 +26,6 @@ import com.hw.ycshareelement.transform.IShareElementSelector;
 import com.hw.ycshareelement.transform.IShareElementTransitionFactory;
 import com.hw.ycshareelement.transform.ShareElementInfo;
 
-import java.lang.ref.Reference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -57,14 +56,13 @@ public class YcShareElement {
 
             @Override
             public Parcelable onCaptureSharedElementSnapshot(View sharedElement, Matrix viewToGlobalMatrix, RectF screenBounds) {
-                Log.w("hwLog", "recordToBundle");
-                Object tag = sharedElement.getTag(R.id.share_element_info);
+                Log.w("hwLog", "onCaptureSharedElementSnapshot");
+                ShareElementInfo info = ShareElementInfo.getFromView(sharedElement);
 
-                if (tag instanceof ShareElementInfo) {
-                    ShareElementInfo shareElementInfo = (ShareElementInfo) tag;
-                    shareElementInfo.recordToBundle(sharedElement, shareElementInfo.getBundle());
-                    shareElementInfo.setSnapshot(super.onCaptureSharedElementSnapshot(sharedElement, viewToGlobalMatrix, screenBounds));
-                    return shareElementInfo;
+                if (info != null) {
+                    info.captureExtraInfo(sharedElement);
+                    info.setSnapshot(super.onCaptureSharedElementSnapshot(sharedElement, viewToGlobalMatrix, screenBounds));
+                    return info;
                 }
                 return super.onCaptureSharedElementSnapshot(sharedElement, viewToGlobalMatrix, screenBounds);
             }
@@ -122,7 +120,6 @@ public class YcShareElement {
                 mapSharedElements(activity, getShareElement, names, sharedElements);
                 super.onMapSharedElements(names, sharedElements);
                 Log.e("hwLog", "onMapSharedElements");
-                recordShareElementsBaseBounds(sharedElements);
             }
 
             @Override
@@ -141,7 +138,7 @@ public class YcShareElement {
             public View onCreateSnapshotView(Context context, Parcelable snapshot) {
                 if (snapshot instanceof ShareElementInfo) {
                     View view = super.onCreateSnapshotView(context, ((ShareElementInfo) snapshot).getSnapshot());
-                    view.setTag(R.id.share_element_info, snapshot);
+                    ShareElementInfo.saveToView(view, (ShareElementInfo) snapshot);
                     return view;
                 } else {
                     return super.onCreateSnapshotView(context, snapshot);
@@ -156,32 +153,46 @@ public class YcShareElement {
                         View snapshotView = sharedElementSnapshots.get(i);
                         View shareElementView = sharedElements.get(i);
                         ShareElementInfo shareElementInfo = null;
-                        if(isEnter.get()){
+                        if (isEnter.get()) {
                             //进入时使用前一个Activity传过来的值
-                            if (snapshotView != null && snapshotView.getTag(R.id.share_element_info) instanceof ShareElementInfo) {
-                                shareElementInfo = (ShareElementInfo) snapshotView.getTag(R.id.share_element_info);
-                            }
-                        }else{
+                            shareElementInfo = ShareElementInfo.getFromView(snapshotView);
+                        } else {
                             //退出时使用当前Activity设置的值
-                            if (shareElementView != null && shareElementView.getTag(R.id.share_element_info) instanceof ShareElementInfo) {
-                                shareElementInfo = (ShareElementInfo) shareElementView.getTag(R.id.share_element_info);
+                            shareElementInfo = ShareElementInfo.getFromView(shareElementView);
+                        }
+                        if (shareElementInfo != null) {
+                            shareElementInfo.setEnter(isEnter.get());
+                            if (isEnter.get()) {
+                                shareElementInfo.setStartViewState(shareElementView);
+                            }else{
+                                shareElementInfo.setEndViewState(shareElementView);
                             }
+                            ShareElementInfo.saveToView(shareElementView, shareElementInfo);
                         }
-                        if(shareElementInfo!=null){
-                            shareElementView.setTag(R.id.share_element_info, shareElementInfo);
-                        }
-                        shareElementInfo.bundleToView(sharedElements.get(i),shareElementInfo.getBundle());
                     }
                 }
                 setTransform(activity, sharedElements);
                 Log.e("hwLog", "onSharedElementStart");
-                isEnter.set(false);
             }
 
             @Override
             public void onSharedElementEnd(List<String> sharedElementNames, List<View> sharedElements, List<View> sharedElementSnapshots) {
                 super.onSharedElementEnd(sharedElementNames, sharedElements, sharedElementSnapshots);
                 Log.e("hwLog", "onSharedElementEnd");
+                for (int i = 0; sharedElements != null && i < sharedElements.size(); i++) {
+                    View shareElementView = sharedElements.get(i);
+                    ShareElementInfo shareElementInfo = ShareElementInfo.getFromView(shareElementView);
+                    if (shareElementInfo != null) {
+                        if (isEnter.get()) {
+                            shareElementInfo.setEndViewState(shareElementView);
+                        }else{
+                            View snapshotView = sharedElementSnapshots==null?null:sharedElementSnapshots.get(i);
+                            ShareElementInfo infoFromSnapshot = ShareElementInfo.getFromView(snapshotView);
+                            shareElementInfo.setBundle(infoFromSnapshot.getBundle());
+                        }
+                    }
+                }
+                isEnter.set(false);
             }
 
 
@@ -192,17 +203,6 @@ public class YcShareElement {
                 return super.onCaptureSharedElementSnapshot(sharedElement, viewToGlobalMatrix, screenBounds);
             }
         });
-    }
-
-    private static void recordShareElementsBaseBounds(Map<String, View> sharedElements) {
-        if (sharedElements == null) {
-            return;
-        }
-//        Iterator<View> values = sharedElements.values().iterator();
-//        while (values.hasNext()) {
-//            View view = values.next();
-//            Object tag = view.getTag(R.id.share_element_info);
-//        }
     }
 
     public static void callReadyAfterPreDraw(final Activity activity) {

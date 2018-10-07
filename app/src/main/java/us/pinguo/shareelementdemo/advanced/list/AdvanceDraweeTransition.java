@@ -17,6 +17,8 @@ import com.facebook.drawee.drawable.ScalingUtils;
 import com.facebook.drawee.generic.GenericDraweeHierarchy;
 import com.facebook.drawee.view.DraweeTransition;
 import com.facebook.drawee.view.GenericDraweeView;
+import com.facebook.drawee.view.SimpleDraweeView;
+import com.hw.ycshareelement.transform.ShareElementInfo;
 import us.pinguo.shareelementdemo.R;
 
 import java.lang.reflect.Field;
@@ -37,18 +39,16 @@ public class AdvanceDraweeTransition extends Transition {
     @Override
     public void captureStartValues(TransitionValues transitionValues) {
         captureValues(transitionValues);
-        if (transitionValues.view.getTag(R.id.share_element_info) instanceof ShareFrescoInfo) {
-            ShareFrescoInfo shareFrescoInfo = (ShareFrescoInfo) transitionValues.view.getTag(R.id.share_element_info);
-            mFromScale = shareFrescoInfo.getFromScale();
+        if(transitionValues.view instanceof GenericDraweeView) {
+            mFromScale = ((GenericDraweeView) transitionValues.view) .getHierarchy().getActualImageScaleType();
         }
     }
 
     @Override
     public void captureEndValues(TransitionValues transitionValues) {
         captureValues(transitionValues);
-        if (transitionValues.view.getTag(R.id.share_element_info) instanceof ShareFrescoInfo) {
-            ShareFrescoInfo shareFrescoInfo = (ShareFrescoInfo) transitionValues.view.getTag(R.id.share_element_info);
-            mToScale = shareFrescoInfo.getToScale();
+        if(transitionValues.view instanceof GenericDraweeView) {
+            mToScale = ((GenericDraweeView) transitionValues.view) .getHierarchy().getActualImageScaleType();
         }
     }
 

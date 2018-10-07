@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import us.pinguo.shareelementdemo.R;
 
 /**
@@ -26,6 +28,7 @@ public class ContactActivity extends Activity {
 
         final ImageView avatarImg = findViewById(R.id.avatar);
         final TextView nameTxt = findViewById(R.id.name);
+        Glide.with(avatarImg).load(R.drawable.avatar).apply(RequestOptions.circleCropTransform()).into(avatarImg);
 
         ViewCompat.setTransitionName(avatarImg,"avatar");
         ViewCompat.setTransitionName(nameTxt,"name");
@@ -41,5 +44,4 @@ public class ContactActivity extends Activity {
             }
         });
     }
-
 }

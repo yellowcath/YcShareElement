@@ -11,11 +11,16 @@ import android.view.View;
  */
 public class ViewStateSaver implements Parcelable{
     /**
-     * 将之前保存的信息设置到目标View上已供{@link android.transition.Transition#captureStartValues(TransitionValues)}获取
+     * 保存View的额外信息
+     * @param view
+     * @param bundle
+     */
+    protected void captureViewInfo(View view,Bundle bundle){}
+    /**
+     * 将之前保存的信息设置到目标View上以供{@link android.transition.Transition#captureStartValues(TransitionValues)}获取
      */
     public void setViewState(View view,Bundle bundle){}
 
-    protected void captureViewInfo(View view,Bundle bundle){}
 
 
     @Override

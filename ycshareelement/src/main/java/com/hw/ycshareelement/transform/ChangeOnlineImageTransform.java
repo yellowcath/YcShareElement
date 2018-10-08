@@ -32,6 +32,9 @@ public class ChangeOnlineImageTransform extends Transition {
     private static final String PROPNAME_BOUNDS = "hw:changeImageTransform:bounds";
     private static final String PROPNAME_MATRIX = "hw:changeImageTransform:matrix";
 
+    public ChangeOnlineImageTransform(){
+        addTarget(ImageView.class);
+    }
     @Override
     public void captureStartValues(TransitionValues transitionValues) {
         captureBoundsAndInfo(transitionValues);

@@ -18,7 +18,7 @@ public class AdvancedContentActivity extends AppCompatActivity implements GetSha
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        YcShareElement.postponeEnterTransition(this, this);
+        YcShareElement.setEnterTransition(this, this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple);
         getWindow().setBackgroundDrawable(new ColorDrawable(0xFF323232));

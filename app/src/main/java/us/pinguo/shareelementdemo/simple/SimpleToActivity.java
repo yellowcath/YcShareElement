@@ -25,7 +25,7 @@ public class SimpleToActivity extends AppCompatActivity implements GetShareEleme
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        YcShareElement.postponeEnterTransition(this, this);
+        YcShareElement.setEnterTransition(this, this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_to);
         mImageView = findViewById(R.id.s2_img);
@@ -37,7 +37,7 @@ public class SimpleToActivity extends AppCompatActivity implements GetShareEleme
                         .transform(new FitCenter())
                         .placeholder(new ColorDrawable(Color.GRAY)))
                 .into(mImageView);
-        YcShareElement.callReadyAfterPreDraw(this);
+        YcShareElement.postStartTransition(this);
     }
 
     @Override

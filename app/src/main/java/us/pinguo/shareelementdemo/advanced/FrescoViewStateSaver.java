@@ -12,12 +12,9 @@ import com.hw.ycshareelement.transform.ViewStateSaver;
  */
 public class FrescoViewStateSaver extends ViewStateSaver {
 
-    @Override
-    public void setViewState(View view, Bundle bundle) {
-        if (view instanceof GenericDraweeView) {
-            int scaleType = bundle.getInt("scaleType", 0);
-            ((GenericDraweeView) view).getHierarchy().setActualImageScaleType(intToScaleType(scaleType));
-        }
+    public ScalingUtils.ScaleType getScaleType(Bundle bundle) {
+        int scaleType = bundle.getInt("scaleType", 0);
+        return intToScaleType(scaleType);
     }
 
     @Override

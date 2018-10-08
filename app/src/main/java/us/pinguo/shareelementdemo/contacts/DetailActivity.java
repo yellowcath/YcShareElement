@@ -1,17 +1,18 @@
 package us.pinguo.shareelementdemo.contacts;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
-import android.transition.ChangeBounds;
-import android.transition.ChangeTransform;
-import android.transition.Fade;
-import android.transition.TransitionSet;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.hw.ycshareelement.YcShareElement;
+import com.hw.ycshareelement.transform.GetShareElement;
+import com.hw.ycshareelement.transform.ShareElementInfo;
+import com.hw.ycshareelement.transform.TextViewStateSaver;
 import us.pinguo.shareelementdemo.R;
 
 /**
@@ -24,28 +25,21 @@ public class DetailActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        ImageView avatarImg = findViewById(R.id.avatar);
-        TextView nameTxt = findViewById(R.id.name);
+        final ImageView avatarImg = findViewById(R.id.avatar);
+        final TextView nameTxt = findViewById(R.id.name);
+        nameTxt.setTextColor(Color.RED);
         Glide.with(avatarImg).load(R.drawable.avatar).apply(RequestOptions.circleCropTransform()).into(avatarImg);
-        /**
-         * 1、设置相同的TransitionName
-         */
-        ViewCompat.setTransitionName(avatarImg,"avatar");
-        ViewCompat.setTransitionName(nameTxt,"name");
-        /**
-         * 2、设置WindowTransition,除指定的ShareElement外，其它所有View都会执行这个Transition动画
-         */
-        getWindow().setEnterTransition(new Fade());
-        getWindow().setExitTransition(new Fade());
-        TransitionSet transitionSet = new TransitionSet();
-        transitionSet.addTransition(new ChangeBounds());
-        transitionSet.addTransition(new ChangeTransform());
-        transitionSet.addTarget(avatarImg);
-        transitionSet.addTarget(nameTxt);
-        /**
-         * 3、设置ShareElementTransition,指定的ShareElement会执行这个Transiton动画
-         */
-        getWindow().setSharedElementEnterTransition(transitionSet);
-        getWindow().setSharedElementExitTransition(transitionSet);
+
+        ViewCompat.setTransitionName(avatarImg, "avatar");
+        ViewCompat.setTransitionName(nameTxt, "name");
+
+        YcShareElement.setEnterTransition(this, new GetShareElement() {
+            @Override
+            public ShareElementInfo[] getShareElements() {
+                return new ShareElementInfo[]{new ShareElementInfo(avatarImg),
+                        new ShareElementInfo(nameTxt, new TextViewStateSaver())};
+            }
+        });
+        YcShareElement.startTransition(this);
     }
 }

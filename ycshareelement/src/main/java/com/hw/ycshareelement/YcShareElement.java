@@ -60,7 +60,7 @@ public class YcShareElement {
                 ShareElementInfo info = ShareElementInfo.getFromView(sharedElement);
 
                 if (info != null) {
-                    info.captureExtraInfo(sharedElement);
+                    info.captureFromViewInfo(sharedElement);
                     info.setSnapshot(super.onCaptureSharedElementSnapshot(sharedElement, viewToGlobalMatrix, screenBounds));
                     return info;
                 }
@@ -107,12 +107,18 @@ public class YcShareElement {
         return TransitionHelper.getTransitionBundle(activity, viewArray);
     }
 
-    public static void postponeEnterTransition(@NonNull final Activity activity, @Nullable final GetShareElement getShareElement) {
+    public static void setEnterTransition(@NonNull final Activity activity, @Nullable final GetShareElement getShareElement) {
+        setEnterTransition(activity, getShareElement, true);
+    }
+
+    public static void setEnterTransition(@NonNull final Activity activity, @Nullable final GetShareElement getShareElement, boolean postponeTransition) {
         if (!TransitionHelper.ENABLE) {
             return;
         }
         final AtomicBoolean isEnter = new AtomicBoolean(true);
-        activity.postponeEnterTransition();
+        if(postponeTransition) {
+            activity.postponeEnterTransition();
+        }
         activity.setEnterSharedElementCallback(new SharedElementCallback() {
 
             @Override
@@ -162,11 +168,6 @@ public class YcShareElement {
                         }
                         if (shareElementInfo != null) {
                             shareElementInfo.setEnter(isEnter.get());
-                            if (isEnter.get()) {
-                                shareElementInfo.setStartViewState(shareElementView);
-                            }else{
-                                shareElementInfo.setEndViewState(shareElementView);
-                            }
                             ShareElementInfo.saveToView(shareElementView, shareElementInfo);
                         }
                     }
@@ -184,11 +185,12 @@ public class YcShareElement {
                     ShareElementInfo shareElementInfo = ShareElementInfo.getFromView(shareElementView);
                     if (shareElementInfo != null) {
                         if (isEnter.get()) {
-                            shareElementInfo.setEndViewState(shareElementView);
-                        }else{
-                            View snapshotView = sharedElementSnapshots==null?null:sharedElementSnapshots.get(i);
+                            shareElementInfo.captureToViewInfo(shareElementView);
+                        } else {
+                            View snapshotView = sharedElementSnapshots == null ? null : sharedElementSnapshots.get(i);
                             ShareElementInfo infoFromSnapshot = ShareElementInfo.getFromView(snapshotView);
-                            shareElementInfo.setBundle(infoFromSnapshot.getBundle());
+                            shareElementInfo.setFromViewBundle(infoFromSnapshot.getFromViewBundle());
+                            shareElementInfo.captureToViewInfo(shareElementView);
                         }
                     }
                 }
@@ -205,19 +207,29 @@ public class YcShareElement {
         });
     }
 
-    public static void callReadyAfterPreDraw(final Activity activity) {
+    /**
+     * 用于例如ShareElement位于ViewPager或者RecyclerView的情况，需要等它们加载好之后再开始动画
+     *
+     * @param activity
+     */
+    public static void postStartTransition(final Activity activity) {
         final View decor = activity.getWindow().getDecorView();
         decor.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
             public boolean onPreDraw() {
                 decor.getViewTreeObserver().removeOnPreDrawListener(this);
-                onShareElementReady(activity);
+                startTransition(activity);
                 return true;
             }
         });
     }
 
-    public static void onShareElementReady(Activity activity) {
+    /**
+     * 直接开始动画，必须确保ShareElement的目标View已经添加到布局里了
+     *
+     * @param activity
+     */
+    public static void startTransition(Activity activity) {
         if (!TransitionHelper.ENABLE) {
             return;
         }

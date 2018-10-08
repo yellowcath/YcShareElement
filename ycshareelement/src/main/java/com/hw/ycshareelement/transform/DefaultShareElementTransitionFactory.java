@@ -38,23 +38,13 @@ public class DefaultShareElementTransitionFactory implements IShareElementTransi
             return transitionSet;
         }
         transitionSet.addTransition(new ChangeClipBounds());
-        boolean imageViewExisted = false;
-        for (View view : shareViewList) {
-            if (view instanceof ImageView) {
-                imageViewExisted = true;
-                break;
-            }
-        }
         transitionSet.addTransition(new ChangeTransform());
-        transitionSet.addTransition(new ChangeClipBounds());
         transitionSet.addTransition(new ChangeBounds());
-
-        if (imageViewExisted) {
-            if (mUseDefaultImageTransform) {
-                transitionSet.addTransition(new ChangeImageTransform());
-            } else {
-                transitionSet.addTransition(new ChangeOnlineImageTransform());
-            }
+        transitionSet.addTransition(new ChangeTextTransform());
+        if (mUseDefaultImageTransform) {
+            transitionSet.addTransition(new ChangeImageTransform());
+        } else {
+            transitionSet.addTransition(new ChangeOnlineImageTransform());
         }
         return transitionSet;
     }

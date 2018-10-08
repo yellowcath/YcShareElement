@@ -1,6 +1,7 @@
 package com.hw.ycshareelement.transform;
 
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
 
@@ -9,13 +10,13 @@ import android.widget.TextView;
  */
 public class TextViewStateSaver extends ViewStateSaver {
 
-    @Override
-    public void setViewState(View view, Bundle bundle) {
-        super.setViewState(view, bundle);
-        if (view instanceof TextView) {
-            ((TextView) view).setTextSize(bundle.getFloat("textSize"));
-            ((TextView) view).setTextColor(bundle.getInt("textColor"));
-        }
+
+    public float getTextSize(Bundle bundle){
+        return bundle.getFloat("textSize");
+    }
+
+    public int getTextColor(Bundle bundle){
+        return bundle.getInt("textColor");
     }
 
     @Override

@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.transition.ChangeBounds;
 import android.transition.Transition;
 import android.transition.TransitionSet;
@@ -20,6 +21,7 @@ import com.facebook.drawee.view.GenericDraweeView;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.hw.ycshareelement.transform.ShareElementInfo;
 import us.pinguo.shareelementdemo.R;
+import us.pinguo.shareelementdemo.advanced.FrescoViewStateSaver;
 
 import java.lang.reflect.Field;
 
@@ -39,16 +41,24 @@ public class AdvanceDraweeTransition extends Transition {
     @Override
     public void captureStartValues(TransitionValues transitionValues) {
         captureValues(transitionValues);
-        if(transitionValues.view instanceof GenericDraweeView) {
-            mFromScale = ((GenericDraweeView) transitionValues.view) .getHierarchy().getActualImageScaleType();
+        if (transitionValues.view instanceof GenericDraweeView) {
+            ShareElementInfo shareElementInfo = ShareElementInfo.getFromView(transitionValues.view);
+            if (shareElementInfo != null && shareElementInfo.getViewStateSaver() instanceof FrescoViewStateSaver) {
+                Bundle viewInfo = shareElementInfo.isEnter() ? shareElementInfo.getFromViewBundle() : shareElementInfo.getToViewBundle();
+                mFromScale = ((FrescoViewStateSaver) shareElementInfo.getViewStateSaver()).getScaleType(viewInfo);
+            }
         }
     }
 
     @Override
     public void captureEndValues(TransitionValues transitionValues) {
         captureValues(transitionValues);
-        if(transitionValues.view instanceof GenericDraweeView) {
-            mToScale = ((GenericDraweeView) transitionValues.view) .getHierarchy().getActualImageScaleType();
+        if (transitionValues.view instanceof GenericDraweeView) {
+            ShareElementInfo shareElementInfo = ShareElementInfo.getFromView(transitionValues.view);
+            if (shareElementInfo != null && shareElementInfo.getViewStateSaver() instanceof FrescoViewStateSaver) {
+                Bundle viewInfo = shareElementInfo.isEnter() ? shareElementInfo.getToViewBundle() : shareElementInfo.getFromViewBundle();
+                mToScale = ((FrescoViewStateSaver) shareElementInfo.getViewStateSaver()).getScaleType(viewInfo);
+            }
         }
     }
 

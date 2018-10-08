@@ -44,7 +44,7 @@ public class AdvancedContentFragment extends Fragment implements ViewPager.OnPag
         mAdapter = new BasePagerAdapter();
         mViewPager.addOnPageChangeListener(this);
         initCells();
-        YcShareElement.callReadyAfterPreDraw(getActivity());
+        YcShareElement.postStartTransition(getActivity());
     }
 
     private void initCells() {

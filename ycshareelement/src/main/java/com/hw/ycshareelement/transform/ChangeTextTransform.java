@@ -30,7 +30,7 @@ public class ChangeTextTransform extends Transition {
     @Override
     public void captureStartValues(TransitionValues transitionValues) {
         ShareElementInfo info = ShareElementInfo.getFromView(transitionValues.view);
-        if (info == null) {
+        if (info == null || !(info.getViewStateSaver() instanceof TextViewStateSaver)) {
             return;
         }
         captureValues(transitionValues, (TextViewStateSaver) info.getViewStateSaver(), info.isEnter() ? info.getFromViewBundle() : info.getToViewBundle());
@@ -39,7 +39,7 @@ public class ChangeTextTransform extends Transition {
     @Override
     public void captureEndValues(TransitionValues transitionValues) {
         ShareElementInfo info = ShareElementInfo.getFromView(transitionValues.view);
-        if (info == null) {
+        if (info == null || !(info.getViewStateSaver() instanceof TextViewStateSaver)) {
             return;
         }
         captureValues(transitionValues, (TextViewStateSaver) info.getViewStateSaver(), info.isEnter() ? info.getToViewBundle() : info.getFromViewBundle());
@@ -53,7 +53,7 @@ public class ChangeTextTransform extends Transition {
     @Override
     public Animator createAnimator(ViewGroup sceneRoot, TransitionValues startValues, TransitionValues endValues) {
         ShareElementInfo info = ShareElementInfo.getFromView(endValues.view);
-        if (info == null) {
+        if (info == null || !(info.getViewStateSaver() instanceof TextViewStateSaver)) {
             return null;
         }
         final TextView view = (TextView) endValues.view;

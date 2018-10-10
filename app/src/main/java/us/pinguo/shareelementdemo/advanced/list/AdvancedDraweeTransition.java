@@ -28,13 +28,13 @@ import java.lang.reflect.Field;
 /**
  * Created by huangwei on 2018/10/5.
  */
-public class AdvanceDraweeTransition extends Transition {
+public class AdvancedDraweeTransition extends Transition {
     private static final String PROPNAME_BOUNDS = "draweeTransition:bounds";
 
     private ScalingUtils.ScaleType mFromScale;
     private ScalingUtils.ScaleType mToScale;
 
-    public AdvanceDraweeTransition() {
+    public AdvancedDraweeTransition() {
         addTarget(GenericDraweeView.class);
     }
 

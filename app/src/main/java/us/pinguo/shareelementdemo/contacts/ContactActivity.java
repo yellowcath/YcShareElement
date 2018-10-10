@@ -27,6 +27,7 @@ import us.pinguo.shareelementdemo.R;
 public class ContactActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        YcShareElement.enableContentTransition(getApplication());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact);
 

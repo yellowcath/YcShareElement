@@ -22,6 +22,7 @@ public class AdvancedListActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        YcShareElement.enableContentTransition(getApplication());
         YcShareElement.setShareElementTransitionFactory(new FrescoShareElementTransitionfactory());
         super.onCreate(savedInstanceState);
         Fresco.initialize(getApplicationContext());

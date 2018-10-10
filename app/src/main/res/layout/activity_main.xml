@@ -8,12 +8,12 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <Button
-        android:id="@+id/simple_fragment_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Simple Fragment Demo"
-    />
+    <!--<Button-->
+        <!--android:id="@+id/simple_fragment_btn"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Simple Fragment Demo"-->
+    <!--/>-->
     <Button
         android:id="@+id/simple_activity_btn"
         android:layout_width="wrap_content"

@@ -51,12 +51,10 @@ public class YcShareElement {
             public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
                 mapSharedElements(activity, getShareElement, names, sharedElements);
                 super.onMapSharedElements(names, sharedElements);
-                Log.w("hwLog", "onMapSharedElements");
             }
 
             @Override
             public Parcelable onCaptureSharedElementSnapshot(View sharedElement, Matrix viewToGlobalMatrix, RectF screenBounds) {
-                Log.w("hwLog", "onCaptureSharedElementSnapshot");
                 ShareElementInfo info = ShareElementInfo.getFromView(sharedElement);
 
                 if (info != null) {
@@ -70,26 +68,22 @@ public class YcShareElement {
             @Override
             public void onSharedElementsArrived(List<String> sharedElementNames, List<View> sharedElements, OnSharedElementsReadyListener listener) {
                 super.onSharedElementsArrived(sharedElementNames, sharedElements, listener);
-                Log.w("hwLog", "onSharedElementsArrived");
             }
 
-            //以下不回調
+            //
             @Override
             public void onSharedElementStart(List<String> sharedElementNames, List<View> sharedElements, List<View> sharedElementSnapshots) {
                 super.onSharedElementStart(sharedElementNames, sharedElements, sharedElementSnapshots);
-                Log.w("hwLog", "onSharedElementStart");
             }
 
             @Override
             public void onSharedElementEnd(List<String> sharedElementNames, List<View> sharedElements, List<View> sharedElementSnapshots) {
                 super.onSharedElementEnd(sharedElementNames, sharedElements, sharedElementSnapshots);
-                Log.w("hwLog", "onSharedElementEnd");
             }
 
             @Override
             public void onRejectSharedElements(List<View> rejectedSharedElements) {
                 super.onRejectSharedElements(rejectedSharedElements);
-                Log.w("hwLog", "onRejectSharedElements");
             }
 
 
@@ -125,19 +119,16 @@ public class YcShareElement {
             public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
                 mapSharedElements(activity, getShareElement, names, sharedElements);
                 super.onMapSharedElements(names, sharedElements);
-                Log.e("hwLog", "onMapSharedElements");
             }
 
             @Override
             public void onSharedElementsArrived(List<String> sharedElementNames, List<View> sharedElements, OnSharedElementsReadyListener listener) {
                 super.onSharedElementsArrived(sharedElementNames, sharedElements, listener);
-                Log.e("hwLog", "onSharedElementsArrived");
             }
 
             @Override
             public void onRejectSharedElements(List<View> rejectedSharedElements) {
                 super.onRejectSharedElements(rejectedSharedElements);
-                Log.e("hwLog", "onRejectSharedElements");
             }
 
             @Override
@@ -173,13 +164,11 @@ public class YcShareElement {
                     }
                 }
                 setTransform(activity, sharedElements);
-                Log.e("hwLog", "onSharedElementStart");
             }
 
             @Override
             public void onSharedElementEnd(List<String> sharedElementNames, List<View> sharedElements, List<View> sharedElementSnapshots) {
                 super.onSharedElementEnd(sharedElementNames, sharedElements, sharedElementSnapshots);
-                Log.e("hwLog", "onSharedElementEnd");
                 for (int i = 0; sharedElements != null && i < sharedElements.size(); i++) {
                     View shareElementView = sharedElements.get(i);
                     ShareElementInfo shareElementInfo = ShareElementInfo.getFromView(shareElementView);
@@ -197,11 +186,9 @@ public class YcShareElement {
                 isEnter.set(false);
             }
 
-
-            //以下不回调
+            //
             @Override
             public Parcelable onCaptureSharedElementSnapshot(View sharedElement, Matrix viewToGlobalMatrix, RectF screenBounds) {
-                Log.e("hwLog", "recordToBundle");
                 return super.onCaptureSharedElementSnapshot(sharedElement, viewToGlobalMatrix, screenBounds);
             }
         });

@@ -40,7 +40,6 @@ public class ImageListCell extends BaseListCell<Image, RecyclerView.ViewHolder> 
                 .apply(new RequestOptions()
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .transform(new FitCenter())
-                        .skipMemoryCache(true)
                         .placeholder(new ColorDrawable(Color.GRAY)))
                 .into(imageView);
     }

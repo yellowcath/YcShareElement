@@ -10,7 +10,6 @@ import android.transition.Fade;
 import android.transition.Transition;
 import android.transition.TransitionSet;
 import android.view.View;
-import android.widget.ImageView;
 
 import java.util.List;
 
@@ -40,11 +39,11 @@ public class DefaultShareElementTransitionFactory implements IShareElementTransi
         transitionSet.addTransition(new ChangeClipBounds());
         transitionSet.addTransition(new ChangeTransform());
         transitionSet.addTransition(new ChangeBounds());
-        transitionSet.addTransition(new ChangeTextTransform());
+        transitionSet.addTransition(new ChangeTextTransition());
         if (mUseDefaultImageTransform) {
             transitionSet.addTransition(new ChangeImageTransform());
         } else {
-            transitionSet.addTransition(new ChangeOnlineImageTransform());
+            transitionSet.addTransition(new ChangeOnlineImageTransition());
         }
         return transitionSet;
     }

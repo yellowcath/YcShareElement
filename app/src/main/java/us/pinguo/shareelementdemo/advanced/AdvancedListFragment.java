@@ -58,7 +58,7 @@ public class AdvancedListFragment extends Fragment implements BaseListCell.OnCel
         mRecyclerView.setAdapter(mAdapter);
         int divider = getResources().getDimensionPixelSize(R.dimen.divider);
         mRecyclerView.setPadding(divider/2,divider/2,divider/2,divider/2);
-        RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getActivity(),2);
 
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.addItemDecoration(new SpaceItemDecoration(divider));
@@ -150,7 +150,7 @@ public class AdvancedListFragment extends Fragment implements BaseListCell.OnCel
             BaseListCell cell = mAdapter.getItem(i);
             if (cell.getData().equals(data)) {
                 mTransitionCell = cell;
-                StaggeredGridLayoutManager layoutManager = (StaggeredGridLayoutManager) mRecyclerView.getLayoutManager();
+                GridLayoutManager layoutManager = (GridLayoutManager) mRecyclerView.getLayoutManager();
                 layoutManager.scrollToPosition(i);
                 return;
             }

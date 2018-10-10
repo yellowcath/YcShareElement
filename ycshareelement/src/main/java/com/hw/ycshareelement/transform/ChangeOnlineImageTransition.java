@@ -26,13 +26,13 @@ import java.util.Map;
  * Created by huangwei on 2018/9/21 0021.
  * 支持对从网络加载图片的ImageView做Matrix动画
  */
-@RequiresApi(api = Build.VERSION_CODES.KITKAT)
-public class ChangeOnlineImageTransform extends Transition {
+@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+public class ChangeOnlineImageTransition extends Transition {
     private static final String PROPNAME_SCALE_TYPE = "hw:changeImageTransform:scaletype";
     private static final String PROPNAME_BOUNDS = "hw:changeImageTransform:bounds";
     private static final String PROPNAME_MATRIX = "hw:changeImageTransform:matrix";
 
-    public ChangeOnlineImageTransform(){
+    public ChangeOnlineImageTransition(){
         addTarget(ImageView.class);
     }
     @Override

@@ -83,7 +83,7 @@ public class VideoListCell extends BaseListCell<Video, RecyclerView.ViewHolder> 
 
         int width = (view.getResources().getDisplayMetrics().widthPixels -
                 view.getResources().getDimensionPixelSize(R.dimen.divider) * 3) / 2;
-        int height = (int) (width / videoRatio);
+        int height = width;//(int) (width / videoRatio);
         ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
         layoutParams.height = height;
         view.setLayoutParams(layoutParams);

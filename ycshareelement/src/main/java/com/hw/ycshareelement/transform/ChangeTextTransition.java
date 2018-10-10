@@ -18,12 +18,12 @@ import android.widget.TextView;
  * Created by huangwei on 2018/10/6.
  */
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-public class ChangeTextTransform extends Transition {
+public class ChangeTextTransition extends Transition {
 
-    protected static final String PROPNAME_TEXTSIZE = "ChangeTextTransform::textSize";
-    protected static final String PROPNAME_TEXTCOLOR = "ChangeTextTransform::textColor";
+    protected static final String PROPNAME_TEXTSIZE = "ChangeTextTransition::textSize";
+    protected static final String PROPNAME_TEXTCOLOR = "ChangeTextTransition::textColor";
 
-    public ChangeTextTransform() {
+    public ChangeTextTransition() {
         addTarget(TextView.class);
     }
 
@@ -63,29 +63,6 @@ public class ChangeTextTransform extends Transition {
         float startTextSize = (float) startValues.values.get(PROPNAME_TEXTSIZE);
         final float endTextSize = (float) endValues.values.get(PROPNAME_TEXTSIZE);
         ObjectAnimator textSizeAnimator = ObjectAnimator.ofFloat(view, new TextSizeProperty(), startTextSize, endTextSize);
-//        textSizeAnimator.addListener(new Animator.AnimatorListener() {
-//            @Override
-//            public void onAnimationStart(Animator animation) {
-//
-//            }
-//
-//            @Override
-//            public void onAnimationEnd(Animator animation) {
-//                view.setScaleX(1f);
-//                view.setScaleY(1f);
-//                view.setTextSize(TypedValue.COMPLEX_UNIT_PX, endTextSize);
-//            }
-//
-//            @Override
-//            public void onAnimationCancel(Animator animation) {
-//
-//            }
-//
-//            @Override
-//            public void onAnimationRepeat(Animator animation) {
-//
-//            }
-//        });
 
         int startTextColor = (int) startValues.values.get(PROPNAME_TEXTCOLOR);
         int endTextColor = (int) endValues.values.get(PROPNAME_TEXTCOLOR);
@@ -114,24 +91,6 @@ public class ChangeTextTransform extends Transition {
         }
     }
 
-    private class ScaleProperty extends Property<View, Float> {
-
-        public ScaleProperty() {
-            super(Float.class, "scale");
-        }
-
-        @Override
-        public void set(View object, Float value) {
-            object.setScaleX(value);
-            object.setScaleY(value);
-        }
-
-        @Override
-        public Float get(View object) {
-            return object.getScaleX();
-        }
-    }
-
     private class TextColorProperty extends Property<TextView, Integer> {
 
         public TextColorProperty() {
@@ -148,33 +107,4 @@ public class ChangeTextTransform extends Transition {
             return object.getCurrentTextColor();
         }
     }
-
-
-    //    @Override
-//    public void captureStartValues(TransitionValues transitionValues) {
-//        ShareElementInfo info = ShareElementInfo.getFromView(transitionValues.view);
-//        if (info instanceof ShareTextInfo && transitionValues.view instanceof TextView) {
-//            if(info.isEnter()){
-//                transitionValues.values.put(PROPNAME_TEXTSIZE,((ShareTextInfo) info).getTextSize());
-//                transitionValues.values.put(PROPNAME_TEXTCOLOR,((ShareTextInfo) info).getTextColor());
-//            }else{
-//                transitionValues.values.put(PROPNAME_TEXTSIZE,((TextView) transitionValues.view).getTextSize());
-//                transitionValues.values.put(PROPNAME_TEXTCOLOR,((TextView) transitionValues.view).getCurrentTextColor());
-//            }
-//        }
-//    }
-//
-//    @Override
-//    public void captureEndValues(TransitionValues transitionValues) {
-//        ShareElementInfo info = ShareElementInfo.getFromView(transitionValues.view);
-//        if (info instanceof ShareTextInfo && transitionValues.view instanceof TextView) {
-//            if(!info.isEnter()){
-//                transitionValues.values.put(PROPNAME_TEXTSIZE,((ShareTextInfo) info).getTextSize());
-//                transitionValues.values.put(PROPNAME_TEXTCOLOR,((ShareTextInfo) info).getTextColor());
-//            }else{
-//                transitionValues.values.put(PROPNAME_TEXTSIZE,((TextView) transitionValues.view).getTextSize());
-//                transitionValues.values.put(PROPNAME_TEXTCOLOR,((TextView) transitionValues.view).getCurrentTextColor());
-//            }
-//        }
-//    }
 }

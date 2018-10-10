@@ -38,11 +38,10 @@ public class VideoContentCell extends BaseContentCell<Video> {
         final ImageView coverImg = viewHolder.getView(R.id.content_item_video_cover);
         ViewCompat.setTransitionName(coverImg, mData.url);
         Glide.with(coverImg)
-                .load(mData.webpUrl)
+                .load(mData.url+"?vframe/jpg/offset/0")
                 .apply(new RequestOptions()
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .transform(new FitCenter())
-                        .skipMemoryCache(true)
                         .placeholder(new ColorDrawable(Color.GRAY)))
                 .into(coverImg);
         //VIDEO

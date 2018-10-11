@@ -9,7 +9,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +21,7 @@ import us.pinguo.shareelementdemo.advanced.list.ImageFrescoListCell;
 import us.pinguo.shareelementdemo.advanced.list.ImageListCell;
 import us.pinguo.shareelementdemo.advanced.list.ShareContentInfo;
 import us.pinguo.shareelementdemo.advanced.list.VideoListCell;
-import com.hw.ycshareelement.transform.GetShareElement;
+import com.hw.ycshareelement.transform.IShareElements;
 import com.hw.ycshareelement.transform.ShareElementInfo;
 
 import java.util.ArrayList;
@@ -32,7 +31,7 @@ import java.util.List;
 /**
  * Created by huangwei on 2018/9/18 0018.
  */
-public class AdvancedListFragment extends Fragment implements BaseListCell.OnCellClickListener, GetShareElement {
+public class AdvancedListFragment extends Fragment implements BaseListCell.OnCellClickListener, IShareElements {
     public static final String KEY_DATA = "data";
     public static final String KEY_SELECT = "select";
 

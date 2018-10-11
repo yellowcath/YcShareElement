@@ -16,12 +16,11 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.view.ViewCompat;
 import android.transition.Transition;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import com.hw.ycshareelement.transform.DefaultShareElementTransitionFactory;
-import com.hw.ycshareelement.transform.GetShareElement;
+import com.hw.ycshareelement.transform.IShareElements;
 import com.hw.ycshareelement.transform.IShareElementSelector;
 import com.hw.ycshareelement.transform.IShareElementTransitionFactory;
 import com.hw.ycshareelement.transform.ShareElementInfo;
@@ -42,7 +41,7 @@ public class YcShareElement {
 
     private static IShareElementTransitionFactory sTransitionFactory = new DefaultShareElementTransitionFactory();
 
-    public static Bundle buildOptionsBundle(@NonNull final Activity activity, @Nullable final GetShareElement getShareElement) {
+    public static Bundle buildOptionsBundle(@NonNull final Activity activity, @Nullable final IShareElements getShareElement) {
         if (!TransitionHelper.ENABLE) {
             return new Bundle();
         }
@@ -101,11 +100,11 @@ public class YcShareElement {
         return TransitionHelper.getTransitionBundle(activity, viewArray);
     }
 
-    public static void setEnterTransition(@NonNull final Activity activity, @Nullable final GetShareElement getShareElement) {
-        setEnterTransition(activity, getShareElement, true);
+    public static void setEnterTransition(@NonNull final Activity activity, @Nullable final IShareElements IShareElements) {
+        setEnterTransition(activity, IShareElements, true);
     }
 
-    public static void setEnterTransition(@NonNull final Activity activity, @Nullable final GetShareElement getShareElement, boolean postponeTransition) {
+    public static void setEnterTransition(@NonNull final Activity activity, @Nullable final IShareElements IShareElements, boolean postponeTransition) {
         if (!TransitionHelper.ENABLE) {
             return;
         }
@@ -117,7 +116,7 @@ public class YcShareElement {
 
             @Override
             public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
-                mapSharedElements(activity, getShareElement, names, sharedElements);
+                mapSharedElements(activity, IShareElements, names, sharedElements);
                 super.onMapSharedElements(names, sharedElements);
             }
 
@@ -266,8 +265,8 @@ public class YcShareElement {
         sTransitionFactory = transitionFactory;
     }
 
-    private static void mapSharedElements(Activity activity, GetShareElement getShareElement, List<String> names, Map<String, View> sharedElements) {
-        ShareElementInfo[] infos = getShareElement == null ? null : getShareElement.getShareElements();
+    private static void mapSharedElements(Activity activity, IShareElements IShareElements, List<String> names, Map<String, View> sharedElements) {
+        ShareElementInfo[] infos = IShareElements == null ? null : IShareElements.getShareElements();
 
         names.clear();
         sharedElements.clear();
@@ -289,8 +288,8 @@ public class YcShareElement {
         return view.getLocalVisibleRect(rect);
     }
 
-    public static void finishAfterTransition(Activity activity, GetShareElement getShareElement) {
-        ShareElementInfo[] shareElements = getShareElement == null ? null : getShareElement.getShareElements();
+    public static void finishAfterTransition(Activity activity, IShareElements IShareElements) {
+        ShareElementInfo[] shareElements = IShareElements == null ? null : IShareElements.getShareElements();
         if (shareElements != null) {
             ArrayList<ShareElementInfo> list = new ArrayList<>(Arrays.asList(shareElements));
             Intent intent = new Intent();

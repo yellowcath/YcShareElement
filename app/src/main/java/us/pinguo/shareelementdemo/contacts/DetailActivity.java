@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.hw.ycshareelement.YcShareElement;
-import com.hw.ycshareelement.transform.GetShareElement;
+import com.hw.ycshareelement.transform.IShareElements;
 import com.hw.ycshareelement.transform.ShareElementInfo;
 import com.hw.ycshareelement.transform.TextViewStateSaver;
 import us.pinguo.shareelementdemo.R;
@@ -33,7 +33,7 @@ public class DetailActivity extends Activity {
         ViewCompat.setTransitionName(avatarImg, "avatar");
         ViewCompat.setTransitionName(nameTxt, "name");
 
-        YcShareElement.setEnterTransition(this, new GetShareElement() {
+        YcShareElement.setEnterTransition(this, new IShareElements() {
             @Override
             public ShareElementInfo[] getShareElements() {
                 return new ShareElementInfo[]{new ShareElementInfo(avatarImg),

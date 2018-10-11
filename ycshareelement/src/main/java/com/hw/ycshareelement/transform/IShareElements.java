@@ -3,6 +3,6 @@ package com.hw.ycshareelement.transform;
 /**
  * Created by huangwei on 2018/9/25 0025.
  */
-public interface GetShareElement {
+public interface IShareElements {
     ShareElementInfo[] getShareElements();
 }

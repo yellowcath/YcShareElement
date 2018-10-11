@@ -13,13 +13,13 @@ import com.bumptech.glide.request.RequestOptions;
 import com.hw.ycshareelement.YcShareElement;
 import us.pinguo.shareelementdemo.R;
 import us.pinguo.shareelementdemo.advanced.BaseData;
-import com.hw.ycshareelement.transform.GetShareElement;
+import com.hw.ycshareelement.transform.IShareElements;
 import com.hw.ycshareelement.transform.ShareElementInfo;
 
 /**
  * Created by huangwei on 2018/9/18 0018.
  */
-public class SimpleToActivity extends AppCompatActivity implements GetShareElement {
+public class SimpleToActivity extends AppCompatActivity implements IShareElements {
 
     private ImageView mImageView;
 

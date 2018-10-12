@@ -39,7 +39,7 @@ public class DetailActivity extends Activity {
                 return new ShareElementInfo[]{new ShareElementInfo(avatarImg),
                         new ShareElementInfo(nameTxt, new TextViewStateSaver())};
             }
-        });
-        YcShareElement.startTransition(this);
+        },false);
+//        YcShareElement.startTransition(this);
     }
 }

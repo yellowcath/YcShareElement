@@ -25,7 +25,7 @@ public class SimpleToActivity extends AppCompatActivity implements IShareElement
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        YcShareElement.setEnterTransition(this, this);
+        YcShareElement.setEnterTransitions(this, this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_to);
         mImageView = findViewById(R.id.s2_img);

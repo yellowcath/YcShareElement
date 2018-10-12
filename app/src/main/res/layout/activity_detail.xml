@@ -15,7 +15,6 @@
         android:layout_gravity="top">
         <ImageView
             android:id="@+id/avatar"
-            android:src="@drawable/avatar"
             android:layout_width="46dp"
             android:layout_height="46dp"
             android:layout_gravity="bottom"
@@ -25,20 +24,20 @@
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textColor="#FFFFFF"
+            android:textSize="22sp"
+            android:textColor="#FF0000"
             android:layout_gravity="bottom"
             android:layout_marginLeft="76dp"
             android:layout_marginBottom="28dp"
             android:text="MeowMeow" />
     </FrameLayout>
     <TextView
+        android:id="@+id/desc"
         android:layout_marginTop="200dp"
         android:padding="16dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:textSize="14sp"
-        android:textColor="#9F000000"
-    android:text="@string/meow"/>
+        android:textColor="#9F000000"/>
 
 </FrameLayout>

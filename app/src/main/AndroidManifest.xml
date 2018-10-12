@@ -25,7 +25,7 @@
         <activity android:name=".simple.SimpleToActivity" />
         <activity android:name=".advanced.AdvancedListActivity" />
         <activity android:name=".advanced.AdvancedContentActivity" />
-        <activity android:name=".contacts.ContactActivity" />
+        <activity android:name=".contacts.ContactsActivity"/>
         <activity android:name=".contacts.DetailActivity" />
     </application>
 

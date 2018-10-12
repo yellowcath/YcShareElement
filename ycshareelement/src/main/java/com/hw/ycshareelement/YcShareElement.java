@@ -39,8 +39,6 @@ import static android.app.Activity.RESULT_OK;
 public class YcShareElement {
     private static final String KEY_SHARE_ELEMENTS = "key_share_elements";
 
-    private static IShareElementTransitionFactory sTransitionFactory = new DefaultShareElementTransitionFactory();
-
     public static Bundle buildOptionsBundle(@NonNull final Activity activity, @Nullable final IShareElements getShareElement) {
         if (!TransitionHelper.ENABLE) {
             return new Bundle();
@@ -100,11 +98,16 @@ public class YcShareElement {
         return TransitionHelper.getTransitionBundle(activity, viewArray);
     }
 
-    public static void setEnterTransition(@NonNull final Activity activity, @Nullable final IShareElements IShareElements) {
-        setEnterTransition(activity, IShareElements, true);
+    public static void setEnterTransitions(@NonNull final Activity activity, @Nullable final IShareElements IShareElements) {
+        setEnterTransitions(activity, IShareElements, true,new DefaultShareElementTransitionFactory());
     }
 
-    public static void setEnterTransition(@NonNull final Activity activity, @Nullable final IShareElements IShareElements, boolean postponeTransition) {
+    public static void setEnterTransitions(@NonNull final Activity activity, @Nullable final IShareElements IShareElements,boolean postponeTransition) {
+        setEnterTransitions(activity, IShareElements, postponeTransition,new DefaultShareElementTransitionFactory());
+    }
+
+    public static void setEnterTransitions(@NonNull final Activity activity, @Nullable final IShareElements IShareElements, boolean postponeTransition,
+                                           final IShareElementTransitionFactory transitionFactory) {
         if (!TransitionHelper.ENABLE) {
             return;
         }
@@ -162,7 +165,7 @@ public class YcShareElement {
                         }
                     }
                 }
-                setTransform(activity, sharedElements);
+                setTransition(activity, sharedElements,transitionFactory);
             }
 
             @Override
@@ -193,6 +196,12 @@ public class YcShareElement {
         });
     }
 
+    public static void setExitTransition(Activity activity,Transition transition){
+        if(!TransitionHelper.ENABLE) {
+            return;
+        }
+        activity.getWindow().setExitTransition(transition);
+    }
     /**
      * 用于例如ShareElement位于ViewPager或者RecyclerView的情况，需要等它们加载好之后再开始动画
      *
@@ -223,13 +232,13 @@ public class YcShareElement {
     }
 
 
-    private static void setTransform(Activity activity, List<View> sharedElements) {
+    private static void setTransition(Activity activity, List<View> sharedElements,IShareElementTransitionFactory transitionFactory) {
         if (!TransitionHelper.ENABLE) {
             return;
         }
-        if (sTransitionFactory != null) {
-            Transition enterShareElementTransition = sTransitionFactory.buildShareElementEnterTransition(sharedElements);
-            Transition exitShareElementTransition = sTransitionFactory.buildShareElementExitTransition(sharedElements);
+        if (transitionFactory != null) {
+            Transition enterShareElementTransition = transitionFactory.buildShareElementEnterTransition(sharedElements);
+            Transition exitShareElementTransition = transitionFactory.buildShareElementExitTransition(sharedElements);
 
             if (enterShareElementTransition != null) {
                 activity.getWindow().setSharedElementEnterTransition(enterShareElementTransition);
@@ -238,8 +247,8 @@ public class YcShareElement {
                 activity.getWindow().setSharedElementExitTransition(exitShareElementTransition);
             }
 
-            Transition enterTransition = sTransitionFactory.buildEnterTransition();
-            Transition exitTransition = sTransitionFactory.buildExitTransition();
+            Transition enterTransition = transitionFactory.buildEnterTransition();
+            Transition exitTransition = transitionFactory.buildExitTransition();
 
             if (enterTransition != null) {
                 activity.getWindow().setEnterTransition(enterTransition);
@@ -259,10 +268,6 @@ public class YcShareElement {
             exitTransition.excludeTarget(Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME, true);
             exitTransition.excludeTarget(Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME, true);
         }
-    }
-
-    public static void setShareElementTransitionFactory(IShareElementTransitionFactory transitionFactory) {
-        sTransitionFactory = transitionFactory;
     }
 
     private static void mapSharedElements(Activity activity, IShareElements IShareElements, List<String> names, Map<String, View> sharedElements) {

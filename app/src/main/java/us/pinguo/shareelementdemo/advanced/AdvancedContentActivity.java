@@ -8,6 +8,7 @@ import com.hw.ycshareelement.YcShareElement;
 import com.hw.ycshareelement.transform.IShareElements;
 import com.hw.ycshareelement.transform.ShareElementInfo;
 import us.pinguo.shareelementdemo.R;
+import us.pinguo.shareelementdemo.advanced.list.FrescoShareElementTransitionfactory;
 
 /**
  * Created by huangwei on 2018/9/18 0018.
@@ -18,7 +19,7 @@ public class AdvancedContentActivity extends AppCompatActivity implements IShare
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        YcShareElement.setEnterTransition(this, this);
+        YcShareElement.setEnterTransitions(this, this,true,new FrescoShareElementTransitionfactory());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple);
         getWindow().setBackgroundDrawable(new ColorDrawable(0xFF323232));

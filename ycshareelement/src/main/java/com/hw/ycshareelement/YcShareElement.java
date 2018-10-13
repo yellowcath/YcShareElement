@@ -19,11 +19,11 @@ import android.transition.Transition;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
-import com.hw.ycshareelement.transform.DefaultShareElementTransitionFactory;
-import com.hw.ycshareelement.transform.IShareElements;
-import com.hw.ycshareelement.transform.IShareElementSelector;
-import com.hw.ycshareelement.transform.IShareElementTransitionFactory;
-import com.hw.ycshareelement.transform.ShareElementInfo;
+import com.hw.ycshareelement.transition.DefaultShareElementTransitionFactory;
+import com.hw.ycshareelement.transition.IShareElements;
+import com.hw.ycshareelement.transition.IShareElementSelector;
+import com.hw.ycshareelement.transition.IShareElementTransitionFactory;
+import com.hw.ycshareelement.transition.ShareElementInfo;
 
 import java.util.ArrayList;
 import java.util.Arrays;

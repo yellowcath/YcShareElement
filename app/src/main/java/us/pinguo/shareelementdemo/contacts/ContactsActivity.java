@@ -20,9 +20,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.hw.ycshareelement.YcShareElement;
-import com.hw.ycshareelement.transform.IShareElements;
-import com.hw.ycshareelement.transform.ShareElementInfo;
-import com.hw.ycshareelement.transform.TextViewStateSaver;
+import com.hw.ycshareelement.transition.IShareElements;
+import com.hw.ycshareelement.transition.ShareElementInfo;
+import com.hw.ycshareelement.transition.TextViewStateSaver;
 import us.pinguo.shareelementdemo.R;
 
 import java.util.ArrayList;

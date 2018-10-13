@@ -21,8 +21,8 @@ import us.pinguo.shareelementdemo.advanced.list.ImageFrescoListCell;
 import us.pinguo.shareelementdemo.advanced.list.ImageListCell;
 import us.pinguo.shareelementdemo.advanced.list.ShareContentInfo;
 import us.pinguo.shareelementdemo.advanced.list.VideoListCell;
-import com.hw.ycshareelement.transform.IShareElements;
-import com.hw.ycshareelement.transform.ShareElementInfo;
+import com.hw.ycshareelement.transition.IShareElements;
+import com.hw.ycshareelement.transition.ShareElementInfo;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

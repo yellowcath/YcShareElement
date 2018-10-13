@@ -5,8 +5,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import com.hw.ycshareelement.YcShareElement;
-import com.hw.ycshareelement.transform.IShareElements;
-import com.hw.ycshareelement.transform.ShareElementInfo;
+import com.hw.ycshareelement.transition.IShareElements;
+import com.hw.ycshareelement.transition.ShareElementInfo;
 import us.pinguo.shareelementdemo.R;
 import us.pinguo.shareelementdemo.advanced.list.FrescoShareElementTransitionfactory;
 

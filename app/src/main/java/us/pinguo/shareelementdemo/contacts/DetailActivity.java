@@ -4,17 +4,14 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
-import android.transition.Slide;
-import android.transition.Transition;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.hw.ycshareelement.YcShareElement;
-import com.hw.ycshareelement.transform.DefaultShareElementTransitionFactory;
-import com.hw.ycshareelement.transform.IShareElements;
-import com.hw.ycshareelement.transform.ShareElementInfo;
-import com.hw.ycshareelement.transform.TextViewStateSaver;
+import com.hw.ycshareelement.transition.IShareElements;
+import com.hw.ycshareelement.transition.ShareElementInfo;
+import com.hw.ycshareelement.transition.TextViewStateSaver;
 import us.pinguo.shareelementdemo.R;
 
 

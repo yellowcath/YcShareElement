@@ -1,4 +1,4 @@
-package com.hw.ycshareelement.transform;
+package com.hw.ycshareelement.transition;
 
 import android.animation.Animator;
 import android.animation.TypeEvaluator;
@@ -12,13 +12,11 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.transition.Transition;
 import android.transition.TransitionValues;
-import android.util.Log;
 import android.util.Pair;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import com.hw.ycshareelement.R;
 
 import java.util.Map;
 

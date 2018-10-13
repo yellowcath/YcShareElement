@@ -15,8 +15,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.hw.ycshareelement.YcShareElement;
 import us.pinguo.shareelementdemo.R;
 import us.pinguo.shareelementdemo.advanced.BaseData;
-import com.hw.ycshareelement.transform.IShareElements;
-import com.hw.ycshareelement.transform.ShareElementInfo;
+import com.hw.ycshareelement.transition.IShareElements;
+import com.hw.ycshareelement.transition.ShareElementInfo;
 
 /**
  * Created by huangwei on 2018/9/18 0018.

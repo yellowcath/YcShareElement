@@ -1,7 +1,6 @@
-package com.hw.ycshareelement.transform;
+package com.hw.ycshareelement.transition;
 
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
 

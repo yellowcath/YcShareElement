@@ -2,7 +2,7 @@ package us.pinguo.shareelementdemo.advanced.list;
 
 import android.transition.TransitionSet;
 import android.view.View;
-import com.hw.ycshareelement.transform.DefaultShareElementTransitionFactory;
+import com.hw.ycshareelement.transition.DefaultShareElementTransitionFactory;
 
 import java.util.List;
 

@@ -4,8 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import com.facebook.drawee.drawable.ScalingUtils;
 import com.facebook.drawee.view.GenericDraweeView;
-import com.facebook.drawee.view.SimpleDraweeView;
-import com.hw.ycshareelement.transform.ViewStateSaver;
+import com.hw.ycshareelement.transition.ViewStateSaver;
 
 /**
  * Created by huangwei on 2018/10/7.

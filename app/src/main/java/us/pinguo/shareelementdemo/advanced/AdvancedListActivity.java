@@ -5,12 +5,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.hw.ycshareelement.YcShareElement;
 import us.pinguo.shareelementdemo.R;
-import com.hw.ycshareelement.transform.IShareElementSelector;
-import com.hw.ycshareelement.transform.ShareElementInfo;
-import us.pinguo.shareelementdemo.advanced.list.FrescoShareElementTransitionfactory;
+import com.hw.ycshareelement.transition.IShareElementSelector;
+import com.hw.ycshareelement.transition.ShareElementInfo;
 
 import java.util.List;
 

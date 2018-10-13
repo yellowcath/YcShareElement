@@ -1,4 +1,4 @@
-package com.hw.ycshareelement.transform;
+package com.hw.ycshareelement.transition;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
@@ -10,7 +10,6 @@ import android.transition.Transition;
 import android.transition.TransitionValues;
 import android.util.Property;
 import android.util.TypedValue;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 

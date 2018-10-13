@@ -17,7 +17,7 @@ import us.pinguo.shareelementdemo.advanced.content.ImageContentCell;
 import us.pinguo.shareelementdemo.advanced.content.ImageFrescoContentCell;
 import us.pinguo.shareelementdemo.advanced.content.VideoContentCell;
 import us.pinguo.shareelementdemo.advanced.content.viewpager.BasePagerAdapter;
-import com.hw.ycshareelement.transform.ShareElementInfo;
+import com.hw.ycshareelement.transition.ShareElementInfo;
 
 import java.util.ArrayList;
 import java.util.List;

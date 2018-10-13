@@ -31,7 +31,7 @@ ImageView在动画过程中要经历默认背景色->小缩略图->大图三个�
 参考:[ChangeOnlineImageTransition](https://github.com/yellowcath/YcShareElement/blob/master/ycshareelement/src/main/java/com/hw/ycshareelement/transition/ChangeOnlineImageTransition.java)  
 2、Fresco图片的ShareElement动画  
 Fresco提供了内置的DraweeTransition，但是如果设置了缩略图，图片就会变形，并且必须在构造函数里提供动画起始的ScaleType信息，简单的情况很好用，在复杂的情况下不太友好  
-参考:[AdvancedDraweeTransition](https://github.com/yellowcath/YcShareElement/blob/master/ycshareelement/src/main/java/com/hw/ycshareelement/transition/AdvancedDraweeTransition.java)  
+参考:[AdvancedDraweeTransition](https://github.com/yellowcath/YcShareElement/blob/master/app/src/main/java/us/pinguo/shareelementdemo/advanced/list/AdvancedDraweeTransition.java)  
 3、从列表的Webp动图到详情页的视频ShareElement动画  
 这个在实现了以上两点之后其实就很简单了,实际上就是视频的封面图做动画
 

@@ -214,7 +214,7 @@ public class AdvancedDraweeTransition extends Transition {
     }
 }
 ```
-#### 4、将自定义的Transition加入到YcShareElement
+#### 4、使用自定义的Transition
 ``` java
 public class FrescoShareElementTransitionfactory extends DefaultShareElementTransitionFactory {
     @Override
@@ -229,7 +229,7 @@ public class FrescoShareElementTransitionfactory extends DefaultShareElementTran
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         ...
-        YcShareElement.setShareElementTransitionFactory(new FrescoShareElementTransitionfactory());
+        YcShareElement.setEnterTransitions(this, this,true,new FrescoShareElementTransitionfactory());
         ...
     }
 ```

@@ -141,6 +141,7 @@ public class ChangeOnlineImageTransition extends Transition {
                 }
                 //计算中间矩阵
                 Matrix imageMatrix = evaluator.evaluate(animation.getAnimatedFraction(), matrixPair.first, matrixPair.second);
+                imageView.setScaleType(ImageView.ScaleType.MATRIX);
                 imageView.setImageMatrix(imageMatrix);
 
             }

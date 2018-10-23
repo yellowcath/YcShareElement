@@ -1,4 +1,5 @@
-[原理分析](https://www.jianshu.com/p/fa1c8deeaa57)
+[原理分析](https://www.jianshu.com/p/fa1c8deeaa57)  
+
 [README（中文）](https://github.com/yellowcath/YcShareElement/blob/master/README_CN.md)
 ## Gradle
 

@@ -1,5 +1,5 @@
 [原理分析](https://www.jianshu.com/p/fa1c8deeaa57)
-[README（中文）](https://github.com/yellowcath/YcShareElement/blob/master/README_CN.md)
+
 ## Gradle
 
 add Maven
@@ -19,32 +19,32 @@ dependencies {
 ```
 
 ## Usage
->In demo,  
-Show the videos with[GSYVideoPlayer](https://github.com/CarGuo/GSYVideoPlayer)  
-Show the images with [Fresco](https://github.com/facebook/fresco) and [Glide](https://github.com/bumptech/glide)
+>demo里用了  
+[GSYVideoPlayer](https://github.com/CarGuo/GSYVideoPlayer)展示视频  
+[Fresco](https://github.com/facebook/fresco)、[Glide](https://github.com/bumptech/glide)展示图片
 
-YcShareElement provides two demos, one is the contact demo above，another implements a complex ShareElement animation of images and video mixes，see image below
+YcShareElement提供了两个demo，一个是上面的联系人demo，另一个实现了图片、视频混合的列表页与详情页之间的ShareElement动画，如下图
 
 ![image](https://github.com/yellowcath/YcShareElement/raw/master/readme/se.gif)
 
-The key points here are as follows：  
-1、ShareElement animation of Glide pictures 
-In the animation, imageView will go through the default background color -> small thumbnail -> big picture three stages. How to achieve a seamless switch in these three stages  
-Reference:[ChangeOnlineImageTransition](https://github.com/yellowcath/YcShareElement/blob/master/ycshareelement/src/main/java/com/hw/ycshareelement/transition/ChangeOnlineImageTransition.java)  
-2、ShareElement animation of Fresco pictures  
-Fresco provides the built-in DraweeTransition, but if you set the thumbnail, the image will be distorted, and must provide animation-starting ScaleType information in the constructor, which isn't very nice in complex situations.  
-Reference:[AdvancedDraweeTransition](https://github.com/yellowcath/YcShareElement/blob/master/ycshareelement/src/main/java/com/hw/ycshareelement/transition/AdvancedDraweeTransition.java)  
-3、ShareElement animation of videos  
-And this is actually pretty simple after we've done the first two points, we're actually animating the cover of video.
+这里面的关键点如下：  
+1、Glide图片的ShareElement动画  
+ImageView在动画过程中要经历默认背景色->小缩略图->大图三个阶段，如何在这三个阶段里做到无缝切换  
+参考:[ChangeOnlineImageTransition](https://github.com/yellowcath/YcShareElement/blob/master/ycshareelement/src/main/java/com/hw/ycshareelement/transition/ChangeOnlineImageTransition.java)  
+2、Fresco图片的ShareElement动画  
+Fresco提供了内置的DraweeTransition，但是如果设置了缩略图，图片就会变形，并且必须在构造函数里提供动画起始的ScaleType信息，简单的情况很好用，在复杂的情况下不太友好  
+参考:[AdvancedDraweeTransition](https://github.com/yellowcath/YcShareElement/blob/master/app/src/main/java/us/pinguo/shareelementdemo/advanced/list/AdvancedDraweeTransition.java)  
+3、从列表的Webp动图到详情页的视频ShareElement动画  
+这个在实现了以上两点之后其实就很简单了,实际上就是视频的封面图做动画
 
-### Simple Usage
+### 普通页面使用步骤
 
-#### 1、Turn on the switch of WindowContentTransition
+#### 1、打开WindowContentTransition开关
 ``` java
 YcShareElement.enableContentTransition(getApplication());  
 ``` 
-The switch is turned on by default
-#### 2、Generate a bundle, and then startActivity
+由于这个开关默认是打开的，因此这一句是可选的，担心遇到奇葩手机关掉这个开关的可以调用
+#### 2、生成Bundle，然后startActivity
 ``` java
     private void gotoDetailActivity(){
         Intent intent = new Intent(this, DetailActivity.class);
@@ -58,7 +58,7 @@ The switch is turned on by default
         ActivityCompat.startActivity(ContactActivity.this, intent, bundle);
     }
 ```
-#### 3、Set up and start transition on the new page
+#### 3、新的页面里设置并启动Transition
 ``` java
 public class DetailActivity extends Activity {
     @Override
@@ -75,7 +75,8 @@ public class DetailActivity extends Activity {
     }
 }
 ```
->YcShareElement.setEnterTransition() will suspend activity transtion animation by default,until the call of YcShareElement.startTransition(),in this simple page where you don't have to wait for ShareElement to load, you can pass the third parameter to false, without pausing ActivityB's transition animation
+>YcShareElement.setEnterTransition()默认会暂停Activity的Transtion动画，直到调用YcShareElement.startTransition(),
+在这种不需要等待ShareElement加载的简单页面，可以将第三个参数传false，就不会暂停ActivityB的Transition动画了,如下
 
 ``` java
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -90,28 +91,28 @@ public class DetailActivity extends Activity {
     }
 ```
 
-Here's the result：  
+效果如下：  
 ![image](https://github.com/yellowcath/YcShareElement/raw/master/readme/contacts2.gif)
 
-### Advanced Usage(Complex page with pictures and videos)
+### 图片&视频页面使用步骤
 
-#### 1、Turn on the switch of WindowContentTransition
+#### 1、打开WindowContentTransition开关
 ``` java
     YcShareElement.enableContentTransition(getApplication());  
 ``` 
-#### 2、Generate a bundle, and then startActivity
+#### 2、生成Bundle，然后startActivity
 ``` java
     Bundle options = YcShareElement.buildOptionsBundle(getActivity(), this);
     startActivityForResult(intent, REQUEST_CONTENT, options);
 ```
-#### 3、Set up transition in Activity B
+#### 3、Activity B设置Transtion动画
 ``` java
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         YcShareElement.setEnterTransition(this, this);
         ...
     }
 ```
-#### 4、start transition after the ViewpPager is loaded
+#### 4、Activity B的ViewPager加载好之后启动Transition
 ``` java
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -119,8 +120,7 @@ Here's the result：
         YcShareElement.postStartTransition(getActivity());
     }
 ```
-
-The next step is to handle the return animation of the list page
+这时候进入动画就执行完毕了，接下来要处理滑动若干页之后返回列表页的情况
 
 #### 5、Activity B实现finishAfterTransition()函数
 ``` java
@@ -130,7 +130,7 @@ The next step is to handle the return animation of the list page
         super.finishAfterTransition();
     }
 ```
-#### 6、Activity B implements the finishAfterTransition() function
+#### 6、Activity A实现onActivityReenter()函数
 ``` java
     @Override
     public void onActivityReenter(int resultCode, Intent data) {
@@ -138,19 +138,19 @@ The next step is to handle the return animation of the list page
         YcShareElement.onActivityReenter(this, resultCode, data, new IShareElementSelector() {
             @Override
             public void selectShareElements(List<ShareElementInfo> list) {
-                //Slide the list page to the location of the changed ShareElement
+                //将列表页滑动到变更后的ShareElement的位置
                 mFragment.selectShareElement(list.get(0));
             }
         });
     }
 ``` 
 
-### How to implement Transition animation that supports custom views
-Here is an example of how to extend Transition to support Fresco
+### 如何扩展支持自定义View的Transition动画
+这里以Fresco为例介绍如何进行扩展
 
-#### 1、Determine required parameters
-First, the parameters required for the Transtion animation, namely the ActualImageScaleType, are determined for SimpleDraweeView
-#### 2、Inherit the ViewStateSaver to get the required parameters
+#### 1、确定所需参数
+首先确定SimpleDraweeView做Transtion动画需要的参数，即ActualImageScaleType
+#### 2、继承ViewStateSaver，获取所需参数
 ``` java
 public class FrescoViewStateSaver extends ViewStateSaver {
 
@@ -168,7 +168,7 @@ public class FrescoViewStateSaver extends ViewStateSaver {
     }
 }
 ``` 
-#### 3、Customize the Transition
+#### 3、自定义Transition
 ``` java
 public class AdvancedDraweeTransition extends Transition {
     private ScalingUtils.ScaleType mFromScale;
@@ -216,7 +216,7 @@ public class AdvancedDraweeTransition extends Transition {
     }
 }
 ```
-#### 4、Add the custom Transition to YcShareElement
+#### 4、使用自定义的Transition
 ``` java
 public class FrescoShareElementTransitionfactory extends DefaultShareElementTransitionFactory {
     @Override
@@ -231,7 +231,7 @@ public class FrescoShareElementTransitionfactory extends DefaultShareElementTran
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         ...
-        YcShareElement.setShareElementTransitionFactory(new FrescoShareElementTransitionfactory());
+        YcShareElement.setEnterTransitions(this, this,true,new FrescoShareElementTransitionfactory());
         ...
     }
 ```

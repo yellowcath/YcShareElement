@@ -1,3 +1,5 @@
+[原理分析](https://www.jianshu.com/p/fa1c8deeaa57)
+
 ## Gradle
 
 add Maven

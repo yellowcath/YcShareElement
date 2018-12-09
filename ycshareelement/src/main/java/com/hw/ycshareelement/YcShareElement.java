@@ -180,7 +180,9 @@ public class YcShareElement {
                         } else {
                             View snapshotView = sharedElementSnapshots == null ? null : sharedElementSnapshots.get(i);
                             ShareElementInfo infoFromSnapshot = ShareElementInfo.getFromView(snapshotView);
-                            shareElementInfo.setFromViewBundle(infoFromSnapshot.getFromViewBundle());
+                            if(infoFromSnapshot!=null) {
+                                shareElementInfo.setFromViewBundle(infoFromSnapshot.getFromViewBundle());
+                            }
                             shareElementInfo.captureToViewInfo(shareElementView);
                         }
                     }

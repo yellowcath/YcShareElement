@@ -51,7 +51,7 @@ public class ChangeTextTransition extends Transition {
 
     @Override
     public Animator createAnimator(ViewGroup sceneRoot, TransitionValues startValues, TransitionValues endValues) {
-        ShareElementInfo info = ShareElementInfo.getFromView(endValues.view);
+        ShareElementInfo info = endValues==null?null:ShareElementInfo.getFromView(endValues.view);
         if (info == null || !(info.getViewStateSaver() instanceof TextViewStateSaver)) {
             return null;
         }

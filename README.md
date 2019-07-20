@@ -15,7 +15,7 @@ add Maven
 add implementation
 ``` groovy
 dependencies {
-    implementation 'com.github.yellowcath:YcShareElement:1.3.1'
+    implementation 'com.github.yellowcath:YcShareElement:1.3.2'
 }
 ```
 

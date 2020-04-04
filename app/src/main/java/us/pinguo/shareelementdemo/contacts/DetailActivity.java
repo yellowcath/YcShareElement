@@ -2,8 +2,8 @@ package us.pinguo.shareelementdemo.contacts;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.view.ViewCompat;
+import androidx.annotation.Nullable;
+import androidx.core.view.ViewCompat;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;

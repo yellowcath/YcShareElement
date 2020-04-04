@@ -3,14 +3,13 @@ package com.hw.ycshareelement;
 import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.util.Pair;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.util.Pair;
 import android.view.View;
 import android.view.Window;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by huangwei on 2018/9/18 0018.

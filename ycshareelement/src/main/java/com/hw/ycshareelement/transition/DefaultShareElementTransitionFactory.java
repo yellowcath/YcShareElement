@@ -1,7 +1,7 @@
 package com.hw.ycshareelement.transition;
 
 import android.os.Build;
-import android.support.annotation.RequiresApi;
+import androidx.annotation.RequiresApi;
 import android.transition.ChangeBounds;
 import android.transition.ChangeClipBounds;
 import android.transition.ChangeImageTransform;

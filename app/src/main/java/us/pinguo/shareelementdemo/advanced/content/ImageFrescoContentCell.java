@@ -1,19 +1,12 @@
 package us.pinguo.shareelementdemo.advanced.content;
 
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-import android.support.v4.view.ViewCompat;
+import androidx.core.view.ViewCompat;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.bitmap.FitCenter;
-import com.bumptech.glide.request.RequestOptions;
+
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.drawable.ScalingUtils;
 import com.facebook.drawee.generic.GenericDraweeHierarchy;

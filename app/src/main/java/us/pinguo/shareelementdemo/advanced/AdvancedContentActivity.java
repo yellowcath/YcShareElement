@@ -2,8 +2,8 @@ package us.pinguo.shareelementdemo.advanced;
 
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import com.hw.ycshareelement.YcShareElement;
 import com.hw.ycshareelement.transition.IShareElements;
 import com.hw.ycshareelement.transition.ShareElementInfo;

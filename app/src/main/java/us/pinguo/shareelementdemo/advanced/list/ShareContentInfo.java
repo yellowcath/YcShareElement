@@ -1,8 +1,8 @@
 package us.pinguo.shareelementdemo.advanced.list;
 
 import android.os.Parcel;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.view.View;
 import us.pinguo.shareelementdemo.advanced.BaseData;
 import com.hw.ycshareelement.transition.ShareElementInfo;

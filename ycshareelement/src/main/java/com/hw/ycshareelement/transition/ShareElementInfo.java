@@ -3,8 +3,8 @@ package com.hw.ycshareelement.transition;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.view.View;
 import com.hw.ycshareelement.R;
 

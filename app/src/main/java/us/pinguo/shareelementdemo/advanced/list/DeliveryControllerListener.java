@@ -1,7 +1,7 @@
 package us.pinguo.shareelementdemo.advanced.list;
 
 import android.graphics.drawable.Animatable;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import com.facebook.drawee.controller.ControllerListener;
 
 /**

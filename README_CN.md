@@ -27,7 +27,7 @@ dependencies {
 
 YcShareElement提供了两个demo，一个是上面的联系人demo，另一个实现了图片、视频混合的列表页与详情页之间的ShareElement动画，如下图
 
-![image](https://pictures-1258313547.cos.ap-chengdu.myqcloud.com/ycshareelement/se.gif)
+![image](https://upload-images.jianshu.io/upload_images/14017475-cbc777dd9a681fe4.gif)
 
 这里面的关键点如下：  
 1、Glide图片的ShareElement动画  
@@ -94,7 +94,7 @@ public class DetailActivity extends Activity {
 ```
 
 效果如下：  
-![image](https://pictures-1258313547.cos.ap-chengdu.myqcloud.com/ycshareelement/contacts2.gif)
+![image](https://upload-images.jianshu.io/upload_images/14017475-3e2ca4346015b685.gif)
 
 ### 图片&视频页面使用步骤
 

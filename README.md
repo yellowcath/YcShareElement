@@ -125,7 +125,7 @@ Here's the result：
 
 The next step is to handle the return animation of the list page
 
-#### 5、Activity B实现finishAfterTransition()函数
+#### 5、Activity B implements the finishAfterTransition() function
 ``` java
     @Override
     public void finishAfterTransition() {
@@ -133,7 +133,7 @@ The next step is to handle the return animation of the list page
         super.finishAfterTransition();
     }
 ```
-#### 6、Activity B implements the finishAfterTransition() function
+#### 6、Activity A implements the onActivityReenter() function
 ``` java
     @Override
     public void onActivityReenter(int resultCode, Intent data) {
